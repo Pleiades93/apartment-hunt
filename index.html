@@ -4065,6 +4065,45 @@
     var c0 = cardByMls(mls0);
     if(c0) openDetail(c0, false);
   }
+
+  /* idle photo prefetch: warm the HTTP cache with every photo the page
+     references, so a fast scroll never waits on a photo arriving late.
+     URLs come from the DOM's own img srcs (works whether the photos are
+     asset files, data URIs, or a separate folder); data URIs fetch as a
+     harmless no-op. Skipped entirely on data-saver or slow connections. */
+  function prefetchPhotos(){
+    try{
+      var conn = navigator.connection;
+      if(conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
+      var seen = {}, urls = [];
+      var imgs = document.querySelectorAll('img');
+      for(var i = 0; i < imgs.length; i++){
+        var src = imgs[i].getAttribute('src');
+        if(src && !seen[src]){ seen[src] = true; urls.push(src); }
+      }
+      var idx = 0;
+      function nextBatch(){
+        var batch = urls.slice(idx, idx + 4);
+        idx += batch.length;
+        if(!batch.length) return;
+        var pending = batch.length;
+        function done(){ if(--pending === 0) nextBatch(); }
+        batch.forEach(function(u){
+          try{ fetch(u).then(done, done); }catch(e){ done(); }
+        });
+      }
+      nextBatch();
+    }catch(e){}
+  }
+  function schedulePrefetch(){
+    if('requestIdleCallback' in window){
+      requestIdleCallback(prefetchPhotos, { timeout: 4000 });
+    }else{
+      setTimeout(prefetchPhotos, 1500);
+    }
+  }
+  if(document.readyState === 'complete'){ schedulePrefetch(); }
+  else{ window.addEventListener('load', schedulePrefetch); }
 })();
 </script>
 </body>
