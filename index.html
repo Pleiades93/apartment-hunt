@@ -440,8 +440,13 @@
   .detail-sheet.sheet-exit{position:fixed;margin:0;z-index:2;pointer-events:none}
   .detail-bar.is-flipping{position:relative;z-index:3}
   /* the restored card's plate while its photo is still flying home:
-     the same 4:3 box, transparent, photo area empty */
+     the same 4:3 box, transparent, photo area empty. The plate's own
+     overlays (rent hero, spec pill, badge, Watch controls) are already
+     home in the plate for the whole flight: pinned at full opacity with
+     transitions suppressed, so the landing photo simply slides in
+     UNDER them — they are uncovered, never inserted or faded in */
   .card .plate.photo-landing{background:transparent}
+  .card .plate.photo-landing>*{transition:none;opacity:1}
 
   @media (max-width:520px){
     h1{font-size:29px}
@@ -3013,15 +3018,22 @@
      opacity ever animate — never width/height/top/left, box-shadow, filters
      or backdrop blur. Choreography, both directions: every restructure
      completes before the first animation frame or after the last, never
-     during. On close, the REAL origin card is restored into the feed
-     (original position, saved scroll, all its feed lines rendered; only
-     its plate's photo area left empty) synchronously BEFORE the first
-     frame, and the hero + sheet finish the flight in the panel's overlay
-     layer, independent of the card; after the group completes the hero's
-     img returns into the card's plate box — measured from the restored
-     card itself, so the landing coincides exactly and the swap is
-     invisible. The hero keeps the plate's own img element with the same
-     src throughout: no clone, no reload, no re-decode. */
+     during. On close, the WHOLE REAL origin card is restored into the
+     feed (original position, saved scroll, every feed line rendered AND
+     every plate overlay home — rent hero, spec pill, badge, Watch
+     controls — at full opacity with transitions suppressed; only its
+     plate's photo area left empty) synchronously BEFORE the first
+     frame. The ONLY card elements in the panel's overlay layer during
+     the flight are the hero's img, its scrim and its photo credit; the
+     hero + sheet finish the flight there, independent of the card.
+     After the group completes, the completion callback ONLY returns
+     that img + scrim + credit into the card's plate box — under the
+     overlays that never left, so at landing they are simply uncovered,
+     never inserted — removes the landing state, and cleans the overlay.
+     The landing target is measured from the restored card itself, so
+     the landing coincides exactly and the swap is invisible. The hero
+     keeps the plate's own img element with the same src throughout:
+     no clone, no reload, no re-decode. */
   var FLIP_MS = 320, FLIP_EASE = 'cubic-bezier(.32,.72,.22,1)';
   /* every animated element in both sequences shares these exact strings:
      delay 0ms, duration 320ms, one easing — the group is synchronized */
@@ -3255,12 +3267,14 @@
        hero and sheet are measured, the sheet's children move back into
        the card (the photo, scrim and credit stay in the hero), the hero
        and the now-empty sheet are detached into the panel's overlay
-       layer at their measured rects, and the REAL origin card - face
-       head / building line, listed-date line, all-in line all rendered -
-       is reinserted into the feed at its original position with the
-       feed scroll restored. Only the card's photo area is empty: the
-       same 4:3 plate box, transparent, as the hero's landing target.
-       No placeholder element stands in for the card anywhere. ===== */
+       layer at their measured rects, and the WHOLE REAL origin card -
+       the plate WITH its rent hero, spec pill, badge and Watch controls
+       on it, plus face head / building line, listed-date line, all-in
+       line, all rendered - is reinserted into the feed at its original
+       position with the feed scroll restored. Only the card's photo
+       area is empty: the same 4:3 plate box, transparent, as the hero's
+       landing target. No placeholder element stands in for the card
+       anywhere, and no card content of any kind is left in transit. ===== */
     detailScroll.scrollTop = 0;
     panel.classList.remove('scrolled');
     heroEl.style.opacity = '';
@@ -3278,6 +3292,23 @@
     }
     document.body.classList.remove('no-scroll');
     window.scrollTo(0, returnScroll);
+    /* plate overlays home, explicitly, in this same pre-frame restore:
+       the rent hero, the spec pill, the badge and the Watch plate
+       controls are children of the plate itself, so the plate's return
+       above already carried them home — anything ever found outside
+       the plate goes back into it here, before the first frame, in
+       plate order. They then sit in the plate at full opacity with
+       transitions suppressed (the .photo-landing rules) over the
+       still-empty photo box for the entire flight; the flying hero
+       shrinks onto the plate ABOVE them (the panel overlay outranks
+       the feed), so at landing they are uncovered, never inserted. */
+    if(plateEl){
+      var overlaySels = ['.plate-badge', '.rent-big', '.spec-pill', '.plate-controls', '.travel'];
+      for(var oi = 0; oi < overlaySels.length; oi++){
+        var ov = plateEl.querySelector(overlaySels[oi]) || card.querySelector(overlaySels[oi]);
+        if(ov && ov.parentNode !== plateEl) plateEl.appendChild(ov);
+      }
+    }
     if(plateEl && card.classList.contains('has-photo')) plateEl.classList.add('photo-landing');
     /* hero -> overlay layer, fixed at its on-screen rect (geometry set
        once, pre-frame; only its transform animates from here) */
@@ -3298,9 +3329,18 @@
     var target = plateEl ? plateEl.getBoundingClientRect() : null;
     var exitSheet = sheetEl;
     var finishAnimated = function(){
-      /* the hero's own img returns into the card's empty plate box,
-         with its scrim and credit, exactly as unwrapDetail restores
-         them - invisible, because the hero has landed on that box */
+      /* COMPLETION - this callback performs ONLY these actions, and
+         nothing else: (1) insert the hero's img, scrim and credit into
+         the restored plate (img first, scrim second, credit last —
+         their normal stacking UNDER the rent hero / spec pill / badge
+         that never left the plate), (2) remove the plate's landing
+         state, (3) hide and clean the overlay layer (drop the hero and
+         the empty sheet shell, clear the bar/close flip styles, hide
+         the panel, reset the flight state). It does NOT move, insert,
+         re-render, recount or restyle any other card content, and no
+         close-path code applies any fade or transition to the card or
+         its children. The swap is invisible because the hero has
+         landed exactly on the plate box it returns into. */
       var photo = heroEl ? heroEl.querySelector('.plate-photo') : null;
       var scrim = heroEl ? heroEl.querySelector('.plate-scrim') : null;
       var credit = heroEl ? heroEl.querySelector('.photo-credit--plate') : null;
