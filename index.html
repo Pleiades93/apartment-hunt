@@ -3020,11 +3020,35 @@
      Delay 0, duration 320ms, one easing. */
   var FLIP_MS = 320, FLIP_EASE = 'cubic-bezier(.32,.72,.22,1)';
   var activeFlight = null;
+  /* The CURRENT rendered state of a panel flight's element, read from
+     computed style while its animation is still applied: an
+     interrupting flight starts from exactly these values, so the
+     hand-off is continuous instead of snapping to a natural layout
+     state (audit F3). Returns null when nothing usable is rendered. */
+  function capturePanelState(){
+    try{
+      var cs = window.getComputedStyle(panel);
+      var clip = cs.clipPath, tf = cs.transform;
+      if(!clip || clip === 'none') clip = 'inset(0px 0px 0px 0px)';
+      if(!tf || tf === 'none') tf = 'translate(0px,0px)';
+      return { kind: 'panel', clipPath: clip, transform: tf };
+    }catch(e){ return null; }
+  }
+  /* Settle the active flight: cancel its animations and run its
+     cleanup synchronously (cleanup(false) — not a natural finish).
+     When a PANEL flight is interrupted mid-flight, its current
+     rendered clip-path + transform are captured BEFORE the cancel
+     and returned, so the caller can start the next flight from the
+     rendered state (audit F3). Image flights return null here; a
+     close image flight interrupted by a reopen is reversed by
+     reverseCloseFlight() instead of being settled. */
   function settleFlight(){
-    if(!activeFlight) return;
+    if(!activeFlight) return null;
     var f = activeFlight;
     activeFlight = null;
     f.settled = true;
+    var cap = null;
+    if(f.kind === 'panel' && f.anim && f.anim.playState === 'running') cap = capturePanelState();
     try{ f.anim.cancel(); }catch(e){}
     /* companion animations on the same clock (the flying img's
        counter-transform, the panel fade-outs) die with the flight;
@@ -3034,13 +3058,25 @@
         try{ f.extras[i].cancel(); }catch(e){}
       }
     }
-    f.cleanup();
+    f.cleanup(false);
+    return cap;
   }
-  function runPanelFlight(frames, cleanup){
+  function runPanelFlight(frames, cleanup, startState){
+    /* ONE explicit shared startTime for the whole flight, taken
+       before any settling or construction (audit item 6a) */
+    var t0 = document.timeline.currentTime;
     settleFlight();
+    /* interrupted-flight continuity (audit F3): when the previous
+       panel flight was captured mid-flight, the new flight's first
+       keyframe IS that rendered state, in both directions */
+    if(startState && startState.kind === 'panel' && frames.length > 1){
+      var first = { clipPath: startState.clipPath, transform: startState.transform };
+      frames = [first].concat(frames.slice(1));
+    }
     var anim = panel.animate(frames, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+    anim.startTime = t0;
     panel.style.willChange = 'clip-path, transform';
-    var f = { anim: anim, cleanup: cleanup, settled: false };
+    var f = { anim: anim, cleanup: cleanup, settled: false, kind: 'panel', isClose: false };
     activeFlight = f;
     anim.finished.then(function(){
       if(f.settled) return;
@@ -3051,8 +3087,30 @@
          visually — it just hands the panel back to plain layout */
       try{ anim.cancel(); }catch(e){}
       panel.style.willChange = '';
-      cleanup();
+      cleanup(true);
     }, function(){ /* a cancelled animation rejects; settleFlight() already cleaned up */ });
+    return f;
+  }
+  /* ---------- hash reconciliation (audit F4) ----------
+     After a close flight completes NATURALLY, the URL hash and the
+     visible state must agree: if the hash names a listing (the user
+     pressed Forward during the close, or the close raced a deep
+     link), that listing is open once teardown has run. */
+  function hashListingMls(){
+    if(location.hash.indexOf('#/listing/') !== 0) return null;
+    return location.hash.slice('#/listing/'.length) || null;
+  }
+  function reconcileHashAfterClose(){
+    var mls = hashListingMls();
+    if(!mls || detailCard) return;
+    var card = cardByMls(mls);
+    if(card) openDetail(card, false);
+  }
+  function closeCleanup(){
+    return function(natural){
+      teardownDetail();
+      if(natural) reconcileHashAfterClose();
+    };
   }
   /* discard the detail clone and hide the panel in one instantaneous
      state change; the feed is not touched. Also removes a landed (or
@@ -3193,8 +3251,8 @@
       return { h: hv, v: vv };
     });
   }
-  function imageFlightFrames(R0, R1, nw, nh, startRadii, endRadii){
-    var K = 24, wFrames = [], iFrames = [];
+  function imageFlightFrames(R0, R1, nw, nh, startRadii, endRadii, par){
+    var K = 24, wFrames = [], iFrames = [], sFrames = [];
     /* round emitted numbers to 5 decimals: keeps the transform strings
        plain decimals (no exponent notation) and the composed error
        under ~0.005px */
@@ -3202,15 +3260,36 @@
     var s0 = coverScaleFor(R0.width, R0.height, nw, nh);
     var off0x = (R0.width - nw * s0) / 2;
     var off0y = (R0.height - nh * s0) / 2;
+    /* PARALLAX START STATE (audit F2): R0 is the hero's VISIBLE window
+       (the hero element's box), never the parallax-transformed img
+       box. When the detail scroll handler has run, the hero img
+       carries translateY(ty) scale(sp) about origin (ox,oy), so the
+       rendering actually visible in the window is the cover drawing
+       pushed through that transform: drawn scale s0*sp and drawn
+       offset o + sp*(off0 - o) + (0,ty). The flight's drawn scale /
+       offset start at exactly that state and blend (factor 1-t) into
+       the plain cover trajectory, which they equal at t=1 — so p=0
+       renders the hero's visible (clipped) pixels for any scroll
+       history, and with no parallax state (sp=1, ty=0, or no
+       transform at all) the blend terms are zero and every keyframe
+       is identical to the pre-parallax construction. */
+    var sStart = s0, osx0 = off0x, osy0 = off0y;
+    if(par && (par.sp !== 1 || par.ty !== 0)){
+      sStart = s0 * par.sp;
+      osx0 = par.ox + par.sp * (off0x - par.ox);
+      osy0 = par.oy + par.sp * (off0y - par.oy) + par.ty;
+    }
     for(var i = 0; i <= K; i++){
       var t = i / K;
       var W = R0.width + (R1.width - R0.width) * t;
       var H = R0.height + (R1.height - R0.height) * t;
       var tx = (R1.left - R0.left) * t;
       var ty = (R1.top - R0.top) * t;
-      var st = coverScaleFor(W, H, nw, nh);
-      var cox = (W - nw * st) / 2;
-      var coy = (H - nh * st) / 2;
+      var sCov = coverScaleFor(W, H, nw, nh);
+      var blend = 1 - t;
+      var st = sCov + blend * (sStart - s0);
+      var cox = (W - nw * sCov) / 2 + blend * (osx0 - off0x);
+      var coy = (H - nh * sCov) / 2 + blend * (osy0 - off0y);
       var sx = W / R0.width, sy = H / R0.height;
       var ax = st / (s0 * sx), ay = st / (s0 * sy);
       var bx = cox / sx - ax * off0x;
@@ -3219,10 +3298,11 @@
          (TL, TR, BR, BL), interpolated hero -> plate; specified
          radius = intended / scale, so rendered = specified * scale
          = intended exactly (horizontal and vertical alike) */
-      var hs = [], vs = [];
+      var hs = [], vs = [], ihs = [], ivs = [];
       for(var c = 0; c < 4; c++){
         var ih = startRadii[c].h + (endRadii[c].h - startRadii[c].h) * t;
         var iv = startRadii[c].v + (endRadii[c].v - startRadii[c].v) * t;
+        ihs.push(ih); ivs.push(iv);
         hs.push(r4(sx ? ih / sx : 0) + 'px');
         vs.push(r4(sy ? iv / sy : 0) + 'px');
       }
@@ -3235,8 +3315,29 @@
         transform: 'translate(' + r4(bx) + 'px,' + r4(by) + 'px) scale(' + r4(ax) + ',' + r4(ay) + ')',
         offset: t
       });
+      /* INSET-SHADOW frames (audit item 3): the shadow carrier is a
+         child of the wrapper laid out at the interpolated rect's own
+         size W x H and counter-scaled by (R0.width/W, R0.height/H).
+         Composed with the wrapper's scale, its box maps exactly onto
+         the interpolated rect, a length specified in its local units
+         renders at that same length on screen on BOTH axes (local x
+         renders x * (R0.width/W) * (W/R0.width) = x), so the plate's
+         exact inset box-shadow — copied verbatim, 1px spread and all —
+         renders at exactly 1px on every edge at every keyframe, and
+         its border radius is specified as the intended rendered
+         radius directly (the counter-scale cancels the wrapper's
+         compensation need). At p=1 the carrier IS the plate box:
+         same rect, same radius, same shadow string. */
+      sFrames.push({
+        width: r4(W) + 'px',
+        height: r4(H) + 'px',
+        transform: 'scale(' + r4(W ? R0.width / W : 1) + ',' + r4(H ? R0.height / H : 1) + ')',
+        borderRadius: ihs.map(function(v){ return r4(v) + 'px'; }).join(' ') + ' / ' +
+          ivs.map(function(v){ return r4(v) + 'px'; }).join(' '),
+        offset: t
+      });
     }
-    return { wrapper: wFrames, img: iFrames };
+    return { wrapper: wFrames, img: iFrames, shadow: sFrames };
   }
   /* ---------- EXIT TEXT FLYERS: rent / spec pill / photo credit ----------
      Built only inside runImageFlight (the top-state photo exit), on
@@ -3297,8 +3398,9 @@
     return { left: tr.left, top: tr.top, width: tr.width + 0.5, height: tr.height };
   }
   function buildTextFlyers(){
-    var anims = [];
-    if(!detailCard || !sheetEl) return anims;
+    var meta = { anims: [], hidden: [], starts: [], controlsEl: null };
+    if(!detailCard || !sheetEl) return meta;
+    var anims = meta.anims;
     var pairs = [
       { card: detailCard.querySelector('.rent-big'), sheet: sheetEl.querySelector('.rent-big'), box: textBoxOf },
       { card: detailCard.querySelector('.spec-pill'), sheet: sheetEl.querySelector('.spec-pill'), box: rectOfEl },
@@ -3312,7 +3414,17 @@
          pair.sheet rule below. */
       { card: detailCard.querySelector('.photo-credit--plate'),
         sheet: heroEl ? heroEl.querySelector('.photo-credit--plate') : null,
-        box: textRectOf }
+        box: textRectOf },
+      /* the plate BADGE (audit F1): the card's badge — box-shadow and
+         all — flies from the SHEET's badge (same element in the
+         sheet, where it sits static with shadow:none) down to
+         identity over the card's badge, on the same clock and by
+         the same construction as the text flyers, so the plate's
+         badge + shadow are present in the last flight frame exactly
+         as they are in the first settled frame. */
+      { card: detailCard.querySelector('.plate-badge'),
+        sheet: sheetEl.querySelector('.plate-badge'),
+        box: rectOfEl }
     ];
     var layer = document.createElement('div');
     layer.style.cssText = 'position:fixed;inset:0;z-index:121;pointer-events:none;margin:0;padding:0';
@@ -3356,10 +3468,50 @@
         [{ transform: start }, { transform: 'translate(0px,0px) scale(1)' }],
         { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' }));
       pair.sheet.style.visibility = 'hidden';
+      meta.hidden.push(pair.sheet);
+      meta.starts.push({ el: flyer, start: start });
     });
+    /* the Watch ✓/✕ CONTROLS (audit F1): they have no detail
+       counterpart (display:none in the detail), so there is nothing
+       to fly FROM — instead a computed-style clone of the card's
+       controls sits in the flight layer at their exact plate
+       position for the whole flight, transparent until the final
+       portion, then fading in on the flight's own clock to full
+       opacity exactly at p=1. Teardown swaps clone-for-real with no
+       rendered change. */
+    var controls = detailCard.querySelector('.plate-controls');
+    if(controls){
+      var kBox = rectOfEl(controls);
+      if(kBox.width > 0 && kBox.height > 0){
+        var kClone = controls.cloneNode(true);
+        kClone.removeAttribute('id');
+        var kSrcs = [controls].concat(Array.prototype.slice.call(controls.querySelectorAll('*')));
+        var kClns = [kClone].concat(Array.prototype.slice.call(kClone.querySelectorAll('*')));
+        for(var ki = 0; ki < kSrcs.length && ki < kClns.length; ki++){
+          var kcs = window.getComputedStyle(kSrcs[ki]);
+          for(var kj = 0; kj < kcs.length; kj++){
+            var kprop = kcs[kj];
+            try{ kClns[ki].style.setProperty(kprop, kcs.getPropertyValue(kprop), kcs.getPropertyPriority(kprop)); }catch(e){}
+          }
+        }
+        kClone.style.position = 'fixed';
+        kClone.style.left = r5(kBox.left) + 'px';
+        kClone.style.top = r5(kBox.top) + 'px';
+        kClone.style.width = r5(kBox.width) + 'px';
+        kClone.style.right = 'auto';
+        kClone.style.bottom = 'auto';
+        kClone.style.margin = '0';
+        kClone.style.pointerEvents = 'none';
+        layer.appendChild(kClone);
+        meta.controlsEl = kClone;
+        anims.push(kClone.animate(
+          [{ opacity: '0', offset: 0 }, { opacity: '0', offset: 0.55 }, { opacity: '1', offset: 1 }],
+          { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' }));
+      }
+    }
     if(layer.childNodes.length) document.body.appendChild(layer);
     else flyLayer = null;
-    return anims;
+    return meta;
   }
 
   /* Run the exit photo flight under the same flight discipline as the
@@ -3369,15 +3521,24 @@
      as extras on the same clock and are cancelled if settled. The
      panel gets out of the image's way at close start: its background
      goes transparent, it becomes inert, and its non-image parts
-     (scroll content, sticky bar, ✕) fade out in ~150ms, so the photo
+     (scroll content, sticky bar, ✕) fade out on the flight's own
+     320ms clock (audit item 6b), so the photo
      flies over the real feed with the origin plate visible beneath.
      The rent, spec pill and photo credit fly with it as text
      flyers (see buildTextFlyers), riding in extras on this same
      clock, and the photo's FULL treatment — its CSS filter plus
      the scrim gradient — rides inside the wrapper (see below). */
-  function runImageFlight(img, R0, R1, cleanup){
+  function runImageFlight(img, R0, R1, cleanup, par){
+    /* ONE explicit shared startTime for every participant in this
+       flight — panel flight state, image flight, every flyer, the
+       controls fade, the panel fades (audit item 6a). It is taken
+       FIRST, before settling, construction or any geometry read, and
+       stamped onto each animation after creation, so no participant
+       can sit a frame ahead of another. */
+    var t0 = document.timeline.currentTime;
     settleFlight();
-    var textAnims = buildTextFlyers();
+    var textMeta = buildTextFlyers();
+    var textAnims = textMeta.anims;
     /* The shared photo treatment has two parts. The CSS filter
        (brightness / saturate) is declared on the img itself by the
        .plate-photo class rule, so it travels with the lifted node;
@@ -3406,13 +3567,18 @@
     var plateEl = detailCard ? detailCard.querySelector('.plate') : null;
     var startRadii = cornerRadiiFor(heroEl, R0.width, R0.height);
     var endRadii = cornerRadiiFor(plateEl, R1.width, R1.height);
-    var frames = imageFlightFrames(R0, R1, img.naturalWidth, img.naturalHeight, startRadii, endRadii);
+    var frames = imageFlightFrames(R0, R1, img.naturalWidth, img.naturalHeight, startRadii, endRadii, par);
     var wrap = document.createElement('div');
     wrap.style.cssText = 'position:fixed;left:' + R0.left + 'px;top:' + R0.top +
       'px;width:' + R0.width + 'px;height:' + R0.height +
       'px;margin:0;padding:0;overflow:hidden;border-radius:' + frames.wrapper[0].borderRadius + ';z-index:120;' +
       'pointer-events:none;transform-origin:0 0;will-change:transform';
-    img.style.transform = ''; /* drop any parallax transform: the flight's first frame reproduces the current rendering from R0 itself */
+    /* the parallax transform comes OFF the node only because the
+       node moves into the wrapper; its effect is not dropped — it is
+       baked into the flight's start construction (see the parallax
+       start state in imageFlightFrames), so the first frame renders
+       the hero's visible pixels, parallax crop included */
+    img.style.transform = '';
     img.style.transformOrigin = '0 0';
     img.style.willChange = 'transform';
     wrap.appendChild(img);
@@ -3426,21 +3592,59 @@
     flyScrim.className = 'plate-scrim';
     flyScrim.setAttribute('aria-hidden', 'true');
     wrap.appendChild(flyScrim);
+    /* the plate's inset ring (audit item 3): the feed plate carries
+       box-shadow: inset 0 0 0 1px var(--line-soft) over its photo;
+       the flight stack carries the SAME shadow — the plate's exact
+       computed box-shadow string, copied verbatim — on a dedicated
+       carrier inside the wrapper, animated with the counter-scale
+       frames from imageFlightFrames so it renders at exactly the
+       plate's 1px on every edge at every keyframe, p=1 included */
+    var flyShadow = null, shadowAnim = null;
+    if(plateEl){
+      var plateShadow = window.getComputedStyle(plateEl).boxShadow;
+      if(plateShadow && plateShadow !== 'none'){
+        flyShadow = document.createElement('div');
+        flyShadow.setAttribute('aria-hidden', 'true');
+        flyShadow.style.cssText = 'position:absolute;left:0;top:0;margin:0;padding:0;' +
+          'pointer-events:none;transform-origin:0 0;will-change:transform,width,height';
+        flyShadow.style.boxShadow = plateShadow;
+        flyShadow.style.width = frames.shadow[0].width;
+        flyShadow.style.height = frames.shadow[0].height;
+        flyShadow.style.borderRadius = frames.shadow[0].borderRadius;
+        wrap.appendChild(flyShadow);
+      }
+    }
     document.body.appendChild(wrap);
     flyWrap = wrap;
     panel.style.background = 'transparent';
     panel.style.pointerEvents = 'none';
-    var fadeOpts = { duration: 150, easing: 'ease-out', delay: 0, fill: 'both' };
+    /* the panel fades ride the flight's OWN clock (audit item 6b):
+       the same 320ms and the same easing as the photo, from the
+       shared startTime — the sheet, bar and ✕ reach invisible
+       exactly as the photo lands, never 170ms early over bare feed */
+    var fadeOpts = { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' };
     var fadeFrom = [{ opacity: '1' }, { opacity: '0' }];
-    var extras = [
-      img.animate(frames.img, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' })
-    ].concat(textAnims);
-    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')]
-      .forEach(function(el){
-        if(el) extras.push(el.animate(fadeFrom, fadeOpts));
-      });
+    var imgAnim = img.animate(frames.img, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+    var extras = [imgAnim].concat(textAnims);
+    if(flyShadow){
+      shadowAnim = flyShadow.animate(frames.shadow, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+      extras.push(shadowAnim);
+    }
+    var fadeEls = [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')];
+    fadeEls.forEach(function(el){
+      if(el) extras.push(el.animate(fadeFrom, fadeOpts));
+    });
     var anim = wrap.animate(frames.wrapper, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
-    var f = { anim: anim, extras: extras, cleanup: cleanup, settled: false };
+    /* stamp the ONE shared startTime on every participant */
+    [anim, imgAnim, shadowAnim].concat(extras).forEach(function(a){ if(a) a.startTime = t0; });
+    var f = { anim: anim, extras: extras, cleanup: cleanup, settled: false,
+      kind: 'image', isClose: true,
+      wrapEl: wrap, imgEl: img, imgAnim: imgAnim,
+      hiddenEls: textMeta.hidden, flyerStarts: textMeta.starts,
+      controlsEl: textMeta.controlsEl, fadeEls: fadeEls,
+      heroScrimEl: heroScrim,
+      parallaxInline: par ? par.inline : '',
+      startRadiusStr: frames.wrapper[0].borderRadius };
     activeFlight = f;
     anim.finished.then(function(){
       if(f.settled) return;
@@ -3450,8 +3654,112 @@
          rect, same cover scale, same crop, same rendered corner
          radius on all four corners) — teardown just discards
          the wrapper and hides the already-transparent panel */
-      cleanup();
+      cleanup(true);
     }, function(){ /* a cancelled animation rejects; settleFlight() already cleaned up */ });
+    return f;
+  }
+
+  /* Reverse a running CLOSE flight back to the open detail (audit
+     F3/F4): Forward pressed mid-close reopens the same listing.
+     The flight's animations are cancelled WITHOUT running the close
+     cleanup; every participant is then re-animated from its CURRENT
+     rendered state (computed transform / border-radius / opacity,
+     captured at the moment of interruption) back to the open state
+     on one new shared clock, and the reverse flight's cleanup
+     restores the exact pre-close DOM: the img back in the hero with
+     its parallax transform reapplied, the flyer sources un-hidden,
+     the hero scrim visible again, the panel opaque and live. */
+  function reverseCloseFlight(){
+    var f = activeFlight;
+    if(!f || !f.isClose || f.settled) return;
+    var t0 = document.timeline.currentTime;
+    if(f.kind === 'panel'){
+      var cap = capturePanelState();
+      f.settled = true;
+      activeFlight = null;
+      try{ f.anim.cancel(); }catch(e){}
+      if(f.extras) f.extras.forEach(function(a){ try{ a.cancel(); }catch(e){} });
+      var frames = [
+        { clipPath: cap ? cap.clipPath : 'inset(0px 0px 0px 0px)', transform: cap ? cap.transform : 'translate(0px,0px)' },
+        { clipPath: 'inset(0px 0px 0px 0px)', transform: 'translate(0px,0px)' }
+      ];
+      var anim = panel.animate(frames, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+      anim.startTime = t0;
+      panel.style.willChange = 'clip-path, transform';
+      var rf = { anim: anim, cleanup: function(){ panel.style.willChange = ''; }, settled: false, kind: 'panel', isClose: false };
+      activeFlight = rf;
+      anim.finished.then(function(){
+        if(rf.settled) return;
+        rf.settled = true;
+        if(activeFlight === rf) activeFlight = null;
+        try{ anim.cancel(); }catch(e){}
+        panel.style.willChange = '';
+      }, function(){});
+      return;
+    }
+    if(f.kind !== 'image') return;
+    /* capture the CURRENT rendered state of every participant */
+    function csOf(el, prop){ try{ return window.getComputedStyle(el)[prop]; }catch(e){ return ''; } }
+    var wrapFrom = { transform: csOf(f.wrapEl, 'transform'), borderRadius: csOf(f.wrapEl, 'borderRadius') };
+    var imgFrom = csOf(f.imgEl, 'transform');
+    var flyerFrom = (f.flyerStarts || []).map(function(s){
+      return { el: s.el, start: s.start, from: csOf(s.el, 'transform') };
+    });
+    var controlsFrom = f.controlsEl ? csOf(f.controlsEl, 'opacity') : null;
+    var fadesFrom = (f.fadeEls || []).map(function(el){
+      return el ? { el: el, from: csOf(el, 'opacity') } : null;
+    });
+    /* cancel the close flight WITHOUT its cleanup */
+    f.settled = true;
+    activeFlight = null;
+    try{ f.anim.cancel(); }catch(e){}
+    if(f.extras) f.extras.forEach(function(a){ try{ a.cancel(); }catch(e){} });
+    /* restore the panel and the hidden sources at once */
+    panel.style.background = '';
+    panel.style.pointerEvents = '';
+    if(f.heroScrimEl) f.heroScrimEl.style.visibility = '';
+    (f.hiddenEls || []).forEach(function(el){ el.style.visibility = ''; });
+    var opts = { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' };
+    var extras = [];
+    extras.push(f.imgEl.animate(
+      [{ transform: imgFrom && imgFrom !== 'none' ? imgFrom : 'translate(0px,0px) scale(1,1)' },
+       { transform: 'translate(0px,0px) scale(1,1)' }], opts));
+    flyerFrom.forEach(function(s){
+      extras.push(s.el.animate(
+        [{ transform: s.from && s.from !== 'none' ? s.from : s.start }, { transform: s.start }], opts));
+    });
+    if(f.controlsEl && controlsFrom !== null){
+      extras.push(f.controlsEl.animate(
+        [{ opacity: controlsFrom }, { opacity: '0' }], opts));
+    }
+    fadesFrom.forEach(function(fd){
+      if(fd) extras.push(fd.el.animate([{ opacity: fd.from }, { opacity: '1' }], opts));
+    });
+    var rAnim = f.wrapEl.animate(
+      [{ transform: wrapFrom.transform && wrapFrom.transform !== 'none' ? wrapFrom.transform : 'translate(0px,0px) scale(1,1)',
+         borderRadius: wrapFrom.borderRadius || f.startRadiusStr },
+       { transform: 'translate(0px,0px) scale(1,1)', borderRadius: f.startRadiusStr }], opts);
+    [rAnim].concat(extras).forEach(function(a){ a.startTime = t0; });
+    var rf2 = { anim: rAnim, extras: extras, settled: false, kind: 'image', isClose: false,
+      cleanup: function(){
+        /* hand the img back to the hero exactly as it was */
+        if(f.imgEl.parentNode === f.wrapEl && heroEl){
+          var scrim = heroEl.querySelector('.plate-scrim');
+          if(scrim) heroEl.insertBefore(f.imgEl, scrim);
+          else heroEl.appendChild(f.imgEl);
+        }
+        f.imgEl.style.transform = f.parallaxInline || '';
+        f.imgEl.style.willChange = '';
+        if(flyWrap === f.wrapEl){ flyWrap.remove(); flyWrap = null; }
+        if(flyLayer){ flyLayer.remove(); flyLayer = null; }
+      } };
+    activeFlight = rf2;
+    rAnim.finished.then(function(){
+      if(rf2.settled) return;
+      rf2.settled = true;
+      if(activeFlight === rf2) activeFlight = null;
+      rf2.cleanup(false);
+    }, function(){ /* settled elsewhere; cleanup already ran */ });
   }
 
   /* split the CLONE into hero (its own photo / scrim / credit) + sheet
@@ -3554,9 +3862,27 @@
     var closeBtn = document.getElementById('detailClose');
     if(closeBtn) closeBtn.focus({ preventScroll: true });
   }
+  /* the hero img's parallax state, read BEFORE anything clears it:
+     the scroll handler's translateY + scale about the img's own
+     transform-origin, as the computed matrix + origin report them.
+     inline keeps the exact string for a reverse flight to reapply. */
+  function readParallax(img){
+    if(!img) return null;
+    var cs = window.getComputedStyle(img);
+    var t = cs.transform;
+    if(!t || t === 'none') return null;
+    var m = /matrix\(([^)]+)\)/.exec(t);
+    if(!m) return null;
+    var parts = m[1].split(',').map(function(v){ return parseFloat(v); });
+    if(parts.length < 6 || !isFinite(parts[0])) return null;
+    var org = String(cs.transformOrigin || '0px 0px').trim().split(/\s+/);
+    return { sp: parts[0], ty: parts[5] || 0,
+      ox: parseFloat(org[0]) || 0, oy: parseFloat(org[1]) || 0,
+      inline: img.style.transform || '' };
+  }
   function closeDetail(){
     if(!detailCard) return;
-    settleFlight();
+    var interrupted = settleFlight();
     if(!detailCard) return; /* settling a prior flight finished the close */
     var card = detailCard;
     var reduce = reducedMotion();
@@ -3568,26 +3894,38 @@
            continuously from the hero rect to the plate rect with the
            cover crop recomputed at every instant, so its last frame
            IS the plate's rendering and teardown changes no pixels.
-           The panel's non-image parts fade out of its way in ~150ms.
+           The panel's non-image parts fade out of its way on the
+           flight's own 320ms clock.
            Listings with no photo (or an unloaded one) keep the panel
            flight below, unchanged. */
         var heroImg = heroEl.querySelector('.plate-photo');
         var flown = false;
-        if(heroImg && heroImg.naturalWidth > 0 && heroImg.naturalHeight > 0){
-          var R0 = heroImg.getBoundingClientRect();
+        /* an interrupted OPEN panel flight (audit F3) closes as a
+           panel flight from the captured rendered state — the image
+           flight's start construction assumes a settled panel */
+        if(!interrupted && heroImg && heroImg.naturalWidth > 0 && heroImg.naturalHeight > 0){
+          /* R0 is the hero's VISIBLE window — the hero element's own
+             box. The img's parallax transform is read first and
+             baked into the flight's start (audit F2); measuring the
+             img's transformed box here would resurrect the clipped
+             edge pixels the window never showed. */
+          var par = readParallax(heroImg);
+          var HB = heroEl.getBoundingClientRect();
           var plateImg = card.querySelector('.plate .plate-photo');
           var R1 = plateImg ? plateImg.getBoundingClientRect() : target;
-          if(R0.width > 0 && R0.height > 0 && R1.width > 0 && R1.height > 0){
-            runImageFlight(heroImg,
-              { top: R0.top, left: R0.left, width: R0.width, height: R0.height },
+          if(HB.width > 0 && HB.height > 0 && R1.width > 0 && R1.height > 0){
+            var imgFlight = runImageFlight(heroImg,
+              { top: HB.top, left: HB.left, width: HB.width, height: HB.height },
               { top: R1.top, left: R1.left, width: R1.width, height: R1.height },
-              function(){ teardownDetail(); });
+              closeCleanup(), par);
+            if(imgFlight) imgFlight.isClose = true;
             flown = true;
           }
         }
         if(!flown){
           var frames = panelFlightFrames(target, heroBoxOf());
-          runPanelFlight([frames[1], frames[0]], function(){ teardownDetail(); });
+          var pf = runPanelFlight([frames[1], frames[0]], closeCleanup(), interrupted);
+          if(pf) pf.isClose = true;
         }
       }else{
         /* scrolled state: the hero is not in view, so there is no
@@ -3596,14 +3934,16 @@
            animation, panel opaque, no fades, no scroll reset, no
            scene substitution: detailScroll.scrollTop is never touched
            and the visible sheet content simply gets clipped away. */
-        runPanelFlight([
+        var sf = runPanelFlight([
           { clipPath: 'inset(0px 0px 0px 0px)' },
           { clipPath: insetFor(target) }
-        ], function(){ teardownDetail(); });
+        ], closeCleanup(), interrupted);
+        if(sf) sf.isClose = true;
       }
     }else{
       /* reduced motion, or nothing to fly to: instant hide */
       teardownDetail();
+      reconcileHashAfterClose();
     }
   }
   /* parallax: hero fades as the sheet covers it; close button goes plain
@@ -3625,9 +3965,26 @@
   }
   document.getElementById('detailClose').addEventListener('click', requestClose);
   window.addEventListener('popstate', function(){
-    if(detailCard && location.hash.indexOf('#/listing/') !== 0) closeDetail();
-    else if(!detailCard && location.hash.indexOf('#/listing/') === 0){
-      var mls = location.hash.slice('#/listing/'.length);
+    var mls = hashListingMls();
+    if(detailCard && !mls) closeDetail();
+    else if(detailCard && mls){
+      if(detailCard.getAttribute('data-mls') === mls){
+        /* Forward during a close of THIS listing (audit F4): the
+           detail must not end hidden while the URL names it —
+           reverse the running close flight from its current
+           rendered state; if no close flight is running the detail
+           is simply open already and state already agrees */
+        if(activeFlight && activeFlight.isClose) reverseCloseFlight();
+      }else if(activeFlight && activeFlight.isClose){
+        /* a DIFFERENT listing named while a close is flying: the
+           close's completion cleanup reconciles and opens it */
+      }else{
+        teardownDetail();
+        var card2 = cardByMls(mls);
+        if(card2) openDetail(card2, false);
+      }
+    }
+    else if(!detailCard && mls){
       var card = cardByMls(mls);
       if(card) openDetail(card, false);
     }
