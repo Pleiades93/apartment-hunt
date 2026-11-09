@@ -270,9 +270,7 @@
 
   /* ---------- Detail view ---------- */
   .detail-panel{position:fixed;inset:0;z-index:100;background:var(--bg);
-    display:flex;flex-direction:column;
-    transform:translateX(102%);transition:transform .32s cubic-bezier(.32,.72,.22,1),opacity .32s cubic-bezier(.32,.72,.22,1)}
-  .detail-panel.open{transform:translateX(0)}
+    display:flex;flex-direction:column}
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:0}
@@ -389,7 +387,6 @@
   .ba-note{font-size:12px;line-height:1.5;color:var(--faint);margin-top:9px}
 
   /* ---------- Detail hero + parallax sheet (Airbnb-style) ---------- */
-  .detail-panel.flip{transform:none;transition:opacity .32s cubic-bezier(.32,.72,.22,1)}
   .detail-panel.scrolled::before{content:'';position:absolute;top:0;left:0;right:0;z-index:4;
     height:calc(58px + env(safe-area-inset-top));background:var(--bg);
     border-bottom:1px solid var(--line-soft);pointer-events:none}
@@ -422,31 +419,19 @@
   .card.in-detail.has-photo .tlabel .tnote{color:var(--faint)}
   .card.in-detail.has-photo .tunit{color:var(--muted)}
   .card.in-detail .photo-credit--detail{display:none}
-  /* FLIP: the hero element itself is the moving image — only transform and
-     opacity ever animate (see openDetail/closeDetail); width/height/top/left
-     are never transitioned, so no layout runs during the flight */
-  .detail-hero.is-flipping{will-change:transform;contain:paint}
-  .detail-sheet.is-flipping{will-change:transform,opacity}
-  .detail-bar.is-flipping,.detail-close.is-flipping{will-change:opacity}
-  /* close choreography: the REAL card is restored into the feed BEFORE
-     the first animation frame (in closeDetail), and the panel goes
-     transparent so the hero flies back into a feed that is already fully
-     on screen — never into empty space that pops in later */
+  /* NO-RELOCATION flights: the feed card never moves. A fixed clipping
+     layer above the panel carries two fresh img elements (plate framing
+     and hero framing) that crossfade under a uniform scale while the
+     layer's clip-path interpolates between the plate rect and the hero
+     rect — the cover crop morphs, never distorts, never snaps. During
+     a close flight the panel goes transparent so the feed (already in
+     place, fully rendered) shows around the flight. */
   .detail-panel.closing{background:transparent}
-  /* close choreography: the REAL card is restored to the feed before the
-     first frame; the hero and the sheet leave the card and finish the
-     flight in the panel's overlay layer, independent of the card */
-  .detail-hero.flying{position:fixed;margin:0;z-index:4}
-  .detail-sheet.sheet-exit{position:fixed;margin:0;z-index:2;pointer-events:none}
-  .detail-bar.is-flipping{position:relative;z-index:3}
-  /* the restored card's plate while its photo is still flying home:
-     the same 4:3 box, transparent, photo area empty. The plate's own
-     overlays (rent hero, spec pill, badge, Watch controls) are already
-     home in the plate for the whole flight: pinned at full opacity with
-     transitions suppressed, so the landing photo simply slides in
-     UNDER them — they are uncovered, never inserted or faded in */
-  .card .plate.photo-landing{background:transparent}
-  .card .plate.photo-landing>*{transition:none;opacity:1}
+  .flight-layer{position:fixed;inset:0;z-index:130;pointer-events:none;overflow:hidden;will-change:clip-path}
+  .flight-img{position:absolute;object-fit:cover;transform-origin:0 0;pointer-events:none;
+    filter:brightness(1.16) saturate(1.14)}
+  .flight-scrim{position:absolute;pointer-events:none;transform-origin:0 0;
+    background:linear-gradient(180deg,rgba(4,8,20,.58) 0%,rgba(4,8,20,.30) 26%,rgba(4,8,20,.04) 52%,rgba(4,8,20,.10) 76%,rgba(4,8,20,.42) 100%)}
 
   @media (max-width:520px){
     h1{font-size:29px}
@@ -2998,15 +2983,26 @@
     btn.addEventListener('click', function(){ selectCategory(btn.getAttribute('data-cat'), false); });
   });
 
-  /* ---------- detail view (the card element itself moves into the panel) ---------- */
+  /* ---------- detail view: NO-RELOCATION overlay ----------
+     The feed card is never moved, emptied, rebuilt or restored.
+     openDetail only READS the original card (text, hrefs, image src,
+     plate rect). The panel carries its OWN detail root for the whole
+     session: a deep clone of the card, built inside the panel by
+     buildDetailClone (which splits the CLONE into hero + sheet; the
+     original's children are never borrowed). On close, the sheet that
+     animates out is that populated clone sheet, and the clone is only
+     discarded after the exit completes. No scroll position is saved
+     or restored on either axis: the feed never leaves the document,
+     so the window keeps its scroll and every horizontal rail keeps
+     its scrollLeft for free. */
   var panel = document.getElementById('detailPanel');
   var detailScroll = document.getElementById('detailScroll');
   var dbRent = document.getElementById('dbRent');
   var dbAllin = document.getElementById('dbAllin');
   var dbCall = document.getElementById('dbCall');
   var dbEmail = document.getElementById('dbEmail');
-  var detailCard = null, returnParent = null, returnNext = null, returnScroll = 0;
-  var heroEl = null, sheetEl = null, flipSrc = null;
+  var detailCard = null;   /* the ORIGINAL feed card — read-only */
+  var detailRoot = null, heroEl = null, sheetEl = null;
 
   function cardByMls(mls){
     return document.querySelector('.card[data-mls="' + mls + '"]');
@@ -3014,143 +3010,165 @@
   function reducedMotion(){
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
-  /* FLIP: one duration + one easing in both directions; only transform and
-     opacity ever animate — never width/height/top/left, box-shadow, filters
-     or backdrop blur. Choreography, both directions: every restructure
-     completes before the first animation frame or after the last, never
-     during. On close, the WHOLE REAL origin card is restored into the
-     feed (original position, saved scroll, every feed line rendered AND
-     every plate overlay home — rent hero, spec pill, badge, Watch
-     controls — at full opacity with transitions suppressed; only its
-     plate's photo area left empty) synchronously BEFORE the first
-     frame. The ONLY card elements in the panel's overlay layer during
-     the flight are the hero's img, its scrim and its photo credit; the
-     hero + sheet finish the flight there, independent of the card.
-     After the group completes, the completion callback ONLY returns
-     that img + scrim + credit into the card's plate box — under the
-     overlays that never left, so at landing they are simply uncovered,
-     never inserted — removes the landing state, and cleans the overlay.
-     The landing target is measured from the restored card itself, so
-     the landing coincides exactly and the swap is invisible. The hero
-     keeps the plate's own img element with the same src throughout:
-     no clone, no reload, no re-decode. */
+
+  /* ---------- flight ownership ----------
+     Every open/close animation is a flight: a set of Web Animations
+     owned by one flight object with one completion cleanup. Starting
+     a new flight settles the previous one first (cancel its
+     animations, run its cleanup synchronously), so no wall-clock
+     timer ever mutates shared elements mid-flight — completion is
+     driven only by the animations' own finished promises. All
+     animations in a flight share delay 0, duration 320ms and one
+     easing; only transform and opacity animate, except the flight
+     layer's clip-path, which is the crop mechanism itself. */
   var FLIP_MS = 320, FLIP_EASE = 'cubic-bezier(.32,.72,.22,1)';
-  /* every animated element in both sequences shares these exact strings:
-     delay 0ms, duration 320ms, one easing — the group is synchronized */
-  var FLIP_TRANSITION = 'transform ' + FLIP_MS + 'ms ' + FLIP_EASE + ' 0ms';
-  var FADE_TRANSITION = 'opacity ' + FLIP_MS + 'ms ' + FLIP_EASE + ' 0ms';
-  var SHEET_TRANSITION = 'transform ' + FLIP_MS + 'ms ' + FLIP_EASE + ' 0ms, ' +
-    'opacity ' + FLIP_MS + 'ms ' + FLIP_EASE + ' 0ms';
-  var flipAnimating = false;
-  var returnCardRect = null;
-  /* snapshot of a feed plate's viewport rect (where the FLIP starts/lands) */
+  var activeFlight = null;
+  function makeAnim(el, frames){
+    return el.animate(frames, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+  }
+  function beginFlight(cleanup){
+    settleFlight();
+    var f = { anims: [], cleanup: cleanup, settled: false,
+      settle: function(){
+        if(f.settled) return;
+        f.settled = true;
+        for(var i = 0; i < f.anims.length; i++){ try{ f.anims[i].cancel(); }catch(e){} }
+        if(activeFlight === f) activeFlight = null;
+        f.cleanup();
+      } };
+    activeFlight = f;
+    return f;
+  }
+  function settleFlight(){ if(activeFlight) activeFlight.settle(); }
+  function watchFlight(f){
+    var ps = [];
+    for(var i = 0; i < f.anims.length; i++) ps.push(f.anims[i].finished);
+    Promise.all(ps).then(function(){
+      if(f.settled) return;
+      f.settled = true;
+      if(activeFlight === f) activeFlight = null;
+      f.cleanup();
+    }, function(){ /* a cancelled animation rejects; settle() already cleaned up */ });
+  }
+  function clearGroupEls(){
+    var bar = document.getElementById('detailBar');
+    if(bar){ bar.style.transition = ''; bar.style.opacity = ''; bar.style.transform = ''; }
+    var closeBtn = document.getElementById('detailClose');
+    if(closeBtn){ closeBtn.style.transition = ''; closeBtn.style.opacity = ''; closeBtn.style.transform = ''; }
+  }
+  /* discard the detail clone and hide the panel; the feed is not touched */
+  function teardownDetail(){
+    settleFlight();
+    detailScroll.innerHTML = '';
+    detailRoot = null; heroEl = null; sheetEl = null; detailCard = null;
+    panel.hidden = true;
+    panel.classList.remove('scrolled', 'closing');
+    panel.style.opacity = ''; panel.style.background = '';
+    document.body.classList.remove('no-scroll');
+    clearGroupEls();
+  }
+
+  /* snapshot of a feed plate's viewport rect (where a flight starts/lands) */
   function plateInfo(card){
     var plate = card.querySelector('.plate');
     if(!plate) return null;
     var r = plate.getBoundingClientRect();
     if(!r.width || !r.height) return null;
-    return { top: r.top, left: r.left, width: r.width, height: r.height };
+    return { top: r.top, left: r.left, width: r.width, height: r.height,
+      right: r.right, bottom: r.bottom };
   }
-  /* transform that maps rect `from` exactly onto rect `to` (origin: top-left) */
-  function flipTransform(from, to){
-    return 'translate(' + (to.left - from.left) + 'px,' + (to.top - from.top) + 'px) ' +
-      'scale(' + (to.width / from.width) + ',' + (to.height / from.height) + ')';
+  function insetFor(r){
+    return 'inset(' + r.top + 'px ' + (window.innerWidth - r.right) + 'px ' +
+      (window.innerHeight - r.bottom) + 'px ' + r.left + 'px)';
   }
-  function setFlipStart(el, transform){
-    el.classList.add('is-flipping');
-    el.style.transition = 'none';
-    el.style.transformOrigin = '0 0';
-    el.style.transform = transform;
+  /* UNIFORM-scale transform (sx === sy at every instant) mapping an
+     element placed at box (left/top/width/height) so it COVERS the
+     target rect, centred on it — never a non-uniform scale(sx, sy) */
+  function coverTransform(box, target){
+    var s = Math.max(target.width / box.width, target.height / box.height);
+    var tx = (target.left + target.width / 2 - box.width * s / 2) - box.left;
+    var ty = (target.top + target.height / 2 - box.height * s / 2) - box.top;
+    return 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
   }
-  /* starts the whole synchronized group in this one call: hero transform,
-     plus every companion element's opacity (and the sheet's transform) —
-     all delay 0ms, all 320ms, all the same easing, set in the same frame.
-     No element is started anywhere else, and nothing is sequenced with
-     timers between elements; the single completion timer fires only
-     after the whole group has finished. */
-  function playFlip(el, endTransform, fadeEls, done){
-    el.style.transition = FLIP_TRANSITION;
-    el.style.transform = endTransform;
-    for(var i = 0; i < fadeEls.length; i++){
-      if(!fadeEls[i].el) continue;
-      fadeEls[i].el.style.transition = fadeEls[i].transition || FADE_TRANSITION;
-      fadeEls[i].el.style.opacity = fadeEls[i].to;
-      if(fadeEls[i].transformTo !== undefined) fadeEls[i].el.style.transform = fadeEls[i].transformTo;
-    }
-    setTimeout(done, FLIP_MS + 40);
+  var IDENTITY_T = 'translate(0px,0px) scale(1)';
+
+  /* The flight layer: a fixed, full-viewport clipping container whose
+     clip-path interpolates between the plate rect and the hero rect,
+     so the visible window itself morphs between the two framings.
+     Inside it, two freshly created img elements (never the card's own
+     img) crossfade: one framed for the plate box, one for the hero
+     box, each moving with a uniform scale only. Together the crop
+     interpolates plate -> hero with no distortion and no snap. */
+  function makeFlightLayer(){
+    var layer = document.createElement('div');
+    layer.className = 'flight-layer';
+    document.body.appendChild(layer);
+    return layer;
   }
-  function clearFlipStyles(){
-    [heroEl, sheetEl].forEach(function(el){
-      if(!el) return;
-      el.classList.remove('is-flipping');
-      el.style.transition = ''; el.style.transform = '';
-      el.style.transformOrigin = ''; el.style.opacity = '';
-    });
-    var bar = document.getElementById('detailBar');
-    if(bar){ bar.classList.remove('is-flipping'); bar.style.transition = ''; bar.style.opacity = ''; }
-    var closeBtn = document.getElementById('detailClose');
-    if(closeBtn){ closeBtn.classList.remove('is-flipping'); closeBtn.style.transition = ''; closeBtn.style.opacity = ''; }
-    flipAnimating = false;
+  function flightImg(layer, box, src){
+    var img = document.createElement('img');
+    img.className = 'flight-img';
+    img.alt = '';
+    img.src = src;
+    img.style.left = box.left + 'px'; img.style.top = box.top + 'px';
+    img.style.width = box.width + 'px'; img.style.height = box.height + 'px';
+    layer.appendChild(img);
+    return img;
   }
-  /* split the card into hero (photo / tinted plate) + sheet (everything else,
-     in the card's original order, plate data block first) */
-  function buildDetail(card){
-    var plate = card.querySelector('.plate');
-    heroEl = document.createElement('div');
-    heroEl.className = 'detail-hero';
-    sheetEl = document.createElement('div');
-    sheetEl.className = 'detail-sheet';
+  function flightScrim(layer, box){
+    var s = document.createElement('div');
+    s.className = 'flight-scrim';
+    s.style.left = box.left + 'px'; s.style.top = box.top + 'px';
+    s.style.width = box.width + 'px'; s.style.height = box.height + 'px';
+    layer.appendChild(s);
+    return s;
+  }
+  function dropLayer(layer){ if(layer && layer.parentNode) layer.parentNode.removeChild(layer); }
+
+  /* split the CLONE into hero (its own photo / scrim / credit) + sheet
+     (everything else, in the clone's original order, plate data first).
+     Only clone nodes move, and only inside the panel. */
+  function buildDetailClone(card){
+    var root = card.cloneNode(true);
+    root.classList.add('in-detail');
+    root.removeAttribute('role'); root.removeAttribute('tabindex');
+    var plate = root.querySelector('.plate');
+    var hero = document.createElement('div');
+    hero.className = 'detail-hero';
+    var sheet = document.createElement('div');
+    sheet.className = 'detail-sheet';
     if(plate){
       var photo = plate.querySelector('.plate-photo');
       var scrim = plate.querySelector('.plate-scrim');
       var credit = plate.querySelector('.photo-credit--plate');
-      if(photo) heroEl.appendChild(photo);
-      if(scrim) heroEl.appendChild(scrim);
-      if(credit) heroEl.appendChild(credit);
-      if(!photo) heroEl.classList.add('no-photo');
+      if(photo) hero.appendChild(photo);
+      if(scrim) hero.appendChild(scrim);
+      if(credit) hero.appendChild(credit);
+      if(!photo) hero.classList.add('no-photo');
     }else{
-      heroEl.classList.add('no-photo');
+      hero.classList.add('no-photo');
     }
-    card.insertBefore(heroEl, card.firstChild);
+    root.insertBefore(hero, root.firstChild);
     var kids = [];
-    for(var i = 0; i < card.childNodes.length; i++){
-      if(card.childNodes[i] !== heroEl) kids.push(card.childNodes[i]);
+    for(var i = 0; i < root.childNodes.length; i++){
+      if(root.childNodes[i] !== hero) kids.push(root.childNodes[i]);
     }
-    for(var k = 0; k < kids.length; k++) sheetEl.appendChild(kids[k]);
-    card.appendChild(sheetEl);
+    for(var k = 0; k < kids.length; k++) sheet.appendChild(kids[k]);
+    root.appendChild(sheet);
+    return { root: root, hero: hero, sheet: sheet };
   }
-  /* put the card back together exactly as it was in the feed */
-  function unwrapDetail(card){
-    if(!sheetEl || !heroEl) return;
-    var plate = sheetEl.querySelector('.plate');
-    var photo = heroEl.querySelector('.plate-photo');
-    var scrim = heroEl.querySelector('.plate-scrim');
-    var credit = heroEl.querySelector('.photo-credit--plate');
-    if(plate){
-      if(photo){ photo.style.transform = ''; plate.insertBefore(photo, plate.firstChild); }
-      if(scrim) plate.insertBefore(scrim, plate.children[1] || null);
-      if(credit) plate.appendChild(credit);
-    }
-    while(sheetEl.firstChild) card.insertBefore(sheetEl.firstChild, sheetEl);
-    drop(sheetEl); drop(heroEl);
-    sheetEl = null; heroEl = null;
-  }
+
   function openDetail(card, push, src){
     if(!card || detailCard) return;
+    settleFlight();
     detailCard = card;
-    returnParent = card.parentNode;
-    returnNext = card.nextSibling;
-    returnScroll = window.pageYOffset;
-    var cardRect0 = card.getBoundingClientRect();
-    returnCardRect = { width: cardRect0.width, height: cardRect0.height };
-    /* sticky bar: rent + all-in from the card, Call = first-listed agent */
+    /* sticky bar: rent + all-in read from the card, Call = first agent */
     var rentEl = card.querySelector('.rent-big');
     dbRent.textContent = rentEl ? rentEl.textContent.replace(/\s+/g, ' ').trim() : '';
     var allinEl = card.querySelector('.allin');
     dbAllin.innerHTML = '';
     if(allinEl){
       var txt = document.createElement('span');
-      var label = allinEl.querySelector('.allin-label');
       var chipEl = allinEl.querySelector('.chip.status');
       var figure = allinEl.textContent.replace(/\s+/g, ' ')
         .replace(/All-in/i, '').replace(/ESTIMATED|CONFIRMED/g, '').trim();
@@ -3183,48 +3201,58 @@
         dbEmail.hidden = true;
       }
     }
-    card.classList.add('in-detail');
-    card.removeAttribute('role'); card.removeAttribute('tabindex');
-    /* restructure FIRST, fully and synchronously: buildDetail's node moves
-       are complete before the first animation frame; nothing moves after */
-    buildDetail(card);
-    detailScroll.appendChild(card);
+    /* build the panel's OWN detail root from a clone and show the panel.
+       All of this is synchronous, before the first animation frame; the
+       original card stays in the feed, untouched, the whole session. */
     detailScroll.scrollTop = 0;
-    panel.classList.remove('scrolled');
-    flipSrc = (!reducedMotion() && src) ? src : null;
-    if(flipSrc && heroEl && sheetEl){
-      panel.classList.add('flip');
-      panel.hidden = false;
-      document.body.classList.add('no-scroll');
-      panel.classList.add('open');
-      /* measure the hero's final rect, invert it onto the feed slot, and
-         fade the sheet + bottom bar in alongside — transform/opacity only */
-      var last = heroEl.getBoundingClientRect();
-      flipAnimating = true;
-      setFlipStart(heroEl, flipTransform(last, flipSrc));
-      /* group start states, all set pre-frame with transitions off: hero
-         inverted onto the feed slot, sheet lowered + transparent, bar and
-         close button transparent — then ONE rAF starts every element
-         together (delay 0, 320ms, same easing) */
-      sheetEl.classList.add('is-flipping');
-      sheetEl.style.transition = 'none'; sheetEl.style.opacity = '0';
-      sheetEl.style.transform = 'translateY(26px)';
-      var bar0 = document.getElementById('detailBar');
-      if(bar0){ bar0.classList.add('is-flipping'); bar0.style.transition = 'none'; bar0.style.opacity = '0'; }
-      var close0 = document.getElementById('detailClose');
-      if(close0){ close0.classList.add('is-flipping'); close0.style.transition = 'none'; close0.style.opacity = '0'; }
-      void heroEl.offsetWidth;
-      requestAnimationFrame(function(){
-        playFlip(heroEl, '', [
-          { el: sheetEl, to: '1', transition: SHEET_TRANSITION, transformTo: '' },
-          { el: bar0, to: '1' },
-          { el: close0, to: '1' }
-        ], clearFlipStyles);
+    var built = buildDetailClone(card);
+    detailRoot = built.root; heroEl = built.hero; sheetEl = built.sheet;
+    detailScroll.appendChild(detailRoot);
+    panel.classList.remove('scrolled', 'closing');
+    panel.hidden = false;
+    document.body.classList.add('no-scroll');
+    var photoImg = card.querySelector('.plate-photo');
+    var useFlight = !reducedMotion() && src && photoImg && heroEl.querySelector('.plate-photo');
+    if(useFlight){
+      var heroRect = heroEl.getBoundingClientRect();
+      var heroBox = { top: heroRect.top, left: heroRect.left, width: heroRect.width,
+        height: heroRect.height, right: heroRect.right, bottom: heroRect.bottom };
+      var layer = makeFlightLayer();
+      var hImg = flightImg(layer, heroBox, photoImg.getAttribute('src'));
+      var pImg = flightImg(layer, src, photoImg.getAttribute('src'));
+      var scr = flightScrim(layer, src);
+      heroEl.style.visibility = 'hidden';
+      var heroRef = heroEl, sheetRef = sheetEl;
+      var f = beginFlight(function(){
+        dropLayer(layer);
+        heroRef.style.visibility = '';
+        if(sheetRef){ sheetRef.style.transform = ''; sheetRef.style.opacity = ''; }
+        clearGroupEls();
       });
+      var bar0 = document.getElementById('detailBar');
+      var close0 = document.getElementById('detailClose');
+      f.anims.push(makeAnim(layer, [
+        { clipPath: insetFor(src) }, { clipPath: insetFor(heroBox) } ]));
+      f.anims.push(makeAnim(hImg, [
+        { transform: coverTransform(heroBox, src), opacity: '0' },
+        { transform: IDENTITY_T, opacity: '1' } ]));
+      f.anims.push(makeAnim(pImg, [
+        { transform: IDENTITY_T, opacity: '1' },
+        { transform: coverTransform(src, heroBox), opacity: '0' } ]));
+      f.anims.push(makeAnim(scr, [
+        { transform: IDENTITY_T, opacity: '1' },
+        { transform: coverTransform(src, heroBox), opacity: '0' } ]));
+      f.anims.push(makeAnim(sheetRef, [
+        { transform: 'translateY(26px)', opacity: '0' },
+        { transform: 'translateY(0px)', opacity: '1' } ]));
+      if(bar0) f.anims.push(makeAnim(bar0, [ { opacity: '0' }, { opacity: '1' } ]));
+      if(close0) f.anims.push(makeAnim(close0, [ { opacity: '0' }, { opacity: '1' } ]));
+      watchFlight(f);
     }else{
-      panel.hidden = false;
-      document.body.classList.add('no-scroll');
-      requestAnimationFrame(function(){ requestAnimationFrame(function(){ panel.classList.add('open'); }); });
+      /* reduced motion or no source plate (deep link): a plain fade */
+      var f2 = beginFlight(function(){ panel.style.opacity = ''; });
+      f2.anims.push(makeAnim(panel, [ { opacity: '0' }, { opacity: '1' } ]));
+      watchFlight(f2);
     }
     if(push !== false){
       try{ history.pushState({ aptListing: card.getAttribute('data-mls') }, '', '#/listing/' + card.getAttribute('data-mls')); }catch(e){}
@@ -3234,163 +3262,70 @@
   }
   function closeDetail(){
     if(!detailCard) return;
+    settleFlight();
+    if(!detailCard) return; /* settling a prior close flight finished it */
     var card = detailCard;
-    detailCard = null;
-    panel.classList.remove('open');
     var reduce = reducedMotion();
-    /* plain finish for reduced motion / missing FLIP pieces: unwrap the
-       card fully (photo back in its plate) and put it back in the feed */
-    var restorePlain = function(){
-      panel.hidden = true;
-      panel.classList.remove('flip', 'scrolled', 'closing');
-      panel.style.opacity = '';
-      document.body.classList.remove('no-scroll');
-      unwrapDetail(card);
-      card.classList.remove('in-detail');
-      card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0');
-      if(card.parentNode === detailScroll && returnParent){
-        if(returnNext && returnNext.parentNode === returnParent) returnParent.insertBefore(card, returnNext);
-        else returnParent.appendChild(card);
-      }
-      window.scrollTo(0, returnScroll);
-      returnParent = null; returnNext = null; returnCardRect = null;
-      flipSrc = null; flipAnimating = false;
-    };
-    if(!heroEl || !sheetEl || reduce){
-      if(reduce) restorePlain(); else setTimeout(restorePlain, FLIP_MS);
-      return;
+    /* CLOSE FROM WHAT'S ON SCREEN: if the user has scrolled the detail
+       (sheet over the hero, hero faded by the parallax), there is no
+       truthful photo flight to reverse — the populated detail layer
+       simply fades out from its current state. detailScroll.scrollTop
+       is never reset and the hero is never resurrected here. */
+    var scrolled = detailScroll.scrollTop > 4;
+    var target = (!reduce && !scrolled) ? plateInfo(card) : null;
+    var photoImg = card.querySelector('.plate-photo');
+    if(!reduce && !scrolled && target && photoImg && heroEl && heroEl.querySelector('.plate-photo')){
+      /* top state: the exact reverse flight. The feed card is already
+         in its slot, fully rendered — the flight lands on its plate,
+         which was never emptied. The panel goes transparent so the
+         feed shows around the flight, and the POPULATED clone sheet
+         slides/fades out as part of the same synchronized group. */
+      var heroRect = heroEl.getBoundingClientRect();
+      var heroBox = { top: heroRect.top, left: heroRect.left, width: heroRect.width,
+        height: heroRect.height, right: heroRect.right, bottom: heroRect.bottom };
+      var layer = makeFlightLayer();
+      var hImg = flightImg(layer, heroBox, photoImg.getAttribute('src'));
+      var pImg = flightImg(layer, target, photoImg.getAttribute('src'));
+      var scr = flightScrim(layer, target);
+      heroEl.style.visibility = 'hidden';
+      panel.classList.add('closing');
+      var sheetRef = sheetEl;
+      var f = beginFlight(function(){
+        dropLayer(layer);
+        teardownDetail();
+      });
+      var bar1 = document.getElementById('detailBar');
+      var close1 = document.getElementById('detailClose');
+      f.anims.push(makeAnim(layer, [
+        { clipPath: insetFor(heroBox) }, { clipPath: insetFor(target) } ]));
+      f.anims.push(makeAnim(hImg, [
+        { transform: IDENTITY_T, opacity: '1' },
+        { transform: coverTransform(heroBox, target), opacity: '0' } ]));
+      f.anims.push(makeAnim(pImg, [
+        { transform: coverTransform(target, heroBox), opacity: '0' },
+        { transform: IDENTITY_T, opacity: '1' } ]));
+      f.anims.push(makeAnim(scr, [
+        { transform: coverTransform(target, heroBox), opacity: '0' },
+        { transform: IDENTITY_T, opacity: '1' } ]));
+      if(sheetRef) f.anims.push(makeAnim(sheetRef, [
+        { transform: 'translateY(0px)', opacity: '1' },
+        { transform: 'translateY(56px)', opacity: '0' } ]));
+      if(bar1) f.anims.push(makeAnim(bar1, [ { opacity: '1' }, { opacity: '0' } ]));
+      if(close1) f.anims.push(makeAnim(close1, [ { opacity: '1' }, { opacity: '0' } ]));
+      watchFlight(f);
+    }else{
+      /* scrolled state or reduced motion: fade the populated detail
+         layer out from exactly the state the user left it in */
+      var curOp = window.getComputedStyle(panel).opacity || '1';
+      var f2 = beginFlight(function(){ teardownDetail(); });
+      f2.anims.push(makeAnim(panel, [ { opacity: curOp }, { opacity: '0' } ]));
+      watchFlight(f2);
     }
-    panel.classList.add('flip');
-    flipAnimating = true;
-    /* ===== STEP 1 - everything below runs synchronously, BEFORE the
-       first animation frame: the detail scroll/parallax resets, the
-       hero and sheet are measured, the sheet's children move back into
-       the card (the photo, scrim and credit stay in the hero), the hero
-       and the now-empty sheet are detached into the panel's overlay
-       layer at their measured rects, and the WHOLE REAL origin card -
-       the plate WITH its rent hero, spec pill, badge and Watch controls
-       on it, plus face head / building line, listed-date line, all-in
-       line, all rendered - is reinserted into the feed at its original
-       position with the feed scroll restored. Only the card's photo
-       area is empty: the same 4:3 plate box, transparent, as the hero's
-       landing target. No placeholder element stands in for the card
-       anywhere, and no card content of any kind is left in transit. ===== */
-    detailScroll.scrollTop = 0;
-    panel.classList.remove('scrolled');
-    heroEl.style.opacity = '';
-    var ph0 = heroEl.querySelector('.plate-photo');
-    if(ph0) ph0.style.transform = '';
-    var from = heroEl.getBoundingClientRect();
-    var sheetRect = sheetEl.getBoundingClientRect();
-    var plateEl = sheetEl.querySelector('.plate');
-    while(sheetEl.firstChild) card.insertBefore(sheetEl.firstChild, sheetEl);
-    card.classList.remove('in-detail');
-    card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0');
-    if(returnParent){
-      if(returnNext && returnNext.parentNode === returnParent) returnParent.insertBefore(card, returnNext);
-      else returnParent.appendChild(card);
-    }
-    document.body.classList.remove('no-scroll');
-    window.scrollTo(0, returnScroll);
-    /* plate overlays home, explicitly, in this same pre-frame restore:
-       the rent hero, the spec pill, the badge and the Watch plate
-       controls are children of the plate itself, so the plate's return
-       above already carried them home — anything ever found outside
-       the plate goes back into it here, before the first frame, in
-       plate order. They then sit in the plate at full opacity with
-       transitions suppressed (the .photo-landing rules) over the
-       still-empty photo box for the entire flight; the flying hero
-       shrinks onto the plate ABOVE them (the panel overlay outranks
-       the feed), so at landing they are uncovered, never inserted. */
-    if(plateEl){
-      var overlaySels = ['.plate-badge', '.rent-big', '.spec-pill', '.plate-controls', '.travel'];
-      for(var oi = 0; oi < overlaySels.length; oi++){
-        var ov = plateEl.querySelector(overlaySels[oi]) || card.querySelector(overlaySels[oi]);
-        if(ov && ov.parentNode !== plateEl) plateEl.appendChild(ov);
-      }
-    }
-    if(plateEl && card.classList.contains('has-photo')) plateEl.classList.add('photo-landing');
-    /* hero -> overlay layer, fixed at its on-screen rect (geometry set
-       once, pre-frame; only its transform animates from here) */
-    heroEl.classList.add('flying');
-    heroEl.style.left = from.left + 'px'; heroEl.style.top = from.top + 'px';
-    heroEl.style.width = from.width + 'px'; heroEl.style.height = from.height + 'px';
-    panel.appendChild(heroEl);
-    /* sheet -> overlay layer as an empty exit shell at its measured
-       rect; it animates out above the already-restored feed */
-    sheetEl.classList.add('sheet-exit');
-    sheetEl.style.left = sheetRect.left + 'px'; sheetEl.style.top = sheetRect.top + 'px';
-    sheetEl.style.width = sheetRect.width + 'px'; sheetEl.style.height = sheetRect.height + 'px';
-    panel.appendChild(sheetEl);
-    panel.classList.add('closing');
-    /* landing target measured from the restored card's actual plate box,
-       after the feed scroll is back - the hero's final frame coincides
-       with this box exactly */
-    var target = plateEl ? plateEl.getBoundingClientRect() : null;
-    var exitSheet = sheetEl;
-    var finishAnimated = function(){
-      /* COMPLETION - this callback performs ONLY these actions, and
-         nothing else: (1) insert the hero's img, scrim and credit into
-         the restored plate (img first, scrim second, credit last —
-         their normal stacking UNDER the rent hero / spec pill / badge
-         that never left the plate), (2) remove the plate's landing
-         state, (3) hide and clean the overlay layer (drop the hero and
-         the empty sheet shell, clear the bar/close flip styles, hide
-         the panel, reset the flight state). It does NOT move, insert,
-         re-render, recount or restyle any other card content, and no
-         close-path code applies any fade or transition to the card or
-         its children. The swap is invisible because the hero has
-         landed exactly on the plate box it returns into. */
-      var photo = heroEl ? heroEl.querySelector('.plate-photo') : null;
-      var scrim = heroEl ? heroEl.querySelector('.plate-scrim') : null;
-      var credit = heroEl ? heroEl.querySelector('.photo-credit--plate') : null;
-      if(plateEl){
-        if(photo) plateEl.insertBefore(photo, plateEl.firstChild);
-        if(scrim) plateEl.insertBefore(scrim, plateEl.children[1] || null);
-        if(credit) plateEl.appendChild(credit);
-        plateEl.classList.remove('photo-landing');
-      }
-      if(heroEl) drop(heroEl);
-      if(exitSheet) drop(exitSheet);
-      heroEl = null; sheetEl = null;
-      var bar2 = document.getElementById('detailBar');
-      if(bar2){ bar2.classList.remove('is-flipping'); bar2.style.transition = ''; bar2.style.opacity = ''; }
-      var close2 = document.getElementById('detailClose');
-      if(close2){ close2.classList.remove('is-flipping'); close2.style.transition = ''; close2.style.opacity = ''; }
-      panel.hidden = true;
-      panel.classList.remove('flip', 'scrolled', 'closing');
-      panel.style.opacity = '';
-      returnParent = null; returnNext = null; returnCardRect = null;
-      flipSrc = null; flipAnimating = false;
-    };
-    if(!target || !target.width){ finishAnimated(); return; }
-    /* group start states, all pre-frame with transitions off */
-    setFlipStart(heroEl, '');
-    exitSheet.classList.add('is-flipping');
-    exitSheet.style.transition = 'none'; exitSheet.style.opacity = '1'; exitSheet.style.transform = '';
-    var bar1 = document.getElementById('detailBar');
-    if(bar1){ bar1.classList.add('is-flipping'); bar1.style.transition = 'none'; bar1.style.opacity = '1'; }
-    var close1 = document.getElementById('detailClose');
-    if(close1){ close1.classList.add('is-flipping'); close1.style.transition = 'none'; close1.style.opacity = '1'; }
-    void heroEl.offsetWidth;
-    /* ===== STEP 2 - ONE synchronized group, started in a single frame:
-       hero reverse FLIP to the restored plate box + sheet slide-down/
-       fade + bar fade + close fade; every element transition-delay
-       0ms, duration 320ms, the same easing curve. ===== */
-    requestAnimationFrame(function(){
-      playFlip(heroEl, flipTransform(from, target), [
-        { el: exitSheet, to: '0', transition: SHEET_TRANSITION, transformTo: 'translateY(56px)' },
-        { el: bar1, to: '0' },
-        { el: close1, to: '0' }
-      ], finishAnimated);
-    });
-    /* ===== STEP 3 is finishAnimated above: it runs only from playFlip's
-       completion callback, after the whole group has finished. ===== */
   }
   /* parallax: hero fades as the sheet covers it; close button goes plain
      once the sheet has scrolled over the hero */
   detailScroll.addEventListener('scroll', function(){
-    if(!heroEl || flipAnimating) return;
+    if(!heroEl || activeFlight) return;
     var y = detailScroll.scrollTop;
     var h = heroEl.offsetHeight || 320;
     var p = Math.min(1, Math.max(0, y / Math.max(1, h - 40)));
@@ -3399,6 +3334,7 @@
     if(ph) ph.style.transform = 'translateY(' + (y * 0.12) + 'px) scale(1.07)';
     panel.classList.toggle('scrolled', y > h - 76);
   });
+
   function requestClose(){
     if(location.hash.indexOf('#/listing/') === 0){ history.back(); }
     else closeDetail();
@@ -3471,11 +3407,10 @@
     if(acceptBtn){
       acceptBtn.addEventListener('click', function(){
         var wasDetail = detailCard === m;
-        if(wasDetail){ unwrapDetail(m); flipSrc = null; }
         addTo(ACCEPT_KEY, mls);
         promote(m);
         recount();
-        if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; panel.classList.remove('flip', 'scrolled'); panel.style.opacity = ''; document.body.classList.remove('no-scroll'); unwrapDetail(m); flipSrc = null; m.classList.remove('in-detail'); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+        if(wasDetail){ teardownDetail(); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
       });
     }
     if(removeBtn){
@@ -3484,11 +3419,10 @@
         if(removeBtn.classList.contains('confirming')){
           if(timer) clearTimeout(timer);
           var wasDetail = detailCard === m;
-          if(wasDetail){ unwrapDetail(m); flipSrc = null; }
           addTo(REMOVE_KEY, mls);
           drop(m);
           recount();
-          if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; panel.classList.remove('flip', 'scrolled'); panel.style.opacity = ''; document.body.classList.remove('no-scroll'); unwrapDetail(m); flipSrc = null; if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+          if(wasDetail){ teardownDetail(); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
         }else{
           removeBtn.classList.add('confirming');
           removeBtn.textContent = 'Sure?';
