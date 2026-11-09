@@ -42,6 +42,17 @@
     --sec-magenta:#f06bd8;
     --sec-green:#3ddc97;
     --sec-orange:#ff8c42;
+    --appbar-h:48px;
+    --appbar-bg:rgba(6,9,19,.92);
+    --shadow:0 14px 34px rgba(1,4,12,.5);
+    --band-blue:rgba(106,174,255,.10);
+    --band-magenta:rgba(240,107,216,.09);
+    --band-green:rgba(61,220,151,.09);
+    --band-orange:rgba(255,140,66,.11);
+    --edge-blue:rgba(106,174,255,.45);
+    --edge-magenta:rgba(240,107,216,.45);
+    --edge-green:rgba(61,220,151,.45);
+    --edge-orange:rgba(255,140,66,.5);
   }
 
   @media (prefers-color-scheme: light){
@@ -76,6 +87,16 @@
       --sec-magenta:#9e0f7a;
       --sec-green:#0a6e44;
       --sec-orange:#b84d00;
+      --appbar-bg:rgba(237,240,246,.94);
+      --shadow:0 10px 26px rgba(20,35,80,.12);
+      --band-blue:rgba(15,98,214,.07);
+      --band-magenta:rgba(158,15,122,.06);
+      --band-green:rgba(10,110,68,.07);
+      --band-orange:rgba(184,77,0,.08);
+      --edge-blue:rgba(15,98,214,.4);
+      --edge-magenta:rgba(158,15,122,.4);
+      --edge-green:rgba(10,110,68,.4);
+      --edge-orange:rgba(184,77,0,.45);
     }
     .chip.warn{color:#7c4a03}
   }
@@ -92,15 +113,73 @@
   .wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
 
   /* ---------- Header ---------- */
-  .top{padding:14px 2px 4px}
+  .top{
+    padding:20px 16px 16px;margin:0 -8px;border-radius:20px;
+    background:linear-gradient(120deg,var(--blue-soft),var(--magenta-soft));
+  }
   .updated{font-size:13px;color:var(--faint);margin:0}
   h1{font-size:34px;line-height:1.08;font-weight:800;margin:14px 0 8px}
 
+  /* ---------- App bar (sticky) ---------- */
+  .appbar{
+    position:sticky;top:0;z-index:60;height:var(--appbar-h);
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin:10px -16px 0;padding:0 16px;
+    background:var(--appbar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .appbar-name{font-family:"Outfit",system-ui,sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em}
+  .appbar-count{font-size:13.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+
+  /* ---------- Hunt summary ---------- */
+  .summary{
+    margin-top:16px;padding:16px 18px;
+    background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:12px 16px;
+  }
+  .fact{
+    display:flex;align-items:center;gap:8px;min-width:0;
+    font-family:"Outfit",system-ui,sans-serif;font-size:15px;font-weight:600;line-height:1.3;
+  }
+  .fact::before{content:"";flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--blue)}
+  .fact:nth-child(even)::before{background:var(--magenta)}
+  .fact-count{color:var(--blue)}
+  @media (max-width:560px){
+    .summary{grid-template-columns:repeat(2,1fr)}
+  }
+
+  /* ---------- Navigation chips ---------- */
+  .navchips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 2px}
+  .navchip{
+    display:inline-flex;align-items:center;gap:6px;min-height:44px;
+    padding:10px 16px;border-radius:999px;cursor:pointer;
+    font-family:"Outfit",system-ui,sans-serif;font-size:14.5px;font-weight:700;
+    border:1px solid var(--line-soft);background:var(--chip-bg);color:var(--text);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .navchip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .navchip .navchip-count{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;font-weight:600;opacity:.75}
+  .navchip[data-nav="body-2bed"]{background:var(--band-blue);border-color:var(--edge-blue);color:var(--sec-blue)}
+  .navchip[data-nav="body-1den"]{background:var(--band-magenta);border-color:var(--edge-magenta);color:var(--sec-magenta)}
+  .navchip[data-nav="body-houses"]{background:var(--band-green);border-color:var(--edge-green);color:var(--sec-green)}
+  .navchip[data-nav="body-watch"]{background:var(--band-orange);border-color:var(--edge-orange);color:var(--sec-orange)}
+
   /* ---------- Sections (collapsible) ---------- */
   .section-head{
-    margin:26px -4px 4px;padding:10px 6px 8px;
-    position:sticky;top:0;z-index:30;background:var(--bg);
-    border-bottom:1px solid var(--line-soft);border-radius:0 0 10px 10px;
+    margin:26px -4px 4px;padding:10px 10px 8px;
+    position:sticky;top:var(--appbar-h);z-index:30;background-color:var(--bg);
+    border-bottom:1px solid var(--line-soft);border-radius:12px;
+    scroll-margin-top:calc(var(--appbar-h) + 8px);
+  }
+  section[data-section="2-Bedroom Condos"] .section-head{background-image:linear-gradient(var(--band-blue),var(--band-blue))}
+  section[data-section="1-Bedroom + Den Condos"] .section-head{background-image:linear-gradient(var(--band-magenta),var(--band-magenta))}
+  section[data-section="Houses & Townhouses"] .section-head{background-image:linear-gradient(var(--band-green),var(--band-green))}
+  section[data-section="Watch list"] .section-head{background-image:linear-gradient(var(--band-orange),var(--band-orange))}
+  .sec-subline{
+    display:block;font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0;
+    padding:1px 2px 3px;min-height:1.2em;
   }
   .section-toggle{
     display:flex;align-items:center;gap:10px;width:100%;text-align:left;
@@ -125,7 +204,7 @@
   /* ---------- Cards ---------- */
   .card{
     background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius);
-    padding:20px 18px;margin-bottom:16px;
+    padding:20px 18px;margin-bottom:16px;box-shadow:var(--shadow);
   }
   .card-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}
   .building{font-family:"Outfit",sans-serif;font-size:19px;font-weight:700;line-height:1.2;margin:0}
@@ -264,9 +343,28 @@
     <p class="updated">Last updated November 2026</p>
   </header>
 
+  <!-- ===== App bar (sticky) ===== -->
+  <div class="appbar"><span class="appbar-name">Apartment Hunt</span><span class="appbar-count" id="appbar-count">39 listings</span></div>
+
+  <!-- ===== Hunt summary ===== -->
+  <div class="summary">
+    <span class="fact fact-count" id="sum-count">39 listings</span>
+    <span class="fact">Move May–Jul 2027</span>
+    <span class="fact">Budget up to $2,500</span>
+    <span class="fact">Her bus ride · 40 min max</span>
+  </div>
+
+  <!-- ===== Section navigation chips ===== -->
+  <nav class="navchips" aria-label="Sections">
+    <button class="navchip" type="button" data-nav="body-2bed">2-Bed <span class="navchip-count">(9)</span></button>
+    <button class="navchip" type="button" data-nav="body-1den">1+Den <span class="navchip-count">(20)</span></button>
+    <button class="navchip" type="button" data-nav="body-houses">Houses <span class="navchip-count">(6)</span></button>
+    <button class="navchip" type="button" data-nav="body-watch">Watch <span class="navchip-count">(4)</span></button>
+  </nav>
+
   <!-- ===== 2 Bedroom ===== -->
   <section class="cat" data-section="2-Bedroom Condos">
-    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-2bed"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span><span class="sec-chev" aria-hidden="true">▾</span></button></h2>
+    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-2bed"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span><span class="sec-chev" aria-hidden="true">▾</span></button><span class="sec-subline" data-subline></span></h2>
     <div class="section-body" id="body-2bed" hidden>
   <div class="rule"></div>
   <p class="section-sub">All at or under the $2,500 rent cap.</p>
@@ -1011,7 +1109,7 @@
 
   <!-- ===== 1 Bed + Den ===== -->
   <section class="cat" data-section="1-Bedroom + Den Condos">
-    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-1den"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(20)</span><span class="sec-chev" aria-hidden="true">▾</span></button></h2>
+    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-1den"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(20)</span><span class="sec-chev" aria-hidden="true">▾</span></button><span class="sec-subline" data-subline></span></h2>
     <div class="section-body" id="body-1den" hidden>
   <div class="rule mag"></div>
   <p class="section-sub">Equal option to 2-bed — not a fallback.</p>
@@ -2598,7 +2696,7 @@
 
   <!-- ===== Houses & Townhouses ===== -->
   <section class="cat" data-section="Houses & Townhouses">
-    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-houses"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(6)</span><span class="sec-chev" aria-hidden="true">▾</span></button></h2>
+    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-houses"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(6)</span><span class="sec-chev" aria-hidden="true">▾</span></button><span class="sec-subline" data-subline></span></h2>
     <div class="section-body" id="body-houses" hidden>
   <div class="rule mag"></div>
   <p class="section-sub">Stacked condo townhouses — whole-property units; the house-like option that exists at this size in the zone.</p>
@@ -3076,7 +3174,7 @@
 
   <!-- ===== Watch list ===== -->
   <section class="cat" data-section="Watch list">
-    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-watch"><span class="sec-name">Watch list</span><span class="count">(4)</span><span class="sec-chev" aria-hidden="true">▾</span></button></h2>
+    <h2 class="section-head"><button class="section-toggle" type="button" aria-expanded="false" aria-controls="body-watch"><span class="sec-name">Watch list</span><span class="count">(4)</span><span class="sec-chev" aria-hidden="true">▾</span></button><span class="sec-subline" data-subline></span></h2>
     <div class="section-body" id="body-watch" hidden>
   <div class="rule dim"></div>
   <p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. Accept moves it to the main list; ✕ removes it for good.</p>
@@ -3509,13 +3607,58 @@
        and visible whether the section is expanded or collapsed. Called on
        load (after stored accept/remove state is applied) and after every
        accept/remove, so a header can never show a stale number. */
+    function rentOf(card){
+      var el = card.querySelector('.rent-big');
+      if(!el) return null;
+      var m = el.textContent.replace(/,/g, '').match(/(\d{3,5})/);
+      return m ? parseInt(m[1], 10) : null;
+    }
+    function fmtRent(n){ return '$' + n.toLocaleString('en-US'); }
+    var SEC_UNIT = {
+      '2-Bedroom Condos': 'condos',
+      '1-Bedroom + Den Condos': 'condos',
+      'Houses & Townhouses': 'homes',
+      'Watch list': 'watching'
+    };
+    /* One live pass over the cards actually on the page drives every count
+       and range in the shell: section header counts, nav-chip counts, the
+       app-bar total, the summary-card count, and each section's sub-line
+       (count + rent range read from the cards' own rent figures). Called
+       on load and after every accept/remove, so nothing can go stale. */
     function recount(){
       var secs = document.querySelectorAll('.cat');
+      var total = 0;
       for(var i = 0; i < secs.length; i++){
+        var cards = sectionCards(secs[i]);
+        var n = cards.length;
+        total += n;
         var c = secs[i].querySelector('.count');
-        if(!c) continue;
-        c.textContent = '(' + sectionCards(secs[i]).length + ')';
+        if(c) c.textContent = '(' + n + ')';
+        var body = secs[i].querySelector('.section-body');
+        var chip = body ? document.querySelector('.navchip[data-nav="' + body.id + '"] .navchip-count') : null;
+        if(chip) chip.textContent = '(' + n + ')';
+        var sub = secs[i].querySelector('[data-subline]');
+        if(sub){
+          var rents = [];
+          for(var j = 0; j < cards.length; j++){
+            var r = rentOf(cards[j]);
+            if(r !== null) rents.push(r);
+          }
+          var unit = SEC_UNIT[secs[i].getAttribute('data-section')] || 'listings';
+          var line = n + ' ' + unit;
+          if(rents.length){
+            var lo = Math.min.apply(null, rents);
+            var hi = Math.max.apply(null, rents);
+            line += ' · ' + (lo === hi ? fmtRent(lo) : fmtRent(lo) + '–' + fmtRent(hi));
+          }
+          sub.textContent = line;
+        }
       }
+      var totalText = total + (total === 1 ? ' listing' : ' listings');
+      var bar = document.getElementById('appbar-count');
+      if(bar) bar.textContent = totalText;
+      var sum = document.getElementById('sum-count');
+      if(sum) sum.textContent = totalText;
     }
 
     /* Erin Square #2008 (W14091848) is a permanent MAIN card now (accepted
@@ -3579,6 +3722,24 @@
 
     recount();
   })();
+</script>
+<script>
+  /* Navigation chips — tapping one opens its section (if closed) and
+     smooth-scrolls to the section header, which lands just below the
+     sticky app bar thanks to its scroll-margin. */
+  document.querySelectorAll('.navchip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      var body = document.getElementById(chip.getAttribute('data-nav'));
+      if(!body) return;
+      var btn = document.querySelector('.section-toggle[aria-controls="' + body.id + '"]');
+      if(btn && btn.getAttribute('aria-expanded') !== 'true') btn.click();
+      var sec = body.closest('section');
+      var head = sec ? sec.querySelector('.section-head') : null;
+      if(!head) return;
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      head.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
 </script>
 </body>
 </html>
