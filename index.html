@@ -170,6 +170,7 @@
   .plate-badge{position:absolute;top:10px;left:10px;z-index:2;background:var(--card);
     box-shadow:0 4px 14px rgba(0,0,0,.25);font-size:11px;font-weight:700}
   .plate:has(.plate-badge) .rent-big{margin-top:30px}
+  .card:not(.in-detail) .plate:has(.plate-controls) .rent-big{margin-top:48px}
   .plate-controls{position:absolute;top:8px;right:8px;z-index:3;display:flex;gap:6px;margin:0}
   .mini-accept,.mini-remove{font-family:inherit;font-size:13px;font-weight:700;line-height:1;
     min-height:44px;padding:10px 13px;border-radius:10px;cursor:pointer;
@@ -218,7 +219,7 @@
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:14px 16px 26px}
-  .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:5;
+  .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:5;
     width:44px;height:44px;border-radius:50%;border:1px solid var(--line-soft);
     background:var(--card);color:var(--text);box-shadow:var(--shadow);
     font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -235,7 +236,9 @@
   .db-call:active{filter:brightness(1.12)}
 
   .card.in-detail .plate{padding:16px}
-  .card.in-detail .plate-badge{top:62px;left:16px}
+  .card.in-detail .plate-badge{top:16px;left:16px}
+  .card.in-detail .plate-controls{display:none}
+  .card.in-detail .rent-big,.card.in-detail .spec-pill{max-width:calc(100% - 56px)}
   .card.in-detail .rent-big{font-size:36px}
   .card.in-detail .tnote{display:inline}
   .card.in-detail .tnum{font-size:24px}
