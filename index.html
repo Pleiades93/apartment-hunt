@@ -3185,34 +3185,35 @@
     }
     return { wrapper: wFrames, img: iFrames };
   }
-  /* ---------- EXIT TEXT FLYERS: rent / spec pill / title ----------
+  /* ---------- EXIT TEXT FLYERS: rent / spec pill ----------
      Built only inside runImageFlight (the top-state photo exit), on
      the same flight clock. Each flyer is a deep clone of the CARD's
      own element — never the sheet's — with the card node's computed
      presentation copied inline node for node, so it renders exactly
      as the card element does even outside the .card subtree (the
      white photo rent and its shadow, the /mo colour). The flyer is
-     laid out at the card element's box — for the rent and the title
-     the TEXT box (the rent element's own box is the full plate width;
-     the text is what the eye tracks) — then one WAAPI animation with
-     the flight's duration / easing / delay 0 takes its transform
-     from a start value to identity. The start value is a translate +
+     laid out at the card element's box — for the rent the TEXT box
+     (the rent element's own box is the full plate width; the text
+     is what the eye tracks) — then one WAAPI animation with the
+     flight's duration / easing / delay 0 takes its transform from a
+     start value to identity. The start value is a translate +
      UNIFORM scale (transform-origin 0 0) that puts the flyer's
      transformed centre exactly on the sheet element's centre, with
      scale (sheetW + sheetH) / (cardW + cardH): for an element set in
-     a single font size in both states (the title, and the pill which
-     is the same size in both) the width and height ratios are
-     identical, so the transformed rect EQUALS the sheet rect; for
-     the rent — whose "/mo" suffix is 13px in BOTH states and cannot
-     grow with the number — the balanced scale splits the small
-     residual evenly over the four edges (about 0.6px per edge at
-     desktop size, under 1px on a phone). At p=1 the transform is
-     identity: the flyer IS the card element's own rendering sitting
-     on the card element, and the layer is discarded with the photo
+     a single font size in both states (the pill, which is the same
+     size in both) the width and height ratios are identical, so
+     the transformed rect EQUALS the sheet rect; for the rent —
+     whose "/mo" suffix is 13px in BOTH states and cannot grow with
+     the number — the balanced scale splits the small residual
+     evenly over the four edges (about 0.6px per edge at desktop
+     size, under 1px on a phone). At p=1 the transform is identity:
+     the flyer IS the card element's own rendering sitting on the
+     card element, and the layer is discarded with the photo
      wrapper — no swap, no fade, full opacity for the whole exit.
-     The sheet's own rent / pill / title are visibility:hidden for
-     the flight so nothing doubles; everything else in the sheet
-     fades as before. The feed card's elements are never mutated. */
+     The sheet's own rent / pill are visibility:hidden for the
+     flight so nothing doubles; everything else in the sheet —
+     the building · unit title included — fades as before. The
+     feed card's elements are never mutated. */
   function rectOfEl(el){
     var r = el.getBoundingClientRect();
     return { left: r.left, top: r.top, width: r.width, height: r.height };
@@ -3230,8 +3231,7 @@
     if(!detailCard || !sheetEl) return anims;
     var pairs = [
       { card: detailCard.querySelector('.rent-big'), sheet: sheetEl.querySelector('.rent-big'), box: textBoxOf },
-      { card: detailCard.querySelector('.spec-pill'), sheet: sheetEl.querySelector('.spec-pill'), box: rectOfEl },
-      { card: detailCard.querySelector('.building'), sheet: sheetEl.querySelector('.building'), box: rectOfEl }
+      { card: detailCard.querySelector('.spec-pill'), sheet: sheetEl.querySelector('.spec-pill'), box: rectOfEl }
     ];
     var layer = document.createElement('div');
     layer.style.cssText = 'position:fixed;inset:0;z-index:121;pointer-events:none;margin:0;padding:0';
@@ -3284,7 +3284,7 @@
      goes transparent, it becomes inert, and its non-image parts
      (scroll content, sticky bar, ✕) fade out in ~150ms, so the photo
      flies over the real feed with the origin plate visible beneath.
-     The rent, spec pill and title fly with it as text flyers (see
+     The rent and spec pill fly with it as text flyers (see
      buildTextFlyers), riding in extras on this same clock. */
   function runImageFlight(img, R0, R1, cleanup){
     settleFlight();
