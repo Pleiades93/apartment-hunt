@@ -7,6 +7,7 @@
 <meta content="light dark" name="color-scheme"/>
 <link href="data:," rel="icon"/>
 <title>Apartment Hunt</title>
+<script>(function(){try{var t=localStorage.getItem('aptHunt.theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
@@ -58,6 +59,52 @@
     }
     .chip.warn{color:#7c4a03}
   }
+  /* ---------- Manual theme override (stored choice beats the system) ---------- */
+  html[data-theme="dark"]{color-scheme:dark;
+    --bg:#060913; --bg2:#0a0f1e; --card:#0e1528; --card2:#111a33;
+    --line:rgba(120,160,255,.16); --line-soft:rgba(255,255,255,.07);
+    --text:#eef2fb; --muted:#a7b2c9; --faint:#7c89a5;
+    --blue:#3f8cff; --blue-soft:rgba(63,140,255,.14);
+    --magenta:#f04fd8; --magenta-soft:rgba(240,79,216,.12);
+    --amber:#ffb454; --amber-soft:rgba(255,180,84,.12);
+    --green:#3ddc97; --green-soft:rgba(61,220,151,.12);
+    --red:#ff6b7a;
+    --bus:#57a5ff; --drive:#f45fdd;
+    --bus-soft:rgba(87,165,255,.09); --drive-soft:rgba(244,95,221,.08);
+    --dd:#d7deee; --chip-text:#c9d4ea; --chip-bg:rgba(255,255,255,.06);
+    --link:#7db4ff;
+    --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42;
+    --appbar-bg:rgba(6,9,19,.92);
+    --shadow:0 14px 34px rgba(1,4,12,.5);
+    --band-blue:rgba(106,174,255,.10); --band-magenta:rgba(240,107,216,.09);
+    --band-green:rgba(61,220,151,.09); --band-orange:rgba(255,140,66,.11);
+    --plate-blue:rgba(63,140,255,.20); --plate-magenta:rgba(240,79,216,.17);
+    --plate-green:rgba(61,220,151,.15); --plate-orange:rgba(255,140,66,.19);
+    --rail-bg:rgba(6,9,19,.94);
+  }
+  html[data-theme="light"]{color-scheme:light;
+    --bg:#edf0f6; --bg2:#e2e8f1; --card:#ffffff; --card2:#f2f5fa;
+    --line:rgba(25,55,130,.25); --line-soft:rgba(20,35,80,.13);
+    --text:#131c31; --muted:#45526c; --faint:#5d6a86;
+    --blue:#0f62d6; --blue-soft:rgba(15,98,214,.1);
+    --magenta:#b0128f; --magenta-soft:rgba(176,18,143,.09);
+    --amber:#855a00; --amber-soft:rgba(190,130,10,.15);
+    --green:#0a6e44; --green-soft:rgba(10,110,68,.1);
+    --red:#c22a3e;
+    --bus:#0f62d6; --drive:#a80e80;
+    --bus-soft:rgba(15,98,214,.07); --drive-soft:rgba(168,14,128,.06);
+    --dd:#2b3650; --chip-text:#33405c; --chip-bg:rgba(20,35,80,.05);
+    --link:#0f56c4;
+    --sec-blue:#0f62d6; --sec-magenta:#9e0f7a; --sec-green:#0a6e44; --sec-orange:#b84d00;
+    --appbar-bg:rgba(237,240,246,.94);
+    --shadow:0 10px 26px rgba(20,35,80,.12);
+    --band-blue:rgba(15,98,214,.07); --band-magenta:rgba(158,15,122,.06);
+    --band-green:rgba(10,110,68,.07); --band-orange:rgba(184,77,0,.08);
+    --plate-blue:rgba(15,98,214,.13); --plate-magenta:rgba(158,15,122,.11);
+    --plate-green:rgba(10,110,68,.11); --plate-orange:rgba(184,77,0,.13);
+    --rail-bg:rgba(237,240,246,.96);
+  }
+  html[data-theme="light"] .chip.warn{color:#7c4a03}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -82,6 +129,14 @@
     border-bottom:1px solid var(--line-soft)}
   .appbar-name{font-family:"Outfit",system-ui,sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em}
   .appbar-count{font-size:13.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .appbar-right{display:flex;align-items:center;gap:10px}
+  .theme-toggle{width:40px;height:40px;flex:0 0 auto;border-radius:50%;
+    border:1px solid var(--line-soft);background:var(--card);color:var(--text);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+    -webkit-tap-highlight-color:transparent}
+  .theme-toggle svg{width:20px;height:20px;display:block}
+  .theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .theme-toggle:active{filter:brightness(1.15)}
 
   /* ---------- Search pill ---------- */
   .search-pill{margin-top:16px;display:flex;align-items:stretch;
@@ -220,11 +275,13 @@
   .detail-panel.open{transform:translateX(0)}
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:14px 16px 26px}
+  .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:0}
   .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:5;
-    width:44px;height:44px;border-radius:50%;border:1px solid var(--line-soft);
-    background:var(--card);color:var(--text);box-shadow:var(--shadow);
-    font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+    width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
+    background:rgba(14,20,38,.42);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.28);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .25s ease,color .25s ease,border-color .25s ease,box-shadow .25s ease}
   .detail-close:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .detail-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
     padding:12px 16px calc(12px + env(safe-area-inset-bottom));
@@ -325,6 +382,50 @@
   .ba-open24{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:2px 8px;border-radius:999px;background:var(--green-soft);color:var(--green);white-space:nowrap;margin-left:7px;vertical-align:2px}
   .ba-note{font-size:12px;line-height:1.5;color:var(--faint);margin-top:9px}
 
+  /* ---------- Detail hero + parallax sheet (Airbnb-style) ---------- */
+  .detail-panel.flip{transform:none;transition:opacity .32s ease}
+  .detail-panel.scrolled::before{content:'';position:absolute;top:0;left:0;right:0;z-index:4;
+    height:calc(58px + env(safe-area-inset-top));background:var(--bg);
+    border-bottom:1px solid var(--line-soft);pointer-events:none}
+  .detail-panel.scrolled .detail-close{background:transparent;border-color:transparent;
+    box-shadow:none;color:var(--text);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .detail-hero{position:sticky;top:0;z-index:0;overflow:hidden;
+    height:min(66vw,340px);min-height:230px;background:var(--card2)}
+  .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-blue),var(--card2))}
+  .card[data-cat="1den"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-magenta),var(--card2))}
+  .card[data-cat="houses"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-green),var(--card2))}
+  .card[data-cat="watch"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-orange),var(--card2))}
+  .detail-hero .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .detail-hero .plate-scrim{background:linear-gradient(180deg,rgba(4,8,20,.30) 0%,rgba(4,8,20,0) 42%,rgba(4,8,20,.06) 72%,rgba(4,8,20,.34) 100%)}
+  .card.in-detail .detail-hero .photo-credit--plate{display:block;left:auto;right:12px;bottom:40px;text-align:right;max-width:82%}
+  .detail-sheet{position:relative;z-index:2;background:var(--bg);
+    border-radius:24px 24px 0 0;margin-top:-28px;padding:22px 16px 30px;
+    box-shadow:0 -14px 34px rgba(1,4,12,.22)}
+  .detail-panel.open .detail-sheet{animation:sheetIn .4s cubic-bezier(.22,.8,.3,1) both}
+  @keyframes sheetIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+  /* the plate becomes the sheet's first data block: rent, spec pill, bus, drive */
+  .card.in-detail .plate{aspect-ratio:auto;background:none;box-shadow:none;border-radius:0;
+    padding:0;overflow:visible;gap:9px}
+  .card.in-detail.has-photo .plate{padding-bottom:0}
+  .card.in-detail .plate-badge{position:static;align-self:flex-start;box-shadow:none}
+  .card.in-detail .plate:has(.plate-badge) .rent-big{margin-top:0}
+  .card.in-detail .rent-big{font-size:36px;max-width:100%}
+  .card.in-detail .spec-pill{max-width:100%}
+  .card.in-detail.has-photo .rent-big{color:var(--text);text-shadow:none}
+  .card.in-detail.has-photo .rent-big .per{color:var(--faint)}
+  .card.in-detail.has-photo .tblock.bus{background:var(--bus-soft)}
+  .card.in-detail.has-photo .tblock.drive{background:var(--drive-soft)}
+  .card.in-detail.has-photo .tlabel,.card.in-detail.has-photo .tdir{color:var(--faint)}
+  .card.in-detail.has-photo .tlabel .tnote{color:var(--faint)}
+  .card.in-detail.has-photo .tunit{color:var(--muted)}
+  .card.in-detail .photo-credit--detail{display:none}
+  /* FLIP overlay: the plate image growing into / shrinking out of the hero */
+  .flip-overlay{position:fixed;z-index:300;border-radius:16px;overflow:hidden;pointer-events:none;
+    transition:left .34s cubic-bezier(.32,.72,.22,1),top .34s cubic-bezier(.32,.72,.22,1),
+      width .34s cubic-bezier(.32,.72,.22,1),height .34s cubic-bezier(.32,.72,.22,1),
+      border-radius .34s cubic-bezier(.32,.72,.22,1)}
+  .flip-overlay img{width:100%;height:100%;object-fit:cover;display:block}
+
   @media (max-width:520px){
     h1{font-size:29px}
     .details .row{grid-template-columns:96px 1fr}
@@ -334,6 +435,8 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .detail-panel{transition:none}
+    .detail-panel.open .detail-sheet{animation:none}
+    .flip-overlay{transition:none}
   }
 
 </style>
@@ -346,7 +449,7 @@
 <p class="updated">Last updated November 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
-<div class="appbar"><span class="appbar-name">Apartment Hunt</span><span class="appbar-count" id="appbar-count">39 listings</span></div>
+<div class="appbar"><span class="appbar-name">Apartment Hunt</span><span class="appbar-right"><span class="appbar-count" id="appbar-count">39 listings</span><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
 <!-- ===== Hunt summary ===== -->
 <div class="search-pill" role="note"><span class="pill-seg">Mississauga</span><span class="pill-seg">May–Jul 2027</span><span class="pill-seg">up to $2,500</span><span class="pill-seg">Bus ≤ 40 min</span></div>
 <!-- ===== Section navigation chips ===== -->
@@ -2720,6 +2823,37 @@
   var ACCEPT_KEY = 'aptHunt.acceptedMinis';
   var REMOVE_KEY = 'aptHunt.removedMinis';
 
+  /* ---------- manual dark / light toggle (stored choice wins over system) ---------- */
+  var THEME_KEY = 'aptHunt.theme';
+  var themeBtn = document.getElementById('themeToggle');
+  function systemTheme(){
+    return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  }
+  function currentTheme(){
+    var t = document.documentElement.getAttribute('data-theme');
+    return (t === 'light' || t === 'dark') ? t : systemTheme();
+  }
+  function paintThemeBtn(){
+    if(!themeBtn) return;
+    var dark = currentTheme() === 'dark';
+    var sun = themeBtn.querySelector('.icon-sun');
+    var moon = themeBtn.querySelector('.icon-moon');
+    if(sun) sun.style.display = dark ? 'block' : 'none';
+    if(moon) moon.style.display = dark ? 'none' : 'block';
+    themeBtn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+  }
+  if(themeBtn){
+    themeBtn.addEventListener('click', function(){
+      var next = currentTheme() === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+      paintThemeBtn();
+    });
+  }
+  paintThemeBtn();
+  var schemeMq = window.matchMedia('(prefers-color-scheme: light)');
+  if(schemeMq.addEventListener) schemeMq.addEventListener('change', paintThemeBtn);
+
   function load(key){
     try{
       var v = JSON.parse(localStorage.getItem(key) || '[]');
@@ -2847,11 +2981,85 @@
   var dbAllin = document.getElementById('dbAllin');
   var dbCall = document.getElementById('dbCall');
   var detailCard = null, returnParent = null, returnNext = null, returnScroll = 0;
+  var heroEl = null, sheetEl = null, flipSrc = null;
 
   function cardByMls(mls){
     return document.querySelector('.card[data-mls="' + mls + '"]');
   }
-  function openDetail(card, push){
+  function reducedMotion(){
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  /* snapshot of a feed plate: where it sits + what it shows (for the FLIP) */
+  function plateInfo(card){
+    var plate = card.querySelector('.plate');
+    if(!plate) return null;
+    var r = plate.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    var img = plate.querySelector('.plate-photo');
+    var cs = window.getComputedStyle(plate);
+    return { top: r.top, left: r.left, width: r.width, height: r.height,
+      img: img ? (img.currentSrc || img.src) : '',
+      bg: cs.backgroundImage, bgColor: cs.backgroundColor };
+  }
+  function makeOverlay(src, rect){
+    var ov = document.createElement('div');
+    ov.className = 'flip-overlay';
+    ov.style.left = rect.left + 'px'; ov.style.top = rect.top + 'px';
+    ov.style.width = rect.width + 'px'; ov.style.height = rect.height + 'px';
+    if(src && src.img){
+      var im = document.createElement('img');
+      im.src = src.img; im.alt = '';
+      ov.appendChild(im);
+    }else if(src){
+      ov.style.backgroundImage = src.bg;
+      ov.style.backgroundColor = src.bgColor;
+    }
+    return ov;
+  }
+  /* split the card into hero (photo / tinted plate) + sheet (everything else,
+     in the card's original order, plate data block first) */
+  function buildDetail(card){
+    var plate = card.querySelector('.plate');
+    heroEl = document.createElement('div');
+    heroEl.className = 'detail-hero';
+    sheetEl = document.createElement('div');
+    sheetEl.className = 'detail-sheet';
+    if(plate){
+      var photo = plate.querySelector('.plate-photo');
+      var scrim = plate.querySelector('.plate-scrim');
+      var credit = plate.querySelector('.photo-credit--plate');
+      if(photo) heroEl.appendChild(photo);
+      if(scrim) heroEl.appendChild(scrim);
+      if(credit) heroEl.appendChild(credit);
+      if(!photo) heroEl.classList.add('no-photo');
+    }else{
+      heroEl.classList.add('no-photo');
+    }
+    card.insertBefore(heroEl, card.firstChild);
+    var kids = [];
+    for(var i = 0; i < card.childNodes.length; i++){
+      if(card.childNodes[i] !== heroEl) kids.push(card.childNodes[i]);
+    }
+    for(var k = 0; k < kids.length; k++) sheetEl.appendChild(kids[k]);
+    card.appendChild(sheetEl);
+  }
+  /* put the card back together exactly as it was in the feed */
+  function unwrapDetail(card){
+    if(!sheetEl || !heroEl) return;
+    var plate = sheetEl.querySelector('.plate');
+    var photo = heroEl.querySelector('.plate-photo');
+    var scrim = heroEl.querySelector('.plate-scrim');
+    var credit = heroEl.querySelector('.photo-credit--plate');
+    if(plate){
+      if(photo){ photo.style.transform = ''; plate.insertBefore(photo, plate.firstChild); }
+      if(scrim) plate.insertBefore(scrim, plate.children[1] || null);
+      if(credit) plate.appendChild(credit);
+    }
+    while(sheetEl.firstChild) card.insertBefore(sheetEl.firstChild, sheetEl);
+    drop(sheetEl); drop(heroEl);
+    sheetEl = null; heroEl = null;
+  }
+  function openDetail(card, push, src){
     if(!card || detailCard) return;
     detailCard = card;
     returnParent = card.parentNode;
@@ -2877,11 +3085,30 @@
     else { dbCall.style.display = 'none'; }
     card.classList.add('in-detail');
     card.removeAttribute('role'); card.removeAttribute('tabindex');
+    buildDetail(card);
     detailScroll.appendChild(card);
     detailScroll.scrollTop = 0;
+    panel.classList.remove('scrolled');
     panel.hidden = false;
     document.body.classList.add('no-scroll');
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){ panel.classList.add('open'); }); });
+    flipSrc = (!reducedMotion() && src) ? src : null;
+    if(flipSrc && heroEl){
+      panel.classList.add('flip');
+      panel.style.opacity = '0';
+      panel.classList.add('open');
+      var target = heroEl.getBoundingClientRect();
+      var ov = makeOverlay(flipSrc, flipSrc);
+      document.body.appendChild(ov);
+      heroEl.style.visibility = 'hidden';
+      void ov.offsetWidth; void panel.offsetWidth;
+      panel.style.opacity = '1';
+      ov.style.left = target.left + 'px'; ov.style.top = target.top + 'px';
+      ov.style.width = target.width + 'px'; ov.style.height = target.height + 'px';
+      ov.style.borderRadius = '0px';
+      setTimeout(function(){ drop(ov); if(heroEl) heroEl.style.visibility = ''; }, 360);
+    }else{
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){ panel.classList.add('open'); }); });
+    }
     if(push !== false){
       try{ history.pushState({ aptListing: card.getAttribute('data-mls') }, '', '#/listing/' + card.getAttribute('data-mls')); }catch(e){}
     }
@@ -2895,7 +3122,10 @@
     panel.classList.remove('open');
     var restore = function(){
       panel.hidden = true;
+      panel.classList.remove('flip', 'scrolled');
+      panel.style.opacity = '';
       document.body.classList.remove('no-scroll');
+      unwrapDetail(card);
       card.classList.remove('in-detail');
       card.setAttribute('role', 'button'); card.setAttribute('tabindex', '0');
       if(card.parentNode === detailScroll){
@@ -2906,10 +3136,42 @@
       }
       window.scrollTo(0, returnScroll);
       returnParent = null; returnNext = null;
+      flipSrc = null;
     };
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce) restore(); else setTimeout(restore, 300);
+    var reduce = reducedMotion();
+    if(flipSrc && heroEl && !reduce){
+      panel.classList.add('flip');
+      detailScroll.scrollTop = 0;
+      heroEl.style.opacity = '1';
+      var ph0 = heroEl.querySelector('.plate-photo');
+      if(ph0) ph0.style.transform = '';
+      var from = heroEl.getBoundingClientRect();
+      var ov = makeOverlay(flipSrc, { left: from.left, top: from.top, width: from.width, height: from.height });
+      ov.style.borderRadius = '0px';
+      document.body.appendChild(ov);
+      heroEl.style.visibility = 'hidden';
+      void panel.offsetWidth;
+      panel.style.opacity = '0';
+      void ov.offsetWidth;
+      ov.style.left = flipSrc.left + 'px'; ov.style.top = flipSrc.top + 'px';
+      ov.style.width = flipSrc.width + 'px'; ov.style.height = flipSrc.height + 'px';
+      ov.style.borderRadius = '16px';
+      setTimeout(function(){ drop(ov); restore(); }, 360);
+    }
+    else if(reduce) restore(); else setTimeout(restore, 300);
   }
+  /* parallax: hero fades as the sheet covers it; close button goes plain
+     once the sheet has scrolled over the hero */
+  detailScroll.addEventListener('scroll', function(){
+    if(!heroEl) return;
+    var y = detailScroll.scrollTop;
+    var h = heroEl.offsetHeight || 320;
+    var p = Math.min(1, Math.max(0, y / Math.max(1, h - 40)));
+    heroEl.style.opacity = String(1 - p * 0.94);
+    var ph = heroEl.querySelector('.plate-photo');
+    if(ph) ph.style.transform = 'translateY(' + (y * 0.12) + 'px) scale(1.07)';
+    panel.classList.toggle('scrolled', y > h - 76);
+  });
   function requestClose(){
     if(location.hash.indexOf('#/listing/') === 0){ history.back(); }
     else closeDetail();
@@ -2930,12 +3192,12 @@
     if(!card) return;
     if(detailCard) return;
     if(ev.target.closest('a, button')) return;
-    openDetail(card);
+    openDetail(card, true, plateInfo(card));
   });
   document.addEventListener('keydown', function(ev){
     if((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('card') && !detailCard){
       ev.preventDefault();
-      openDetail(ev.target);
+      openDetail(ev.target, true, plateInfo(ev.target));
     }
     if(ev.key === 'Escape' && detailCard) requestClose();
   });
@@ -2982,10 +3244,11 @@
     if(acceptBtn){
       acceptBtn.addEventListener('click', function(){
         var wasDetail = detailCard === m;
+        if(wasDetail){ unwrapDetail(m); flipSrc = null; }
         addTo(ACCEPT_KEY, mls);
         promote(m);
         recount();
-        if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; document.body.classList.remove('no-scroll'); m.classList.remove('in-detail'); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+        if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; panel.classList.remove('flip', 'scrolled'); panel.style.opacity = ''; document.body.classList.remove('no-scroll'); unwrapDetail(m); flipSrc = null; m.classList.remove('in-detail'); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
       });
     }
     if(removeBtn){
@@ -2994,10 +3257,11 @@
         if(removeBtn.classList.contains('confirming')){
           if(timer) clearTimeout(timer);
           var wasDetail = detailCard === m;
+          if(wasDetail){ unwrapDetail(m); flipSrc = null; }
           addTo(REMOVE_KEY, mls);
           drop(m);
           recount();
-          if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; document.body.classList.remove('no-scroll'); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+          if(wasDetail){ detailCard = null; panel.classList.remove('open'); panel.hidden = true; panel.classList.remove('flip', 'scrolled'); panel.style.opacity = ''; document.body.classList.remove('no-scroll'); unwrapDetail(m); flipSrc = null; if(location.hash.indexOf('#/listing/') === 0) history.back(); }
         }else{
           removeBtn.classList.add('confirming');
           removeBtn.textContent = 'Sure?';
