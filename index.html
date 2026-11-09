@@ -271,17 +271,17 @@
   /* ---------- Detail view ---------- */
   .detail-panel{position:fixed;inset:0;z-index:100;background:var(--bg);
     display:flex;flex-direction:column;
-    transform:translateX(102%);transition:transform .3s ease}
+    transform:translateX(102%);transition:transform .32s cubic-bezier(.32,.72,.22,1),opacity .32s cubic-bezier(.32,.72,.22,1)}
   .detail-panel.open{transform:translateX(0)}
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:0}
-  .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:5;
+  .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:5;
     width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
     background:rgba(14,20,38,.42);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.28);
     -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
-    transition:background .25s ease,color .25s ease,border-color .25s ease,box-shadow .25s ease}
+    transition:background .32s cubic-bezier(.32,.72,.22,1),color .32s cubic-bezier(.32,.72,.22,1),border-color .32s cubic-bezier(.32,.72,.22,1),box-shadow .32s cubic-bezier(.32,.72,.22,1)}
   .detail-close:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .detail-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
     padding:12px 16px calc(12px + env(safe-area-inset-bottom));
@@ -340,15 +340,13 @@
 
 
   /* ---------- Building photos (Google Places) ---------- */
-  .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
-  /* feed plates: lift the photo so it reads as a real picture */
-  .card:not(.in-detail) .plate-photo{filter:brightness(1.16) saturate(1.14)}
-  /* feed scrim: soft band only where the rent/pill sit, a whisper at the
-     bottom for the credit line, clear through the middle */
+  /* ONE shared photo treatment: the identical filter + scrim on the feed
+     plate (compact rails and full-width filtered view) and on the detail
+     hero, so a photo's brightness can never differ between views */
+  .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none;
+    filter:brightness(1.16) saturate(1.14)}
   .plate-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
     background:linear-gradient(180deg,rgba(4,8,20,.58) 0%,rgba(4,8,20,.30) 26%,rgba(4,8,20,.04) 52%,rgba(4,8,20,.10) 76%,rgba(4,8,20,.42) 100%)}
-  /* detail plate keeps the stronger scrim — it carries the bus/drive rows too */
-  .card.in-detail .plate-scrim{background:linear-gradient(180deg,rgba(4,8,20,.68) 0%,rgba(4,8,20,.34) 38%,rgba(4,8,20,.44) 68%,rgba(4,8,20,.80) 100%)}
   .card.has-photo .plate{padding-bottom:29px}
   .card.has-photo .rent-big,.card.has-photo .spec-pill,.card.has-photo .travel{position:relative;z-index:2}
   .card.has-photo .rent-big{color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.5)}
@@ -391,7 +389,7 @@
   .ba-note{font-size:12px;line-height:1.5;color:var(--faint);margin-top:9px}
 
   /* ---------- Detail hero + parallax sheet (Airbnb-style) ---------- */
-  .detail-panel.flip{transform:none;transition:opacity .32s ease}
+  .detail-panel.flip{transform:none;transition:opacity .32s cubic-bezier(.32,.72,.22,1)}
   .detail-panel.scrolled::before{content:'';position:absolute;top:0;left:0;right:0;z-index:4;
     height:calc(58px + env(safe-area-inset-top));background:var(--bg);
     border-bottom:1px solid var(--line-soft);pointer-events:none}
@@ -404,13 +402,10 @@
   .card[data-cat="houses"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-green),var(--card2))}
   .card[data-cat="watch"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-orange),var(--card2))}
   .detail-hero .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .detail-hero .plate-scrim{background:linear-gradient(180deg,rgba(4,8,20,.30) 0%,rgba(4,8,20,0) 42%,rgba(4,8,20,.06) 72%,rgba(4,8,20,.34) 100%)}
   .card.in-detail .detail-hero .photo-credit--plate{display:block;left:auto;right:12px;bottom:40px;text-align:right;max-width:82%}
   .detail-sheet{position:relative;z-index:2;background:var(--bg);
     border-radius:24px 24px 0 0;margin-top:-28px;padding:22px 16px 30px;
     box-shadow:0 -14px 34px rgba(1,4,12,.22)}
-  .detail-panel.open .detail-sheet{animation:sheetIn .4s cubic-bezier(.22,.8,.3,1) both}
-  @keyframes sheetIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
   /* the plate becomes the sheet's first data block: rent, spec pill, bus, drive */
   .card.in-detail .plate{aspect-ratio:auto;background:none;box-shadow:none;border-radius:0;
     padding:0;overflow:visible;gap:9px}
@@ -427,12 +422,11 @@
   .card.in-detail.has-photo .tlabel .tnote{color:var(--faint)}
   .card.in-detail.has-photo .tunit{color:var(--muted)}
   .card.in-detail .photo-credit--detail{display:none}
-  /* FLIP overlay: the plate image growing into / shrinking out of the hero */
-  .flip-overlay{position:fixed;z-index:300;border-radius:16px;overflow:hidden;pointer-events:none;
-    transition:left .34s cubic-bezier(.32,.72,.22,1),top .34s cubic-bezier(.32,.72,.22,1),
-      width .34s cubic-bezier(.32,.72,.22,1),height .34s cubic-bezier(.32,.72,.22,1),
-      border-radius .34s cubic-bezier(.32,.72,.22,1)}
-  .flip-overlay img{width:100%;height:100%;object-fit:cover;display:block}
+  /* FLIP: the hero element itself is the moving image — only transform and
+     opacity ever animate (see openDetail/closeDetail); width/height/top/left
+     are never transitioned, so no layout runs during the flight */
+  .detail-hero.is-flipping{will-change:transform;contain:paint}
+  .detail-sheet.is-flipping,.detail-bar.is-flipping{will-change:opacity}
 
   @media (max-width:520px){
     h1{font-size:29px}
@@ -447,8 +441,6 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
     .detail-panel{transition:none}
-    .detail-panel.open .detail-sheet{animation:none}
-    .flip-overlay{transition:none}
   }
 
 </style>
@@ -3002,32 +2994,55 @@
   function reducedMotion(){
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
-  /* snapshot of a feed plate: where it sits + what it shows (for the FLIP) */
+  /* FLIP: one duration + one easing in both directions; only transform and
+     opacity ever animate on the moving hero — never width/height/top/left,
+     box-shadow, filters or backdrop blur — and every DOM restructure
+     (buildDetail/unwrapDetail) completes before the first animation frame
+     or after the last, never during. The hero keeps the plate's own img
+     element with the same src throughout: no clone, no reload, no re-decode. */
+  var FLIP_MS = 320, FLIP_EASE = 'cubic-bezier(.32,.72,.22,1)';
+  var FLIP_TRANSITION = 'transform ' + FLIP_MS + 'ms ' + FLIP_EASE;
+  var FADE_TRANSITION = 'opacity ' + FLIP_MS + 'ms ' + FLIP_EASE;
+  var flipAnimating = false;
+  /* snapshot of a feed plate's viewport rect (where the FLIP starts/lands) */
   function plateInfo(card){
     var plate = card.querySelector('.plate');
     if(!plate) return null;
     var r = plate.getBoundingClientRect();
     if(!r.width || !r.height) return null;
-    var img = plate.querySelector('.plate-photo');
-    var cs = window.getComputedStyle(plate);
-    return { top: r.top, left: r.left, width: r.width, height: r.height,
-      img: img ? (img.currentSrc || img.src) : '',
-      bg: cs.backgroundImage, bgColor: cs.backgroundColor };
+    return { top: r.top, left: r.left, width: r.width, height: r.height };
   }
-  function makeOverlay(src, rect){
-    var ov = document.createElement('div');
-    ov.className = 'flip-overlay';
-    ov.style.left = rect.left + 'px'; ov.style.top = rect.top + 'px';
-    ov.style.width = rect.width + 'px'; ov.style.height = rect.height + 'px';
-    if(src && src.img){
-      var im = document.createElement('img');
-      im.src = src.img; im.alt = '';
-      ov.appendChild(im);
-    }else if(src){
-      ov.style.backgroundImage = src.bg;
-      ov.style.backgroundColor = src.bgColor;
+  /* transform that maps rect `from` exactly onto rect `to` (origin: top-left) */
+  function flipTransform(from, to){
+    return 'translate(' + (to.left - from.left) + 'px,' + (to.top - from.top) + 'px) ' +
+      'scale(' + (to.width / from.width) + ',' + (to.height / from.height) + ')';
+  }
+  function setFlipStart(el, transform){
+    el.classList.add('is-flipping');
+    el.style.transition = 'none';
+    el.style.transformOrigin = '0 0';
+    el.style.transform = transform;
+  }
+  function playFlip(el, endTransform, fadeEls, done){
+    el.style.transition = FLIP_TRANSITION;
+    el.style.transform = endTransform;
+    for(var i = 0; i < fadeEls.length; i++){
+      if(!fadeEls[i].el) continue;
+      fadeEls[i].el.style.transition = FADE_TRANSITION;
+      fadeEls[i].el.style.opacity = fadeEls[i].to;
     }
-    return ov;
+    setTimeout(done, FLIP_MS + 40);
+  }
+  function clearFlipStyles(){
+    [heroEl, sheetEl].forEach(function(el){
+      if(!el) return;
+      el.classList.remove('is-flipping');
+      el.style.transition = ''; el.style.transform = '';
+      el.style.transformOrigin = ''; el.style.opacity = '';
+    });
+    var bar = document.getElementById('detailBar');
+    if(bar){ bar.classList.remove('is-flipping'); bar.style.transition = ''; bar.style.opacity = ''; }
+    flipAnimating = false;
   }
   /* split the card into hero (photo / tinted plate) + sheet (everything else,
      in the card's original order, plate data block first) */
@@ -3120,28 +3135,37 @@
     }
     card.classList.add('in-detail');
     card.removeAttribute('role'); card.removeAttribute('tabindex');
+    /* restructure FIRST, fully and synchronously: buildDetail's node moves
+       are complete before the first animation frame; nothing moves after */
     buildDetail(card);
     detailScroll.appendChild(card);
     detailScroll.scrollTop = 0;
     panel.classList.remove('scrolled');
-    panel.hidden = false;
-    document.body.classList.add('no-scroll');
     flipSrc = (!reducedMotion() && src) ? src : null;
-    if(flipSrc && heroEl){
+    if(flipSrc && heroEl && sheetEl){
       panel.classList.add('flip');
-      panel.style.opacity = '0';
+      panel.hidden = false;
+      document.body.classList.add('no-scroll');
       panel.classList.add('open');
-      var target = heroEl.getBoundingClientRect();
-      var ov = makeOverlay(flipSrc, flipSrc);
-      document.body.appendChild(ov);
-      heroEl.style.visibility = 'hidden';
-      void ov.offsetWidth; void panel.offsetWidth;
-      panel.style.opacity = '1';
-      ov.style.left = target.left + 'px'; ov.style.top = target.top + 'px';
-      ov.style.width = target.width + 'px'; ov.style.height = target.height + 'px';
-      ov.style.borderRadius = '0px';
-      setTimeout(function(){ drop(ov); if(heroEl) heroEl.style.visibility = ''; }, 360);
+      /* measure the hero's final rect, invert it onto the feed slot, and
+         fade the sheet + bottom bar in alongside — transform/opacity only */
+      var last = heroEl.getBoundingClientRect();
+      flipAnimating = true;
+      setFlipStart(heroEl, flipTransform(last, flipSrc));
+      sheetEl.classList.add('is-flipping');
+      sheetEl.style.transition = 'none'; sheetEl.style.opacity = '0';
+      var bar0 = document.getElementById('detailBar');
+      if(bar0){ bar0.classList.add('is-flipping'); bar0.style.transition = 'none'; bar0.style.opacity = '0'; }
+      void heroEl.offsetWidth;
+      requestAnimationFrame(function(){
+        playFlip(heroEl, '', [
+          { el: sheetEl, to: '1' },
+          { el: bar0, to: '1' }
+        ], clearFlipStyles);
+      });
     }else{
+      panel.hidden = false;
+      document.body.classList.add('no-scroll');
       requestAnimationFrame(function(){ requestAnimationFrame(function(){ panel.classList.add('open'); }); });
     }
     if(push !== false){
@@ -3171,34 +3195,41 @@
       }
       window.scrollTo(0, returnScroll);
       returnParent = null; returnNext = null;
-      flipSrc = null;
+      flipSrc = null; flipAnimating = false;
     };
     var reduce = reducedMotion();
-    if(flipSrc && heroEl && !reduce){
+    if(flipSrc && heroEl && sheetEl && !reduce){
       panel.classList.add('flip');
+      /* reset scroll + parallax BEFORE the first animation frame so the hero
+         is measured at rest; the exact reverse of the open then runs on
+         transform/opacity alone, and unwrapDetail happens only after the
+         last frame, in the same task that hides the panel — the hero lands
+         exactly on its feed slot, so the swap shows no jump or flash */
+      flipAnimating = true;
       detailScroll.scrollTop = 0;
-      heroEl.style.opacity = '1';
+      panel.classList.remove('scrolled');
+      heroEl.style.opacity = '';
       var ph0 = heroEl.querySelector('.plate-photo');
       if(ph0) ph0.style.transform = '';
+      void heroEl.offsetWidth;
       var from = heroEl.getBoundingClientRect();
-      var ov = makeOverlay(flipSrc, { left: from.left, top: from.top, width: from.width, height: from.height });
-      ov.style.borderRadius = '0px';
-      document.body.appendChild(ov);
-      heroEl.style.visibility = 'hidden';
-      void panel.offsetWidth;
-      panel.style.opacity = '0';
-      void ov.offsetWidth;
-      ov.style.left = flipSrc.left + 'px'; ov.style.top = flipSrc.top + 'px';
-      ov.style.width = flipSrc.width + 'px'; ov.style.height = flipSrc.height + 'px';
-      ov.style.borderRadius = '16px';
-      setTimeout(function(){ drop(ov); restore(); }, 360);
+      setFlipStart(heroEl, '');
+      sheetEl.classList.add('is-flipping');
+      var bar1 = document.getElementById('detailBar');
+      if(bar1) bar1.classList.add('is-flipping');
+      requestAnimationFrame(function(){
+        playFlip(heroEl, flipTransform(from, flipSrc), [
+          { el: sheetEl, to: '0' },
+          { el: bar1, to: '0' }
+        ], function(){ clearFlipStyles(); restore(); });
+      });
     }
-    else if(reduce) restore(); else setTimeout(restore, 300);
+    else if(reduce) restore(); else setTimeout(restore, FLIP_MS);
   }
   /* parallax: hero fades as the sheet covers it; close button goes plain
      once the sheet has scrolled over the hero */
   detailScroll.addEventListener('scroll', function(){
-    if(!heroEl) return;
+    if(!heroEl || flipAnimating) return;
     var y = detailScroll.scrollTop;
     var h = heroEl.offsetHeight || 320;
     var p = Math.min(1, Math.max(0, y / Math.max(1, h - 40)));
