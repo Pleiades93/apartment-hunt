@@ -3165,7 +3165,10 @@
      is applied by WAAPI on top, so at eased progress p the
      rendering is exactly cover into rect(p). The text flyers are
      NOT inside this wrapper (they ride in their own layer above
-     it), so the morphing corners can never clip the spec pill. */
+     it), so the morphing corners can never clip the spec pill.
+     The scrim IS inside the wrapper (see runImageFlight): the
+     photo's tint treatment must travel with the photo, or it
+     pops at both flight boundaries. */
   function coverScaleFor(w, h, nw, nh){ return Math.max(w / nw, h / nh); }
   /* one corner's computed radius as px {h, v}: a computed value is
      "Npx" (circular) or "Hpx Vpx" (elliptical); a percentage
@@ -3235,7 +3238,7 @@
     }
     return { wrapper: wFrames, img: iFrames };
   }
-  /* ---------- EXIT TEXT FLYERS: rent / spec pill ----------
+  /* ---------- EXIT TEXT FLYERS: rent / spec pill / photo credit ----------
      Built only inside runImageFlight (the top-state photo exit), on
      the same flight clock. Each flyer is a deep clone of the CARD's
      own element — never the sheet's — with the card node's computed
@@ -3260,8 +3263,9 @@
      the flyer IS the card element's own rendering sitting on the
      card element, and the layer is discarded with the photo
      wrapper — no swap, no fade, full opacity for the whole exit.
-     The sheet's own rent / pill are visibility:hidden for the
-     flight so nothing doubles; everything else in the sheet —
+     The sheet's own rent / pill — and the hero's own credit — are
+     visibility:hidden for the flight so nothing doubles;
+     everything else in the sheet —
      the building · unit title included — fades as before. The
      feed card's elements are never mutated. */
   function rectOfEl(el){
@@ -3276,12 +3280,39 @@
     return { left: r.left, top: r.top,
       width: tr.width > 0 ? tr.width : r.width, height: r.height };
   }
+  /* the text's own rect, position included: for the photo credit,
+     whose element box spans the full plate width on the card while
+     its text hugs the left edge, and whose hero box is shrink-fit
+     and right-aligned — the text rect is the box the eye tracks in
+     both states. Width carries a half-pixel cushion so the fixed
+     clone, laid out at the measured text width, can never wrap its
+     last glyph on a sub-pixel rounding (the cushion shifts the
+     centre-matched landing by ~0.25px at most). */
+  function textRectOf(el){
+    var r = el.getBoundingClientRect();
+    var range = document.createRange();
+    range.selectNodeContents(el);
+    var tr = range.getBoundingClientRect();
+    if(!(tr.width > 0) || !(tr.height > 0)) return rectOfEl(el);
+    return { left: tr.left, top: tr.top, width: tr.width + 0.5, height: tr.height };
+  }
   function buildTextFlyers(){
     var anims = [];
     if(!detailCard || !sheetEl) return anims;
     var pairs = [
       { card: detailCard.querySelector('.rent-big'), sheet: sheetEl.querySelector('.rent-big'), box: textBoxOf },
-      { card: detailCard.querySelector('.spec-pill'), sheet: sheetEl.querySelector('.spec-pill'), box: rectOfEl }
+      { card: detailCard.querySelector('.spec-pill'), sheet: sheetEl.querySelector('.spec-pill'), box: rectOfEl },
+      /* the photo credit: the CARD's plate credit (small muted text
+         at the plate's bottom edge) flies to the detail credit,
+         which lives in the HERO at its bottom-right, not in the
+         sheet. Both states set the same element at the same 10.5px,
+         so the balanced uniform scale is ~1 and the start transform
+         lands the flyer's text rect on the hero's text rect. The
+         hero's own credit is hidden for the flight by the same
+         pair.sheet rule below. */
+      { card: detailCard.querySelector('.photo-credit--plate'),
+        sheet: heroEl ? heroEl.querySelector('.photo-credit--plate') : null,
+        box: textRectOf }
     ];
     var layer = document.createElement('div');
     layer.style.cssText = 'position:fixed;inset:0;z-index:121;pointer-events:none;margin:0;padding:0';
@@ -3306,6 +3337,12 @@
       flyer.style.left = r5(cBox.left) + 'px';
       flyer.style.top = r5(cBox.top) + 'px';
       flyer.style.width = r5(cBox.width) + 'px';
+      /* the credit clone arrives with its absolute offsets (left /
+         right / bottom) copied inline; clearing right and bottom
+         keeps the fixed box exactly the measured one (a no-op for
+         the rent and pill, whose computed offsets are auto) */
+      flyer.style.right = 'auto';
+      flyer.style.bottom = 'auto';
       flyer.style.margin = '0';
       flyer.style.transformOrigin = '0 0';
       flyer.style.willChange = 'transform';
@@ -3334,11 +3371,34 @@
      goes transparent, it becomes inert, and its non-image parts
      (scroll content, sticky bar, ✕) fade out in ~150ms, so the photo
      flies over the real feed with the origin plate visible beneath.
-     The rent and spec pill fly with it as text flyers (see
-     buildTextFlyers), riding in extras on this same clock. */
+     The rent, spec pill and photo credit fly with it as text
+     flyers (see buildTextFlyers), riding in extras on this same
+     clock, and the photo's FULL treatment — its CSS filter plus
+     the scrim gradient — rides inside the wrapper (see below). */
   function runImageFlight(img, R0, R1, cleanup){
     settleFlight();
     var textAnims = buildTextFlyers();
+    /* The shared photo treatment has two parts. The CSS filter
+       (brightness / saturate) is declared on the img itself by the
+       .plate-photo class rule, so it travels with the lifted node;
+       it is pinned inline here regardless, so the flying img's
+       computed filter equals the hero / plate img's at every frame
+       by construction. The scrim gradient, though, lives on a
+       SIBLING div (.plate-scrim) that the lift would leave behind
+       in the hero: missing from the photo for the whole flight,
+       darkening the empty hero box while the panel fades out (the
+       stray rectangle), then snapping back on when the wrapper is
+       discarded and the plate's own scrim reappears at landing.
+       So the hero's own scrim is hidden for the flight's duration
+       and a twin scrim rides inside the wrapper instead — at p=0
+       the flying stack (img + filter + scrim) renders identically
+       to the hero stack it replaces (no double tint: the hero's
+       scrim is off, and the opaque flying img covers its rect
+       anyway), and at p=1 identically to the plate stack, so
+       removing the wrapper at landing changes nothing on screen. */
+    img.style.filter = window.getComputedStyle(img).filter;
+    var heroScrim = heroEl ? heroEl.querySelector('.plate-scrim') : null;
+    if(heroScrim) heroScrim.style.visibility = 'hidden';
     /* both end radii measured live from the DOM, never hard-coded:
        the start is the hero element's as-displayed corner radii
        (its box is R0), the end is the origin plate's exact radii,
@@ -3356,6 +3416,16 @@
     img.style.transformOrigin = '0 0';
     img.style.willChange = 'transform';
     wrap.appendChild(img);
+    /* the flying scrim: a fresh div carrying the shared .plate-scrim
+       rule, so the gradient is identical to the plate / hero scrim
+       by construction. It sits over the img (z-index 1, as in the
+       plate), is clipped by the wrapper's morphing corner radius,
+       and simply rides the wrapper's transform — a percentage
+       gradient stretches invisibly, so no counter-animation. */
+    var flyScrim = document.createElement('div');
+    flyScrim.className = 'plate-scrim';
+    flyScrim.setAttribute('aria-hidden', 'true');
+    wrap.appendChild(flyScrim);
     document.body.appendChild(wrap);
     flyWrap = wrap;
     panel.style.background = 'transparent';
