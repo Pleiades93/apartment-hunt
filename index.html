@@ -207,22 +207,6 @@
     padding:12px;box-shadow:var(--shadow);cursor:pointer;-webkit-tap-highlight-color:transparent}
   .card:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
-  /* ---------- Offscreen-card containment ----------
-     Feed cards far from the viewport skip layout/paint via
-     content-visibility:auto, in the horizontal rails and in the
-     filtered full-width column alike. contain-intrinsic-size's
-     auto keyword replays a card's last rendered size once it has
-     been rendered; the fallback lengths approximate a
-     never-rendered card per context — rail (fixed flex-basis,
-     4/3 plate) vs filtered (full width) — split again at the
-     520px breakpoint where the rail basis changes (see the media
-     query below). Pure rendering hint: no DOM node is added,
-     removed or reordered, so filtering and the live recount read
-     exactly the same tree. The detail clone lives outside .rail
-     and is never contained. Flight measurements of an original
-     card force it rendered first — see the JS guard. */
-  .rail .card{content-visibility:auto;contain-intrinsic-size:auto 400px 436px}
-  body.filtered .rail .card{contain-intrinsic-size:auto 728px 660px}
   .plate{position:relative;aspect-ratio:4/3;border-radius:16px;padding:12px;
     display:flex;flex-direction:column;gap:7px;overflow:hidden}
   .card[data-cat="2bed"] .plate{background:linear-gradient(155deg,var(--plate-blue),var(--card2))}
@@ -444,8 +428,7 @@
   @media (max-width:520px){
     h1{font-size:29px}
     .details .row{grid-template-columns:96px 1fr}
-    .rail .card{flex-basis:62%;contain-intrinsic-size:auto 242px 292px}
-    body.filtered .rail .card{contain-intrinsic-size:auto 358px 384px}
+    .rail .card{flex-basis:62%}
     .rent-big{font-size:26px}
     .detail-bar{gap:10px;padding-left:12px;padding-right:12px}
     .db-rent{font-size:18px}
@@ -3147,53 +3130,20 @@
         if(el) el.getAnimations().forEach(function(a){ a.cancel(); });
       });
     detailScroll.innerHTML = '';
-    releaseCardRendered(detailCard);
     detailRoot = null; heroEl = null; sheetEl = null; detailCard = null;
     panel.hidden = true;
     panel.classList.remove('scrolled');
     document.body.classList.remove('no-scroll');
   }
 
-  /* ---------- offscreen-containment flight guard ----------
-     Feed cards carry content-visibility:auto (see the CSS): a card
-     far off screen may have its subtree SKIPPED, and then
-     getBoundingClientRect() on its plate / photo / flyer sources
-     returns the contain-intrinsic-size estimate, not the true
-     rendered rect — poison for flight geometry. A tapped card is
-     necessarily rendered, but a card measured while its detail is
-     open (every close), above all one opened by a hash deep link
-     whose card may never have been on screen, is not. The guard
-     mechanism: an inline content-visibility:visible override on
-     the card, which forces the browser to lay the subtree out for
-     real before anything is read. withCardRendered applies it
-     around one synchronous read; closeDetail holds it via
-     force/release from its first measurement until teardownDetail
-     releases it, so the card under a landing flight is the real
-     rendered card, never an intrinsic-size estimate. */
-  function forceCardRendered(card){
-    if(card) card.style.contentVisibility = 'visible';
-  }
-  function releaseCardRendered(card){
-    if(card) card.style.contentVisibility = '';
-  }
-  function withCardRendered(card, fn){
-    if(!card) return fn();
-    var prev = card.style.contentVisibility;
-    card.style.contentVisibility = 'visible';
-    try{ return fn(); }
-    finally{ card.style.contentVisibility = prev; }
-  }
-
   /* snapshot of a feed plate's viewport rect (where a flight starts/lands) */
   function plateInfo(card){
     var plate = card.querySelector('.plate');
     if(!plate) return null;
-    return withCardRendered(card, function(){
-      var r = plate.getBoundingClientRect();
-      if(!r.width || !r.height) return null;
-      return { top: r.top, left: r.left, width: r.width, height: r.height,
-        right: r.right, bottom: r.bottom };
-    });
+    var r = plate.getBoundingClientRect();
+    if(!r.width || !r.height) return null;
+    return { top: r.top, left: r.left, width: r.width, height: r.height,
+      right: r.right, bottom: r.bottom };
   }
   function insetFor(r){
     return 'inset(' + r.top + 'px ' + (window.innerWidth - r.right) + 'px ' +
@@ -3858,15 +3808,6 @@
     var interrupted = settleFlight();
     if(!detailCard) return; /* settling a prior flight finished the close */
     var card = detailCard;
-    /* flight geometry guard (see withCardRendered): every rect
-       read from the original card in this close — plateInfo, the
-       plate photo's landing rect, buildTextFlyers' sources, the
-       plate's corner radii — must be the TRUE rendered rect, so
-       the card is forced rendered here, before the first read,
-       and held rendered until teardownDetail releases it; this is
-       also the deep-link path's guard, since a hash-opened card
-       is first measured here, at close */
-    forceCardRendered(card);
     var reduce = reducedMotion();
     var target = !reduce ? plateInfo(card) : null;
     if(target && heroEl){
@@ -4067,12 +4008,15 @@
     if(c0) openDetail(c0, false);
   }
 
-  /* idle photo prefetch: warm the HTTP cache with every photo the page
-     references, so a fast scroll never waits on a photo arriving late.
-     URLs come from the DOM's own img srcs (works whether the photos are
-     asset files, data URIs, or a separate folder); data URIs fetch as a
-     harmless no-op. Skipped entirely on data-saver or slow connections. */
-  function prefetchPhotos(){
+  /* photo warm-up: warm the HTTP cache AND the decoded bitmaps with
+     every photo the page references, so a fast scroll never waits on a
+     photo arriving late or decoding late. Starts immediately after
+     first paint (requestAnimationFrame following DOMContentLoaded) —
+     never gated on a browser quiet moment. URLs come from the DOM's
+     own img srcs (works whether the photos are asset files, data URIs,
+     or a separate folder); data URIs fetch as a harmless no-op.
+     Skipped entirely on data-saver or slow connections. */
+  function warmUpPhotos(){
     try{
       var conn = navigator.connection;
       if(conn && (conn.saveData || conn.effectiveType === 'slow-2g' || conn.effectiveType === '2g')) return;
@@ -4084,27 +4028,34 @@
       }
       var idx = 0;
       function nextBatch(){
-        var batch = urls.slice(idx, idx + 4);
+        var batch = urls.slice(idx, idx + 6);
         idx += batch.length;
         if(!batch.length) return;
         var pending = batch.length;
         function done(){ if(--pending === 0) nextBatch(); }
         batch.forEach(function(u){
-          try{ fetch(u).then(done, done); }catch(e){ done(); }
+          var remaining = 2;
+          function one(){ if(--remaining === 0) done(); }
+          try{ fetch(u).then(one, one); }catch(e){ one(); }
+          try{
+            var im = new Image();
+            im.src = u;
+            if(im.decode){ im.decode().then(one, one); }
+            else{ one(); }
+          }catch(e){ one(); }
         });
       }
       nextBatch();
     }catch(e){}
   }
-  function schedulePrefetch(){
-    if('requestIdleCallback' in window){
-      requestIdleCallback(prefetchPhotos, { timeout: 4000 });
-    }else{
-      setTimeout(prefetchPhotos, 1500);
-    }
+  function scheduleWarmUp(){
+    requestAnimationFrame(function(){ warmUpPhotos(); });
   }
-  if(document.readyState === 'complete'){ schedulePrefetch(); }
-  else{ window.addEventListener('load', schedulePrefetch); }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', scheduleWarmUp);
+  }else{
+    scheduleWarmUp();
+  }
 })();
 </script>
 </body>
