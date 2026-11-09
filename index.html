@@ -419,10 +419,11 @@
   .card.in-detail.has-photo .tlabel .tnote{color:var(--faint)}
   .card.in-detail.has-photo .tunit{color:var(--muted)}
   .card.in-detail .photo-credit--detail{display:none}
-  /* ONE MOVING PANEL: the detail panel is the only element that ever
-     animates, and only in the open/close path (see the flight code in
-     the script). There is no flight layer and no per-element animation
-     on the hero, sheet, close button or bottom bar. */
+  /* ONE MOVING PANEL on open; on the sheet, close button and bottom
+     bar nothing ever animates in the open path. The one exception is
+     the EXIT from the top state on a listing with a photo: there the
+     hero's img alone flies (see runImageFlight) while the panel's
+     non-image parts fade out of its way. */
 
   @media (max-width:520px){
     h1{font-size:29px}
@@ -2982,8 +2983,11 @@
      motion begins, and the panel itself is the only thing that moves:
      one Web Animations flight on the panel element alone coupling
      clip-path inset and transform translate in the same keyframes.
-     Nothing inside the panel ever animates in the open/close path.
-     The clone is discarded only after a close completes. No scroll
+     Nothing inside the panel ever animates in the open path.
+     EXIT exception (top state, photo listings only): the close flies
+     the hero's own img as one morphing image — see runImageFlight —
+     while the panel fades out of its way; the scrolled close and
+     no-photo closes keep the panel flight. The clone is discarded only after a close completes. No scroll
      position is saved or restored on either axis: the feed never
      leaves the document, so the window keeps its scroll and every
      horizontal rail keeps its scrollLeft for free. */
@@ -3004,14 +3008,16 @@
   }
 
   /* ---------- flight ownership ----------
-     A flight is ONE Web Animation on the panel element, owned by one
-     flight object with one completion cleanup. Starting a new flight
-     settles the previous one first (cancel its animation, run its
-     cleanup synchronously), so no wall-clock timer ever mutates
-     shared state mid-flight — completion is driven only by the
-     animation's own finished promise. Delay 0, duration 320ms, one
-     easing; the animated properties are clip-path and transform on
-     the panel, nothing else, ever. */
+     A flight is owned by one flight object with one completion
+     cleanup: the open/scrolled/no-photo flights are ONE Web Animation
+     on the panel element; the top-state photo exit is ONE WAAPI
+     timeline on the flying-photo wrapper, with the img's
+     counter-animation and the panel fade-outs as companion extras.
+     Starting a new flight settles the previous one first (cancel its
+     animations, run its cleanup synchronously), so no wall-clock
+     timer ever mutates shared state mid-flight — completion is
+     driven only by the flight animation's own finished promise.
+     Delay 0, duration 320ms, one easing. */
   var FLIP_MS = 320, FLIP_EASE = 'cubic-bezier(.32,.72,.22,1)';
   var activeFlight = null;
   function settleFlight(){
@@ -3020,6 +3026,14 @@
     activeFlight = null;
     f.settled = true;
     try{ f.anim.cancel(); }catch(e){}
+    /* companion animations on the same clock (the flying img's
+       counter-transform, the panel fade-outs) die with the flight;
+       panel flights carry no extras, so this is a no-op for them */
+    if(f.extras){
+      for(var i = 0; i < f.extras.length; i++){
+        try{ f.extras[i].cancel(); }catch(e){}
+      }
+    }
     f.cleanup();
   }
   function runPanelFlight(frames, cleanup){
@@ -3041,10 +3055,20 @@
     }, function(){ /* a cancelled animation rejects; settleFlight() already cleaned up */ });
   }
   /* discard the detail clone and hide the panel in one instantaneous
-     state change; the feed is not touched */
+     state change; the feed is not touched. Also removes a landed (or
+     settled mid-flight) flying-photo wrapper and undoes the close's
+     panel fade-out state, so the next open starts from plain layout. */
+  var flyWrap = null;
   function teardownDetail(){
     settleFlight();
+    if(flyWrap){ flyWrap.remove(); flyWrap = null; }
     panel.style.willChange = '';
+    panel.style.background = '';
+    panel.style.pointerEvents = '';
+    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')]
+      .forEach(function(el){
+        if(el) el.getAnimations().forEach(function(a){ a.cancel(); });
+      });
     detailScroll.innerHTML = '';
     detailRoot = null; heroEl = null; sheetEl = null; detailCard = null;
     panel.hidden = true;
@@ -3094,6 +3118,123 @@
     var r = heroEl.getBoundingClientRect();
     return { top: r.top, left: r.left, width: r.width, height: r.height,
       right: r.right, bottom: r.bottom };
+  }
+
+  /* ---------- EXIT PHOTO FLIGHT: one flying image ----------
+     Used only when closing from the top state on a listing WITH a
+     photo. The detail hero's own img node (a clone node — the feed is
+     never touched) is lifted into a fixed-position wrapper at the
+     hero img's current rendered rect R0 and flown to the origin
+     plate's photo rect R1. The visual invariant at every progress
+     point p: the rendered image equals object-fit:cover of the photo
+     into the rect interpolated between R0 and R1 — so the first frame
+     IS the hero's rendering and the last frame IS the plate's
+     rendering, by construction, and discarding the wrapper at p=1
+     hands off to an identical rendering (no swap, no crossfade).
+
+     Transforms only, no per-frame layout: the wrapper (layout box =
+     R0, transform-origin 0 0) gets translate + non-uniform scale
+     morphing its box to the interpolated rect; the img gets a
+     counter translate + scale on the SAME WAAPI clock. Composed, the
+     img's drawn photo lands at uniform scale s(p) = cover scale of
+     the interpolated rect, centred in it:
+       wrapper: translate(tx,ty) scale(sx,sy)   sx=W(p)/W0, sy=H(p)/H0
+       img:     translate(bx,by) scale(ax,ay)   ax=s(p)/(s0*sx), ay=s(p)/(s0*sy)
+                bx = coverOffX(p)/sx - ax*off0x, by = coverOffY(p)/sy - ay*off0y
+     where s0/off0 are the hero box's cover scale / drawn-photo offset.
+     The wrapper clips (overflow hidden) and its border-radius morphs
+     0 -> the plate's radius, so the visible window is exactly the
+     interpolated rect with the plate's corners at landing. Keyframes
+     are precomputed at 25 sample points of LINEAR p and the flight's
+     single easing is applied by WAAPI on top, so at eased progress p
+     the rendering is exactly cover into rect(p). */
+  function coverScaleFor(w, h, nw, nh){ return Math.max(w / nw, h / nh); }
+  function imageFlightFrames(R0, R1, nw, nh, radiusPx){
+    var K = 24, wFrames = [], iFrames = [];
+    /* round emitted numbers to 5 decimals: keeps the transform strings
+       plain decimals (no exponent notation) and the composed error
+       under ~0.005px */
+    function r4(n){ return Math.round(n * 100000) / 100000; }
+    var s0 = coverScaleFor(R0.width, R0.height, nw, nh);
+    var off0x = (R0.width - nw * s0) / 2;
+    var off0y = (R0.height - nh * s0) / 2;
+    for(var i = 0; i <= K; i++){
+      var t = i / K;
+      var W = R0.width + (R1.width - R0.width) * t;
+      var H = R0.height + (R1.height - R0.height) * t;
+      var tx = (R1.left - R0.left) * t;
+      var ty = (R1.top - R0.top) * t;
+      var st = coverScaleFor(W, H, nw, nh);
+      var cox = (W - nw * st) / 2;
+      var coy = (H - nh * st) / 2;
+      var sx = W / R0.width, sy = H / R0.height;
+      var ax = st / (s0 * sx), ay = st / (s0 * sy);
+      var bx = cox / sx - ax * off0x;
+      var by = coy / sy - ay * off0y;
+      wFrames.push({
+        transform: 'translate(' + r4(tx) + 'px,' + r4(ty) + 'px) scale(' + r4(sx) + ',' + r4(sy) + ')',
+        borderRadius: r4(radiusPx * t) + 'px',
+        offset: t
+      });
+      iFrames.push({
+        transform: 'translate(' + r4(bx) + 'px,' + r4(by) + 'px) scale(' + r4(ax) + ',' + r4(ay) + ')',
+        offset: t
+      });
+    }
+    return { wrapper: wFrames, img: iFrames };
+  }
+  /* Run the exit photo flight under the same flight discipline as the
+     panel flights: settle the previous flight first, ONE flight object
+     owns the wrapper animation (its finished promise drives
+     completion), the img counter-animation and the panel fade-outs ride
+     as extras on the same clock and are cancelled if settled. The
+     panel gets out of the image's way at close start: its background
+     goes transparent, it becomes inert, and its non-image parts
+     (scroll content, sticky bar, ✕) fade out in ~150ms, so the photo
+     flies over the real feed with the origin plate visible beneath. */
+  function runImageFlight(img, R0, R1, cleanup){
+    settleFlight();
+    var radiusPx = 16;
+    var plateEl = detailCard ? detailCard.querySelector('.plate') : null;
+    if(plateEl){
+      var parsed = parseFloat(window.getComputedStyle(plateEl).borderTopLeftRadius);
+      if(parsed > 0) radiusPx = parsed;
+    }
+    var frames = imageFlightFrames(R0, R1, img.naturalWidth, img.naturalHeight, radiusPx);
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'position:fixed;left:' + R0.left + 'px;top:' + R0.top +
+      'px;width:' + R0.width + 'px;height:' + R0.height +
+      'px;margin:0;padding:0;overflow:hidden;border-radius:0;z-index:120;' +
+      'pointer-events:none;transform-origin:0 0;will-change:transform';
+    img.style.transform = ''; /* drop any parallax transform: the flight's first frame reproduces the current rendering from R0 itself */
+    img.style.transformOrigin = '0 0';
+    img.style.willChange = 'transform';
+    wrap.appendChild(img);
+    document.body.appendChild(wrap);
+    flyWrap = wrap;
+    panel.style.background = 'transparent';
+    panel.style.pointerEvents = 'none';
+    var fadeOpts = { duration: 150, easing: 'ease-out', delay: 0, fill: 'both' };
+    var fadeFrom = [{ opacity: '1' }, { opacity: '0' }];
+    var extras = [
+      img.animate(frames.img, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' })
+    ];
+    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')]
+      .forEach(function(el){
+        if(el) extras.push(el.animate(fadeFrom, fadeOpts));
+      });
+    var anim = wrap.animate(frames.wrapper, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
+    var f = { anim: anim, extras: extras, cleanup: cleanup, settled: false };
+    activeFlight = f;
+    anim.finished.then(function(){
+      if(f.settled) return;
+      f.settled = true;
+      if(activeFlight === f) activeFlight = null;
+      /* p=1: the wrapper's rendering IS the plate's rendering (same
+         rect, same cover scale, same crop) — teardown just discards
+         the wrapper and hides the already-transparent panel */
+      cleanup();
+    }, function(){ /* a cancelled animation rejects; settleFlight() already cleaned up */ });
   }
 
   /* split the CLONE into hero (its own photo / scrim / credit) + sheet
@@ -3205,14 +3346,32 @@
     var target = !reduce ? plateInfo(card) : null;
     if(target && heroEl){
       if(detailScroll.scrollTop <= 4){
-        /* top state: the EXACT reverse of the open flight — the same
-           two keyframes, reversed, on the panel alone. The panel
-           stays fully opaque for the entire close; the feed (never
-           changed) is revealed only by the shrinking clip window.
-           On finish, teardownDetail hides the panel in one
-           instantaneous state change. */
-        var frames = panelFlightFrames(target, heroBoxOf());
-        runPanelFlight([frames[1], frames[0]], function(){ teardownDetail(); });
+        /* top state, listing WITH a photo: the exit is the flying
+           image alone (see runImageFlight) — the hero's own img morphs
+           continuously from the hero rect to the plate rect with the
+           cover crop recomputed at every instant, so its last frame
+           IS the plate's rendering and teardown changes no pixels.
+           The panel's non-image parts fade out of its way in ~150ms.
+           Listings with no photo (or an unloaded one) keep the panel
+           flight below, unchanged. */
+        var heroImg = heroEl.querySelector('.plate-photo');
+        var flown = false;
+        if(heroImg && heroImg.naturalWidth > 0 && heroImg.naturalHeight > 0){
+          var R0 = heroImg.getBoundingClientRect();
+          var plateImg = card.querySelector('.plate .plate-photo');
+          var R1 = plateImg ? plateImg.getBoundingClientRect() : target;
+          if(R0.width > 0 && R0.height > 0 && R1.width > 0 && R1.height > 0){
+            runImageFlight(heroImg,
+              { top: R0.top, left: R0.left, width: R0.width, height: R0.height },
+              { top: R1.top, left: R1.left, width: R1.width, height: R1.height },
+              function(){ teardownDetail(); });
+            flown = true;
+          }
+        }
+        if(!flown){
+          var frames = panelFlightFrames(target, heroBoxOf());
+          runPanelFlight([frames[1], frames[0]], function(){ teardownDetail(); });
+        }
       }else{
         /* scrolled state: the hero is not in view, so there is no
            truthful translate coupling — drop it and animate the clip
