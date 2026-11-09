@@ -3144,14 +3144,53 @@
        img:     translate(bx,by) scale(ax,ay)   ax=s(p)/(s0*sx), ay=s(p)/(s0*sy)
                 bx = coverOffX(p)/sx - ax*off0x, by = coverOffY(p)/sy - ay*off0y
      where s0/off0 are the hero box's cover scale / drawn-photo offset.
-     The wrapper clips (overflow hidden) and its border-radius morphs
-     0 -> the plate's radius, so the visible window is exactly the
-     interpolated rect with the plate's corners at landing. Keyframes
-     are precomputed at 25 sample points of LINEAR p and the flight's
-     single easing is applied by WAAPI on top, so at eased progress p
-     the rendering is exactly cover into rect(p). */
+     The wrapper clips (overflow hidden) and its corners morph with
+     the flight: the RENDERED radius of every corner interpolates
+     from the hero's as-displayed radius (measured live from the
+     hero element) to the plate's exact radius (measured live from
+     the plate element), all four corners as the plate has them, so
+     the visible window is exactly the interpolated rect and the
+     last flying frame is pixel-identical to the plate's rounded
+     rendering — nothing swaps at landing. The wrapper itself is
+     non-uniformly scaled (sx != sy), and a border-radius set on a
+     scaled element is scaled with it, so a naive radius would
+     render elliptical and undersized (at p=1 it would land at
+     radius*sx by radius*sy, not the plate's radius). Each keyframe
+     therefore specifies the radius DIVIDED by that keyframe's
+     scale factors — horizontal radii / sx, vertical radii / sy,
+     in the shorthand's elliptical "h / v" form — so the rendered
+     radius (specified x scale) equals the intended interpolated
+     radius exactly at every keyframe. Keyframes are precomputed
+     at 25 sample points of LINEAR p and the flight's single easing
+     is applied by WAAPI on top, so at eased progress p the
+     rendering is exactly cover into rect(p). The text flyers are
+     NOT inside this wrapper (they ride in their own layer above
+     it), so the morphing corners can never clip the spec pill. */
   function coverScaleFor(w, h, nw, nh){ return Math.max(w / nw, h / nh); }
-  function imageFlightFrames(R0, R1, nw, nh, radiusPx){
+  /* one corner's computed radius as px {h, v}: a computed value is
+     "Npx" (circular) or "Hpx Vpx" (elliptical); a percentage
+     resolves against the box width (horizontal) / height
+     (vertical), per spec */
+  function cornerRadiiFor(el, w, h){
+    var zero = [{ h: 0, v: 0 }, { h: 0, v: 0 }, { h: 0, v: 0 }, { h: 0, v: 0 }];
+    if(!el) return zero;
+    var cs = window.getComputedStyle(el);
+    var props = ['borderTopLeftRadius', 'borderTopRightRadius',
+      'borderBottomRightRadius', 'borderBottomLeftRadius'];
+    return props.map(function(prop){
+      var parts = String(cs[prop] || '0px').trim().split(/\s+/);
+      function conv(tok, basis){
+        if(!tok) return 0;
+        var n = parseFloat(tok);
+        if(!isFinite(n)) return 0;
+        return tok.charAt(tok.length - 1) === '%' ? n * basis / 100 : n;
+      }
+      var hv = conv(parts[0], w);
+      var vv = parts.length > 1 ? conv(parts[1], h) : conv(parts[0], h);
+      return { h: hv, v: vv };
+    });
+  }
+  function imageFlightFrames(R0, R1, nw, nh, startRadii, endRadii){
     var K = 24, wFrames = [], iFrames = [];
     /* round emitted numbers to 5 decimals: keeps the transform strings
        plain decimals (no exponent notation) and the composed error
@@ -3173,9 +3212,20 @@
       var ax = st / (s0 * sx), ay = st / (s0 * sy);
       var bx = cox / sx - ax * off0x;
       var by = coy / sy - ay * off0y;
+      /* intended rendered radius at this keyframe, per corner
+         (TL, TR, BR, BL), interpolated hero -> plate; specified
+         radius = intended / scale, so rendered = specified * scale
+         = intended exactly (horizontal and vertical alike) */
+      var hs = [], vs = [];
+      for(var c = 0; c < 4; c++){
+        var ih = startRadii[c].h + (endRadii[c].h - startRadii[c].h) * t;
+        var iv = startRadii[c].v + (endRadii[c].v - startRadii[c].v) * t;
+        hs.push(r4(sx ? ih / sx : 0) + 'px');
+        vs.push(r4(sy ? iv / sy : 0) + 'px');
+      }
       wFrames.push({
         transform: 'translate(' + r4(tx) + 'px,' + r4(ty) + 'px) scale(' + r4(sx) + ',' + r4(sy) + ')',
-        borderRadius: r4(radiusPx * t) + 'px',
+        borderRadius: hs.join(' ') + ' / ' + vs.join(' '),
         offset: t
       });
       iFrames.push({
@@ -3289,17 +3339,18 @@
   function runImageFlight(img, R0, R1, cleanup){
     settleFlight();
     var textAnims = buildTextFlyers();
-    var radiusPx = 16;
+    /* both end radii measured live from the DOM, never hard-coded:
+       the start is the hero element's as-displayed corner radii
+       (its box is R0), the end is the origin plate's exact radii,
+       all four corners (its photo box is R1) */
     var plateEl = detailCard ? detailCard.querySelector('.plate') : null;
-    if(plateEl){
-      var parsed = parseFloat(window.getComputedStyle(plateEl).borderTopLeftRadius);
-      if(parsed > 0) radiusPx = parsed;
-    }
-    var frames = imageFlightFrames(R0, R1, img.naturalWidth, img.naturalHeight, radiusPx);
+    var startRadii = cornerRadiiFor(heroEl, R0.width, R0.height);
+    var endRadii = cornerRadiiFor(plateEl, R1.width, R1.height);
+    var frames = imageFlightFrames(R0, R1, img.naturalWidth, img.naturalHeight, startRadii, endRadii);
     var wrap = document.createElement('div');
     wrap.style.cssText = 'position:fixed;left:' + R0.left + 'px;top:' + R0.top +
       'px;width:' + R0.width + 'px;height:' + R0.height +
-      'px;margin:0;padding:0;overflow:hidden;border-radius:0;z-index:120;' +
+      'px;margin:0;padding:0;overflow:hidden;border-radius:' + frames.wrapper[0].borderRadius + ';z-index:120;' +
       'pointer-events:none;transform-origin:0 0;will-change:transform';
     img.style.transform = ''; /* drop any parallax transform: the flight's first frame reproduces the current rendering from R0 itself */
     img.style.transformOrigin = '0 0';
@@ -3326,7 +3377,8 @@
       f.settled = true;
       if(activeFlight === f) activeFlight = null;
       /* p=1: the wrapper's rendering IS the plate's rendering (same
-         rect, same cover scale, same crop) — teardown just discards
+         rect, same cover scale, same crop, same rendered corner
+         radius on all four corners) — teardown just discards
          the wrapper and hides the already-transparent panel */
       cleanup();
     }, function(){ /* a cancelled animation rejects; settleFlight() already cleaned up */ });
