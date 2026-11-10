@@ -191,8 +191,8 @@
   .fav-empty[hidden]{display:none}
 
   /* ---------- Category rows ---------- */
-  .section-head{margin:24px 0 4px}
-  .row-title{display:flex;align-items:baseline;gap:9px;width:100%;text-align:left;
+  .section-head{margin:24px 0 4px;display:flex;flex-wrap:wrap;align-items:center}
+  .row-title{display:flex;align-items:baseline;gap:9px;flex:1 1 auto;min-width:0;text-align:left;
     background:none;border:0;padding:8px 2px;min-height:44px;margin:0;cursor:pointer;color:var(--text);
     font-family:"Outfit",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
   .row-title:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:8px}
@@ -202,8 +202,12 @@
   section[data-section="Houses & Townhouses"] .sec-name{color:var(--sec-green)}
   section[data-section="Maybes"] .sec-name{color:var(--sec-orange)}
   .row-title .count{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;color:var(--faint);font-weight:600}
-  .sec-subline{display:block;font-size:13px;font-weight:500;color:var(--muted);padding:0 2px;min-height:1.2em}
-  .section-sub{margin:3px 2px 0;font-size:13.5px;color:var(--muted)}
+  .sec-subline{display:block;flex:0 0 100%;font-size:13px;font-weight:500;color:var(--muted);padding:0 2px;min-height:1.2em}
+  .sort-btn{flex:0 0 auto;margin-left:10px;padding:7px 12px;min-height:34px;cursor:pointer;
+    font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:12.5px;font-weight:600;color:var(--muted);
+    background:none;border:1px solid var(--line);border-radius:999px;-webkit-tap-highlight-color:transparent}
+  .sort-btn.on{color:var(--text);border-color:var(--muted)}
+  .sort-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
   /* ---------- Card rails ---------- */
   .rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;
@@ -483,7 +487,7 @@
 <nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
-<h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">All at or under the $2,500 rent cap.</p></h2>
+<h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-2bed">
 
 
@@ -1328,7 +1332,7 @@
 </section>
 <!-- ===== 1 Bed + Den ===== -->
 <section class="cat" data-cat="1den" data-section="1-Bedroom + Den Condos">
-<h2 class="section-head"><button class="row-title" data-cat="1den" type="button"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(20)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Equal option to 2-bed — not a fallback.</p></h2>
+<h2 class="section-head"><button class="row-title" data-cat="1den" type="button"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(20)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-1den">
 
 
@@ -4759,7 +4763,7 @@
 </section>
 <!-- ===== Houses & Townhouses ===== -->
 <section class="cat" data-cat="houses" data-section="Houses &amp; Townhouses">
-<h2 class="section-head"><button class="row-title" data-cat="houses" type="button"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(6)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Stacked condo townhouses — whole-property units; the house-like option that exists at this size in the zone.</p></h2>
+<h2 class="section-head"><button class="row-title" data-cat="houses" type="button"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(6)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-houses">
 
 
@@ -5169,7 +5173,7 @@
 </section>
 <!-- ===== Maybes ===== -->
 <section class="cat" data-cat="watch" data-section="Maybes">
-<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Maybes</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. ✓ moves it to the main list; ✕ removes it for good.</p></h2>
+<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Maybes</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-watch">
 
 
@@ -5705,6 +5709,63 @@
     btn.addEventListener('click', function(){ selectCategory(btn.getAttribute('data-cat'), false); });
   });
 
+  /* ---------- per-section price sort ----------
+     One small toggle in each section head (the same head serves the
+     All rails and the single-category vertical view), cycling
+     Default order -> Price: high to low -> Price: low to high ->
+     Default. The key is the card's monthly RENT only (rentOf),
+     never the all-in estimate. Sorting re-appends the section's
+     existing card elements in the new order — cards are never
+     rebuilt and their content is never touched. State is
+     per-section and kept in memory only. The default order is the
+     order the cards were in when the page loaded; a card that
+     arrives later (a promoted Maybe) joins the end of it. */
+  var SORT_LABELS = ['Sort: Default', 'Price ↓', 'Price ↑'];
+  var sortMode = {};    /* cat -> 0 default, 1 high-to-low, 2 low-to-high */
+  var homeOrder = {};   /* cat -> [cards in default order] */
+  function applySort(sec){
+    var cat = sec.getAttribute('data-cat');
+    var body = sec.querySelector('.section-body');
+    if(!body) return;
+    var mode = sortMode[cat] || 0;
+    var cards = sectionCards(sec);
+    var ordered;
+    if(mode === 0){
+      var home = homeOrder[cat] || [];
+      ordered = home.filter(function(c){ return cards.indexOf(c) !== -1; });
+      cards.forEach(function(c){ if(ordered.indexOf(c) === -1) ordered.push(c); });
+    }else{
+      ordered = cards.map(function(c, i){
+        var r = rentOf(c);
+        return { c: c, i: i, r: (r === null ? 0 : r) };
+      }).sort(function(a, b){
+        var d = mode === 1 ? (b.r - a.r) : (a.r - b.r);
+        return d !== 0 ? d : (a.i - b.i);
+      }).map(function(x){ return x.c; });
+    }
+    ordered.forEach(function(c){ body.appendChild(c); });
+    body.scrollLeft = 0;
+  }
+  document.querySelectorAll('.cat').forEach(function(sec){
+    var cat = sec.getAttribute('data-cat');
+    sortMode[cat] = 0;
+    homeOrder[cat] = sectionCards(sec);
+    var title = sec.querySelector('.row-title');
+    if(!title || !title.parentNode) return;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sort-btn';
+    btn.textContent = SORT_LABELS[0];
+    btn.setAttribute('aria-label', 'Sort ' + (sec.getAttribute('data-section') || 'listings') + ' by price');
+    title.parentNode.insertBefore(btn, title.nextSibling);
+    btn.addEventListener('click', function(){
+      sortMode[cat] = ((sortMode[cat] || 0) + 1) % 3;
+      btn.textContent = SORT_LABELS[sortMode[cat]];
+      btn.classList.toggle('on', sortMode[cat] !== 0);
+      applySort(sec);
+    });
+  });
+
   /* ---------- detail view: ONE MOVING PANEL ----------
      The feed card is never moved, emptied, rebuilt or restored.
      openDetail only READS the original card (text, hrefs, image src,
@@ -5861,6 +5922,7 @@
         if(el) el.getAnimations().forEach(function(a){ a.cancel(); });
       });
     detailScroll.innerHTML = '';
+    detailScroll.scrollTop = 0;
     detailRoot = null; heroEl = null; sheetEl = null; detailCard = null;
     panel.hidden = true;
     panel.classList.remove('scrolled');
@@ -6511,6 +6573,12 @@
     detailScroll.appendChild(detailRoot);
     panel.classList.remove('scrolled');
     panel.hidden = false;
+    /* the scroll reset must land AFTER the panel is unhidden: while
+       the panel is display:none the scroll container has no box, the
+       pre-assembly scrollTop = 0 above is discarded, and the previous
+       listing's offset reappears when the panel re-renders. Still
+       synchronous, before the flight's first frame — no visible jump. */
+    detailScroll.scrollTop = 0;
     document.body.classList.add('no-scroll');
     if(!reducedMotion() && src && heroEl){
       runPanelFlight(panelFlightFrames(src, heroBoxOf()), function(){});
