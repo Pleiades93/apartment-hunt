@@ -7,7 +7,7 @@
 <meta content="light dark" name="color-scheme"/>
 <link href="data:," rel="icon"/>
 <title>Apartment Hunt</title>
-<script>(function(){try{var t=localStorage.getItem('aptHunt.theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();</script>
+<script>(function(){try{document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
@@ -60,7 +60,7 @@
     }
     .chip.warn{color:#7c4a03}
   }
-  /* ---------- Manual theme override (stored choice beats the system) ---------- */
+  /* ---------- Manual theme override (cold open is always light; the toggle's stored choice never wins on load) ---------- */
   html[data-theme="dark"]{color-scheme:dark;
     --bg:#060913; --bg2:#0a0f1e; --card:#0e1528; --card2:#111a33;
     --line:rgba(120,160,255,.16); --line-soft:rgba(255,255,255,.07);
@@ -106,6 +106,17 @@
     --rail-bg:rgba(237,240,246,.96);
   }
   html[data-theme="light"] .chip.warn{color:#7c4a03}
+  /* ---------- Category pill surfaces (Airbnb-style) ---------- */
+  :root{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
+    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4)}
+  @media (prefers-color-scheme: light){
+    :root{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
+      --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3}
+  }
+  html[data-theme="dark"]{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
+    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4)}
+  html[data-theme="light"]{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
+    --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -117,7 +128,7 @@
   .wrap{max-width:760px;margin:0 auto;padding:20px 16px 48px}
 
   /* ---------- Header ---------- */
-  .top{padding:20px 16px 16px;margin:0 -8px;border-radius:20px;
+  .top{padding:20px 16px 16px;margin:0 -8px;border-radius:20px;text-align:center;
     background:linear-gradient(120deg,var(--blue-soft),var(--magenta-soft))}
   .updated{font-size:13px;color:var(--faint);margin:0}
   h1{font-size:34px;line-height:1.08;font-weight:800;margin:14px 0 8px}
@@ -128,8 +139,7 @@
     margin:10px -16px 0;padding:0 16px;
     background:var(--appbar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft)}
-  .appbar-name{font-family:"Outfit",system-ui,sans-serif;font-size:15.5px;font-weight:700;letter-spacing:-.01em}
-  .appbar-count{font-size:13.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+  .appbar-count{font-family:"Outfit",system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
   .appbar-right{display:flex;align-items:center;gap:10px}
   .theme-toggle{width:40px;height:40px;flex:0 0 auto;border-radius:50%;
     border:1px solid var(--line-soft);background:var(--card);color:var(--text);
@@ -149,35 +159,33 @@
   .pill-seg + .pill-seg{border-left:1px solid var(--line-soft)}
   @media (max-width:400px){.pill-seg{font-size:12px;padding:12px 2px}}
 
-  /* ---------- Category rail (pinned under app bar) ---------- */
+  /* ---------- Category rail (pinned under app bar) — Airbnb-style pills ---------- */
   .catrail{position:sticky;top:var(--appbar-h);z-index:55;
-    display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;
-    margin:12px -16px 0;padding:4px 12px 0;
+    display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;
+    margin:12px -16px 0;padding:10px 14px;
     background:var(--rail-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft)}
   .catrail::-webkit-scrollbar{display:none}
-  .cat-tile{flex:1 0 auto;min-width:70px;min-height:64px;
-    display:flex;flex-direction:column;align-items:center;gap:1px;
-    padding:7px 10px 8px;background:none;border:0;border-bottom:2px solid transparent;
-    cursor:pointer;color:var(--muted);font-family:inherit;
-    -webkit-tap-highlight-color:transparent}
-  .cat-tile:focus-visible{outline:2px solid var(--blue);outline-offset:-2px;border-radius:8px}
+  .cat-tile{flex:0 0 auto;min-height:44px;
+    display:flex;flex-direction:row;align-items:center;gap:7px;
+    padding:8px 15px;border-radius:999px;
+    background:var(--pill-bg);border:1px solid var(--pill-border);box-shadow:var(--pill-shadow);
+    cursor:pointer;color:var(--text);font-family:inherit;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .18s ease,border-color .18s ease}
+  .cat-tile:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .tile-glyph{display:block;line-height:0}
-  .tile-glyph svg{width:27px;height:27px}
+  .tile-glyph svg{width:20px;height:20px}
   .tile-2bed .tile-glyph{color:var(--sec-blue)}
   .tile-1den .tile-glyph{color:var(--sec-magenta)}
   .tile-houses .tile-glyph{color:var(--sec-green)}
   .tile-watch .tile-glyph{color:var(--sec-orange)}
   .tile-all .tile-glyph{color:var(--muted)}
-  .tile-label{font-family:"Outfit",system-ui,sans-serif;font-size:13px;font-weight:600;line-height:1.2;white-space:nowrap}
-  .tile-count{font-size:11.5px;font-weight:600;color:var(--faint);line-height:1.2}
-  .cat-tile.selected .tile-label{color:var(--text);font-weight:700}
+  .tile-label{font-family:"Outfit",system-ui,sans-serif;font-size:13.5px;font-weight:600;line-height:1.2;white-space:nowrap}
+  .tile-count{font-size:12px;font-weight:600;color:var(--faint);line-height:1.2}
+  .cat-tile.selected{background:var(--pill-sel-bg);border-color:var(--pill-sel-border)}
+  .cat-tile.selected .tile-label{font-weight:700}
   .cat-tile.selected .tile-count{color:var(--muted)}
-  .tile-all.selected{border-bottom-color:var(--muted)}
-  .tile-2bed.selected{border-bottom-color:var(--sec-blue)}
-  .tile-1den.selected{border-bottom-color:var(--sec-magenta)}
-  .tile-houses.selected{border-bottom-color:var(--sec-green)}
-  .tile-watch.selected{border-bottom-color:var(--sec-orange)}
 
   /* ---------- Category rows ---------- */
   .section-head{margin:24px 0 4px}
@@ -275,13 +283,20 @@
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:0}
-  .detail-close{position:absolute;top:calc(10px + env(safe-area-inset-top));left:12px;z-index:5;
-    width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.35);
-    background:rgba(14,20,38,.42);color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.28);
-    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-    font-size:16px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  .detail-close,.detail-share{position:absolute;top:calc(10px + env(safe-area-inset-top));z-index:5;
+    width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.05);
+    background:rgba(255,255,255,.94);color:#111;box-shadow:0 2px 10px rgba(0,0,0,.22);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
     transition:background .32s cubic-bezier(.32,.72,.22,1),color .32s cubic-bezier(.32,.72,.22,1),border-color .32s cubic-bezier(.32,.72,.22,1),box-shadow .32s cubic-bezier(.32,.72,.22,1)}
-  .detail-close:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .detail-close{left:12px}
+  .detail-share{right:12px}
+  .detail-close svg,.detail-share svg{width:19px;height:19px;display:block}
+  .detail-close:focus-visible,.detail-share:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);
+    z-index:130;background:#222222;color:#fff;font-size:14px;font-weight:600;line-height:1.3;
+    padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.3);white-space:nowrap}
+  .toast[hidden]{display:none}
   .detail-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;
     padding:12px 16px calc(12px + env(safe-area-inset-bottom));
     border-top:1px solid var(--line-soft);
@@ -390,7 +405,7 @@
   .detail-panel.scrolled::before{content:'';position:absolute;top:0;left:0;right:0;z-index:4;
     height:calc(58px + env(safe-area-inset-top));background:var(--bg);
     border-bottom:1px solid var(--line-soft);pointer-events:none}
-  .detail-panel.scrolled .detail-close{background:transparent;border-color:transparent;
+  .detail-panel.scrolled .detail-close,.detail-panel.scrolled .detail-share{background:transparent;border-color:transparent;
     box-shadow:none;color:var(--text);-webkit-backdrop-filter:none;backdrop-filter:none}
   .detail-hero{position:sticky;top:0;z-index:0;overflow:hidden;
     height:min(66vw,340px);min-height:230px;background:var(--card2)}
@@ -446,12 +461,12 @@
 <!-- ===== Header ===== -->
 <header class="top">
 <h1>Apartment Hunt</h1>
-<p class="updated">Last updated November 2026</p>
+<p class="updated">Last updated November 9, 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
-<div class="appbar"><span class="appbar-name">Apartment Hunt</span><span class="appbar-right"><span class="appbar-count" id="appbar-count">39 listings</span><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
+<div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
 <!-- ===== Hunt summary ===== -->
-<div class="search-pill" role="note"><span class="pill-seg">Mississauga</span><span class="pill-seg">May–Jul 2027</span><span class="pill-seg">up to $2,500</span><span class="pill-seg">Bus ≤ 40 min</span></div>
+<div class="search-pill" role="note"><span class="pill-seg">Mississauga</span><span class="pill-seg">Jan–Apr 2027</span><span class="pill-seg">up to $2,500</span><span class="pill-seg">Bus ≤ 40 min</span></div>
 <!-- ===== Section navigation chips ===== -->
 <nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1.5" width="7" x="4" y="4"></rect><rect height="7" rx="1.5" width="7" x="13" y="4"></rect><rect height="7" rx="1.5" width="7" x="4" y="13"></rect><rect height="7" rx="1.5" width="7" x="13" y="13"></rect></svg></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"></path><path d="M3 18h18"></path><path d="M3 21v-3"></path><path d="M21 21v-3"></path><path d="M5 10V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2"></path><path d="M7 8h4"></path></svg></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M2 18v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5"></path><path d="M2 18h15"></path><path d="M2 21v-3"></path><path d="M17 21v-3"></path><path d="M4 11V9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v2"></path><path d="M19.5 4v5"></path><path d="M17 6.5h5"></path></svg></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 11l8-7 8 7"></path><path d="M6 9.5V20h12V9.5"></path><path d="M10 20v-5h4v5"></path></svg></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg></span><span class="tile-label">Watch</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
@@ -2815,7 +2830,8 @@
 </div>
 </section>
 </div>
-<div aria-label="Listing details" aria-modal="true" class="detail-panel" hidden="" id="detailPanel" role="dialog"><button aria-label="Close listing details" class="detail-close" id="detailClose" type="button">✕</button><div class="detail-scroll" id="detailScroll"></div><div class="detail-bar" id="detailBar"><div class="db-price"><div class="db-rent" id="dbRent"></div><div class="db-allin" id="dbAllin"></div></div><div class="db-actions"><a class="db-email" href="#" hidden="" id="dbEmail">Email agent</a><a class="db-call" href="#" id="dbCall">Call agent</a></div></div></div>
+<div aria-label="Listing details" aria-modal="true" class="detail-panel" hidden="" id="detailPanel" role="dialog"><button aria-label="Back to listings" class="detail-close" id="detailClose" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button aria-label="Share listing" class="detail-share" id="detailShare" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 15.5v-11"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5.5 12.5v6A1.5 1.5 0 0 0 7 20h10a1.5 1.5 0 0 0 1.5-1.5v-6"/></svg></button><div class="detail-scroll" id="detailScroll"></div><div class="detail-bar" id="detailBar"><div class="db-price"><div class="db-rent" id="dbRent"></div><div class="db-allin" id="dbAllin"></div></div><div class="db-actions"><a class="db-email" href="#" hidden="" id="dbEmail">Email agent</a><a class="db-call" href="#" id="dbCall">Call agent</a></div></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden=""></div>
 
 <script>
 (function(){
@@ -2823,7 +2839,7 @@
   var ACCEPT_KEY = 'aptHunt.acceptedMinis';
   var REMOVE_KEY = 'aptHunt.removedMinis';
 
-  /* ---------- manual dark / light toggle (stored choice wins over system) ---------- */
+  /* ---------- manual dark / light toggle (cold open is always light; the toggle switches for the session) ---------- */
   var THEME_KEY = 'aptHunt.theme';
   var themeBtn = document.getElementById('themeToggle');
   function systemTheme(){
@@ -3125,7 +3141,7 @@
     panel.style.willChange = '';
     panel.style.background = '';
     panel.style.pointerEvents = '';
-    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')]
+    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare')]
       .forEach(function(el){
         if(el) el.getAnimations().forEach(function(a){ a.cancel(); });
       });
@@ -3558,7 +3574,7 @@
     var fadeFrom = [{ opacity: '1' }, { opacity: '0' }];
     var imgAnim = img.animate(frames.img, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
     var extras = [imgAnim].concat(textAnims);
-    var fadeEls = [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose')];
+    var fadeEls = [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare')];
     fadeEls.forEach(function(el){
       if(el) extras.push(el.animate(fadeFrom, fadeOpts));
     });
@@ -3887,6 +3903,44 @@
     else closeDetail();
   }
   document.getElementById('detailClose').addEventListener('click', requestClose);
+
+  /* ---------- share (Airbnb-style top-right circle) ---------- */
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(msg){
+    if(!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.hidden = false;
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.hidden = true; }, 2200);
+  }
+  var shareBtn = document.getElementById('detailShare');
+  if(shareBtn){
+    shareBtn.addEventListener('click', function(){
+      if(!detailCard) return;
+      /* share the listing's own public Realtor.ca link (the card's
+         "View listing" URL) — never this page's own address */
+      var linkEl = detailCard.querySelector('.actions .btn-primary');
+      var url = linkEl ? linkEl.getAttribute('href') : '';
+      if(!url) return;
+      var headingEl = detailCard.querySelector('.building');
+      var title = headingEl ? headingEl.textContent.replace(/\s+/g, ' ').trim() : 'Apartment Hunt listing';
+      if(navigator.share){
+        try{ navigator.share({ title: title, url: url }).catch(function(){}); }catch(e){}
+      }else if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(url).then(function(){ showToast('Link copied'); }, function(){ showToast('Link copied'); });
+      }else{
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        ta.remove();
+        showToast('Link copied');
+      }
+    });
+  }
   window.addEventListener('popstate', function(){
     var mls = hashListingMls();
     if(detailCard && !mls) closeDetail();
