@@ -143,16 +143,17 @@
   /* ---------- App bar (sticky) ---------- */
   .appbar{position:sticky;top:0;z-index:60;height:var(--appbar-h);
     display:flex;align-items:center;justify-content:space-between;gap:12px;
-    margin:10px -16px 0;padding:0 16px;
+    margin:5px -16px 0;padding:0 16px;
     background:var(--appbar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--line-soft)}
   .appbar-count{font-family:"Outfit",system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
   .appbar-right{display:flex;align-items:center;gap:10px}
-  /* white circle in both themes (icon art has a white ground baked in); margin-top:1px offsets the
-     app bar's 1px bottom border so the gaps above and below the circle measure equal */
+  /* white circle in both themes (icon art has a white ground baked in); margin-top:-4px lifts the
+     circle so it sits centered between the title block above the bar and the bar's bottom border:
+     title-block bottom -> circle top and circle bottom -> bar bottom both measure 7.5px */
   .theme-toggle{width:44px;height:44px;flex:0 0 auto;border-radius:50%;overflow:hidden;
     border:1px solid var(--pill-border);background:#fff;box-shadow:var(--pill-shadow);
-    margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+    margin-top:-4px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
     -webkit-tap-highlight-color:transparent}
   .theme-toggle img{width:100%;height:100%;object-fit:cover;display:block}
   .theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
