@@ -6,6 +6,11 @@
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
 <meta content="light dark" name="color-scheme"/>
 <link href="data:," rel="icon"/>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="photos/e5e9ea3573317af5.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<meta name="apple-mobile-web-app-title" content="Apartment Hunt">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Apartment Hunt</title>
 <script>(function(){try{document.documentElement.setAttribute('data-theme','light');}catch(e){}})();</script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
@@ -107,16 +112,18 @@
   }
   html[data-theme="light"] .chip.warn{color:#7c4a03}
   /* ---------- Category pill surfaces (Airbnb-style) ---------- */
-  :root{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
-    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4); --pill-sel-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 2px rgba(255,255,255,.09)}
+  :root{--pill-bg:#2a2a2e; --pill-border:rgba(255,255,255,.10); --pill-shadow:0 8px 16px -4px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.08);
+    --pill-press-shadow:0 1px 2px rgba(0,0,0,0.4),inset 0 4px 10px rgba(0,0,0,0.55),inset 0 -1px 2px rgba(255,255,255,0.06);
+    --pill-sel-bg:#1d1d20; --pill-sel-border:rgba(255,255,255,.06); --pill-sel-shadow:inset 0 4px 10px rgba(0,0,0,0.55),inset 0 -1px 2px rgba(255,255,255,0.06)}
   @media (prefers-color-scheme: light){
-    :root{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
-      --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3; --pill-sel-shadow:inset 0 2px 5px rgba(0,0,0,.16),inset 0 -1px 2px rgba(255,255,255,.7)}
+    :root{--pill-bg:#ffffff; --pill-border:rgba(0,0,0,0.06); --pill-shadow:0 1px 2px rgba(0,0,0,0.04),0 8px 16px -4px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.9); --pill-press-shadow:0 1px 2px rgba(0,0,0,0.05),inset 0 4px 10px rgba(0,0,0,0.16),inset 0 14px 22px -8px rgba(0,0,0,0.10),inset 0 -2px 3px rgba(255,255,255,0.65);
+      --pill-sel-bg:#ededed; --pill-sel-border:rgba(0,0,0,0.04); --pill-sel-shadow:inset 0 4px 10px rgba(0,0,0,0.16),inset 0 14px 22px -8px rgba(0,0,0,0.10),inset 0 -2px 3px rgba(255,255,255,0.65)}
   }
-  html[data-theme="dark"]{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
-    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4); --pill-sel-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 2px rgba(255,255,255,.09)}
-  html[data-theme="light"]{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
-    --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3; --pill-sel-shadow:inset 0 2px 5px rgba(0,0,0,.16),inset 0 -1px 2px rgba(255,255,255,.7)}
+  html[data-theme="dark"]{--pill-bg:#2a2a2e; --pill-border:rgba(255,255,255,.10); --pill-shadow:0 8px 16px -4px rgba(0,0,0,0.55),inset 0 1px 0 rgba(255,255,255,0.08);
+    --pill-press-shadow:0 1px 2px rgba(0,0,0,0.4),inset 0 4px 10px rgba(0,0,0,0.55),inset 0 -1px 2px rgba(255,255,255,0.06);
+    --pill-sel-bg:#1d1d20; --pill-sel-border:rgba(255,255,255,.06); --pill-sel-shadow:inset 0 4px 10px rgba(0,0,0,0.55),inset 0 -1px 2px rgba(255,255,255,0.06)}
+  html[data-theme="light"]{--pill-bg:#ffffff; --pill-border:rgba(0,0,0,0.06); --pill-shadow:0 1px 2px rgba(0,0,0,0.04),0 8px 16px -4px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.9); --pill-press-shadow:0 1px 2px rgba(0,0,0,0.05),inset 0 4px 10px rgba(0,0,0,0.16),inset 0 14px 22px -8px rgba(0,0,0,0.10),inset 0 -2px 3px rgba(255,255,255,0.65);
+    --pill-sel-bg:#ededed; --pill-sel-border:rgba(0,0,0,0.04); --pill-sel-shadow:inset 0 4px 10px rgba(0,0,0,0.16),inset 0 14px 22px -8px rgba(0,0,0,0.10),inset 0 -2px 3px rgba(255,255,255,0.65)}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -162,10 +169,10 @@
     background:var(--pill-bg);border:1px solid var(--pill-border);box-shadow:var(--pill-shadow);
     cursor:pointer;color:var(--text);font-family:inherit;
     -webkit-tap-highlight-color:transparent;
-    transition:background .18s ease,border-color .18s ease,box-shadow .13s ease,transform .13s ease}
+    transition:background .14s ease-out,border-color .14s ease-out,box-shadow .14s ease-out,transform .14s ease-out}
   .cat-tile:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .tile-glyph{display:block;line-height:0}
-  .tile-glyph svg{width:20px;height:20px}
+  .tile-glyph img{width:24px;height:24px;object-fit:contain;display:block}
   .tile-2bed .tile-glyph{color:var(--sec-blue)}
   .tile-1den .tile-glyph{color:var(--sec-magenta)}
   .tile-houses .tile-glyph{color:var(--sec-green)}
@@ -174,7 +181,7 @@
   .tile-label{font-family:"Outfit",system-ui,sans-serif;font-size:13.5px;font-weight:600;line-height:1.2;white-space:nowrap}
   .tile-count{font-size:12px;font-weight:600;color:var(--faint);line-height:1.2}
   .cat-tile.selected{background:var(--pill-sel-bg);border-color:var(--pill-sel-border);box-shadow:var(--pill-sel-shadow)}
-  .cat-tile:active{transform:scale(.97);box-shadow:var(--pill-sel-shadow)}
+  .cat-tile:active{transform:translateY(1px) scale(.98);box-shadow:var(--pill-press-shadow)}
   .cat-tile.selected .tile-label{font-weight:700}
   .cat-tile.selected .tile-count{color:var(--muted)}
 
@@ -461,7 +468,7 @@
 <!-- ===== App bar (sticky) ===== -->
 <div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
 <!-- ===== Section navigation chips ===== -->
-<nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="currentColor" fill-opacity=".12"/><ellipse cx="12" cy="12" rx="3.8" ry="8.4"/><path d="M3.9 9.3h16.2M3.9 14.7h16.2"/></svg></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3.2 18.6V7a1.9 1.9 0 0 1 1.9-1.9h13.8A1.9 1.9 0 0 1 20.8 7v11.6"/><rect x="5.1" y="8" width="5.9" height="3.6" rx="1.5" fill="currentColor" fill-opacity=".18"/><rect x="13" y="8" width="5.9" height="3.6" rx="1.5" fill="currentColor" fill-opacity=".18"/><path d="M3.2 15.1c3.2-1.2 6.2-1.7 8.8-1.7s5.6.5 8.8 1.7v3.5H3.2z" fill="currentColor" fill-opacity=".10"/></svg></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M2.6 18.6V9.6"/><rect x="4.1" y="10.3" width="5.1" height="3.2" rx="1.4" fill="currentColor" fill-opacity=".18"/><path d="M2.6 15h10.7a1.8 1.8 0 0 1 1.8 1.8v1.8H2.6z" fill="currentColor" fill-opacity=".10"/><path d="M16 18.6v-3.2h5.6v3.2"/><path d="M18.8 15.4v-2.1"/><path d="M17.1 13.3h3.4l-1.05-2.9h-1.3z" fill="currentColor" fill-opacity=".18"/></svg></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M16.7 8.1V4.5h2.5v4.9"/><path d="M3.4 11.3L12 4.1l8.6 7.2"/><path d="M5.7 9.7v9.1a1 1 0 0 0 1 1h10.6a1 1 0 0 0 1-1V9.7" fill="currentColor" fill-opacity=".08"/><path d="M10.2 19.8v-4.4a1.8 1.8 0 0 1 3.6 0v4.4"/><path d="M12.9 17.4h.01" stroke-width="2.4"/><circle cx="7.9" cy="13.2" r="1.2" fill="currentColor" fill-opacity=".18"/></svg></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M2.6 12.1c2-3.9 5.3-6 9.4-6s7.4 2.1 9.4 6c-2 3.9-5.3 6-9.4 6s-7.4-2.1-9.4-6Z"/><circle cx="12" cy="12.1" r="3.4" fill="currentColor" fill-opacity=".16"/><circle cx="12" cy="12.1" r="1.3" fill="currentColor" stroke="none"/><path d="M12 3.6v1.8M5.3 5.5l1.1 1.6M18.7 5.5l-1.1 1.6"/></svg></span><span class="tile-label">Watchlist</span><span class="tile-count"></span></button></nav>
+<nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Watchlist</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
 <h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">All at or under the $2,500 rent cap.</p></h2>
@@ -469,7 +476,7 @@
 
 
 <!-- Block Nine 3116 -->
-<article aria-label="View listing: Block Nine South Tower · #3116" class="card has-photo" data-cat="2bed" data-mls="W14130520" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/734dc375bbdf174f.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Block Nine South Tower · #3116" class="card has-photo" data-cat="2bed" data-mls="W14130520" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/5a9f04cabab536aa.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -484,7 +491,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div><div class="face-head"><h3 class="building">Block Nine South Tower · #3116</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14130520</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">Block Nine South Tower · #3116</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14130520</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 space + locker included</span></p>
 <p><span class="mk">Utilities</span><span>Heat included; water + hydro not stated</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent"><a href="http://www.alvinci.ca/" rel="noopener" target="_blank">Alvin Tung</a>, Broker — Right At Home Realty</p><a class="call-btn" href="tel:647-882-7653">Call 647-882-7653</a></div></div><div class="details">
@@ -532,7 +539,7 @@
 
 </div></article>
 <!-- M City 2 2409 -->
-<article aria-label="View listing: M City 2 · #2409" class="card has-photo" data-cat="2bed" data-mls="W14127644" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/18cec5cceb108215.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 2 · #2409" class="card has-photo" data-cat="2bed" data-mls="W14127644" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -547,7 +554,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div><div class="face-head"><h3 class="building">M City 2 · #2409</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14127644</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #2409</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14127644</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 underground space + locker</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent"><a href="http://www.ronaldmathias.com/" rel="noopener" target="_blank">Ronald John Mathias</a>, Broker — RE/MAX Real Estate Centre Inc.</p><a class="call-btn" href="tel:905-270-2000">Call 905-270-2000</a></div></div><div class="details">
@@ -594,7 +601,7 @@
 
 </div></article>
 <!-- M City 2 2109 -->
-<article aria-label="View listing: M City 2 · #2109" class="card has-photo" data-cat="2bed" data-mls="W14119192" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/18cec5cceb108215.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 2 · #2109" class="card has-photo" data-cat="2bed" data-mls="W14119192" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -609,7 +616,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div><div class="face-head"><h3 class="building">M City 2 · #2109</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Oct 26, 2026 · MLS® W14119192</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #2109</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Oct 26, 2026 · MLS® W14119192</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 spot, locker owned</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent"><a href="https://www.soldbyjk.ca/" rel="noopener" target="_blank">JK Kalra</a>, Salesperson — Royal LePage Certified Realty</p><a class="call-btn" href="tel:416-725-1007">Call 416-725-1007</a></div></div><div class="details">
@@ -656,7 +663,7 @@
 
 </div></article>
 <!-- M City 2 4801 -->
-<article aria-label="View listing: M City 2 · #4801" class="card has-photo" data-cat="2bed" data-mls="W13826004" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/18cec5cceb108215.webp"/><span class="chip plate-badge">Partially furnished</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 700–799 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 2 · #4801" class="card has-photo" data-cat="2bed" data-mls="W13826004" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><span class="chip plate-badge">Partially furnished</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -671,7 +678,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div><div class="face-head"><h3 class="building">M City 2 · #4801</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Sep 24, 2026 · MLS® W13826004</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #4801</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">Listed Sep 24, 2026 · MLS® W13826004</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 underground space + locker owned</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent"><a href="https://frank-wan1.nhmls.ca/" rel="noopener" target="_blank">Frank Wan</a>, Salesperson — Anjia Realty</p><a class="call-btn" href="tel:905-808-6000">Call 905-808-6000</a></div></div><div class="details">
@@ -719,7 +726,7 @@
 
 </div></article>
 <!-- M City 3 2312 -->
-<article aria-label="View listing: M City 3 · #2312" class="card has-photo" data-cat="2bed" data-mls="W14141398" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7e386d138565fbe8.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #2312" class="card has-photo" data-cat="2bed" data-mls="W14141398" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -734,7 +741,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">M City 3 · #2312</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14141398</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #2312</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14141398</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 space; locker owned</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Venkateswaran Subburaj, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-637-1700">Call 905-637-1700</a></div></div><div class="details">
@@ -782,7 +789,7 @@
 
 </div></article>
 <!-- Canopy 2707 -->
-<article aria-label="View listing: Canopy Towers · #2707" class="card has-photo" data-cat="2bed" data-mls="W13827760" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/3151d5bc3b49c370.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
+<article aria-label="View listing: Canopy Towers · #2707" class="card has-photo" data-cat="2bed" data-mls="W13827760" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/173859a661012315.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -843,7 +850,7 @@
 
 </div></article>
 <!-- M City 3 5802 -->
-<article aria-label="View listing: M City 3 · #5802" class="card has-photo" data-cat="2bed" data-mls="W14145952" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7e386d138565fbe8.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #5802" class="card has-photo" data-cat="2bed" data-mls="W14145952" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -858,7 +865,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">M City 3 · #5802</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14145952</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #5802</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14145952</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 space included</span></p>
 <p><span class="mk">Utilities</span><span>Internet included; rest not stated</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sohan Sharma, Salesperson — Homelife/Miracle Realty Ltd</p><a class="call-btn" href="tel:905-454-4000">Call 905-454-4000</a></div></div><div class="details">
@@ -903,7 +910,7 @@
 
 </div></article>
 <!-- Trailwood 832 -->
-<article aria-label="View listing: 95 Trailwood Dr · #832" class="card has-photo" data-cat="2bed" data-mls="W14143756" data-building="trailwood-95" role="button" tabindex="0"><div class="plate"><img alt="Street View of 95 Trailwood Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/f92c14ad1728a008.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 900–999 sq ft</span><div class="travel">
+<article aria-label="View listing: 95 Trailwood Dr · #832" class="card has-photo" data-cat="2bed" data-mls="W14143756" data-building="trailwood-95" role="button" tabindex="0"><div class="plate"><img alt="Street View of 95 Trailwood Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/10c66227d2657172.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 900–999 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -918,7 +925,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">47–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Jul 2009</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jul 2009</div><div class="face-head"><h3 class="building">95 Trailwood Dr · #832</h3></div><p class="addr">Hurontario</p><p class="prov">MLS® W14143756</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2024</div><div class="face-head"><h3 class="building">95 Trailwood Dr · #832</h3></div><p class="addr">Hurontario</p><p class="prov">MLS® W14143756</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>2 spots</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Debbie Mckenna, Salesperson — Royal Lepage Terrequity Realty</p><a class="call-btn" href="tel:647-239-6055">Call 647-239-6055</a></div></div><div class="details">
@@ -1030,7 +1037,7 @@
 
 
 <!-- M City 3 908 -->
-<article aria-label="View listing: M City 3 (M3) · #908" class="card has-photo" data-cat="1den" data-mls="W14130680" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7e386d138565fbe8.webp"/><span class="chip plate-badge">Furnished</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 (M3) · #908" class="card has-photo" data-cat="1den" data-mls="W14130680" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><span class="chip plate-badge">Furnished</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1045,7 +1052,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">M City 3 (M3) · #908</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14130680</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 (M3) · #908</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14130680</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 spot, locker owned</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Gourav Setia, Salesperson — RE/MAX Realty Services Inc.</p><a class="call-btn" href="tel:647-615-4555">Call 647-615-4555</a></div></div><div class="details">
@@ -1209,7 +1216,7 @@
 
 </div></article>
 <!-- M City 3 6704 -->
-<article aria-label="View listing: M City 3 · #6704" class="card has-photo" data-cat="1den" data-mls="W14160494" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7e386d138565fbe8.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #6704" class="card has-photo" data-cat="1den" data-mls="W14160494" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1224,7 +1231,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">M City 3 · #6704</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14160494</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #6704</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14160494</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 spot</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Jannie Lam, Salesperson — Re/Max Crossroads Realty Inc.</p><a class="call-btn" href="tel:416-720-1831">Call 416-720-1831</a></div></div><div class="details">
@@ -1268,7 +1275,7 @@
 
 </div></article>
 <!-- M City 3 7109 -->
-<article aria-label="View listing: M City 3 · #7109" class="card has-photo" data-cat="1den" data-mls="W14152042" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7e386d138565fbe8.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #7109" class="card has-photo" data-cat="1den" data-mls="W14152042" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1283,7 +1290,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">M City 3 · #7109</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14152042</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #7109</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14152042</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Rizwan Razzaq, Salesperson — Re/Max Real Estate Centre Inc.</p><a class="call-btn" href="tel:416-543-6555">Call 416-543-6555</a></div></div><div class="details">
@@ -1328,7 +1335,7 @@
 
 </div></article>
 <!-- M City 2 3412 -->
-<article aria-label="View listing: M City 2 · #3412" class="card has-photo" data-cat="1den" data-mls="W14159850" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/18cec5cceb108215.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 2 · #3412" class="card has-photo" data-cat="1den" data-mls="W14159850" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1343,7 +1350,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/115683501796949195415" rel="noopener" target="_blank">Munîr Xelîl</a></div><div class="face-head"><h3 class="building">M City 2 · #3412</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">MLS® W14159850</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #3412</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">MLS® W14159850</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Aaron Cyrus, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-953-0550">Call 905-953-0550</a></div></div><div class="details">
@@ -1555,7 +1562,7 @@
 
 </div></article>
 <!-- Duke of York 808 -->
-<article aria-label="View listing: 3880 Duke of York Blvd · #808" class="card has-photo" data-cat="1den" data-mls="W14156148" data-building="duke-3880" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3880 Duke of York Blvd" class="plate-photo" decoding="async" loading="lazy" src="photos/82a0bfc894a3d111.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 3880 Duke of York Blvd · #808" class="card has-photo" data-cat="1den" data-mls="W14156148" data-building="duke-3880" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3880 Duke of York Blvd" class="plate-photo" decoding="async" loading="lazy" src="photos/5e273455aa1983b1.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1570,7 +1577,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Mar 2021</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Mar 2021</div><div class="face-head"><h3 class="building">3880 Duke of York Blvd · #808</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14156148</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–2,520 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2026</div><div class="face-head"><h3 class="building">3880 Duke of York Blvd · #808</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14156148</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–2,520 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Andre Lill, Salesperson — Royal Lepage Signature Realty</p><a class="call-btn" href="tel:905-568-2121">Call 905-568-2121</a></div></div><div class="details">
@@ -1669,7 +1676,7 @@
 
 </div></article>
 <!-- Confederation 704 -->
-<article aria-label="View listing: 4070 Confederation Pkwy · #704" class="card" data-cat="1den" data-mls="W14152238" role="button" tabindex="0"><div class="plate"><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 4070 Confederation Pkwy · #704" class="card has-photo" data-cat="1den" data-mls="W14152238" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4070 Confederation Pkwy" class="plate-photo" decoding="async" loading="lazy" src="photos/3dcc8c7439a9b764.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1684,7 +1691,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">52–54</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div></div><div class="face-head"><h3 class="building">4070 Confederation Pkwy · #704</h3><span class="face-star">★ 3.3</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14152238</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/117988591826355007438" rel="noopener" target="_blank">Jairo Alzate</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/117988591826355007438" rel="noopener" target="_blank">Jairo Alzate</a></div><div class="face-head"><h3 class="building">4070 Confederation Pkwy · #704</h3><span class="face-star">★ 3.3</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14152238</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Winson Wing-Sou Luk, Salesperson — Tradeworld Realty Inc</p><a class="call-btn" href="tel:416-560-0999">Call 416-560-0999</a></div></div><div class="details">
@@ -1728,7 +1735,7 @@
 
 </div></article>
 <!-- Grand Park 605 -->
-<article aria-label="View listing: 3975 Grand Park Dr · #605" class="card has-photo" data-cat="1den" data-mls="W14149306" data-building="grand-park-3975" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3975 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/e20640ed08c3b960.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 3975 Grand Park Dr · #605" class="card has-photo" data-cat="1den" data-mls="W14149306" data-building="grand-park-3975" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3975 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/f85d9628b0af5464.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1788,7 +1795,7 @@
 
 </div></article>
 <!-- Grand Park 1001 -->
-<article aria-label="View listing: 3975 Grand Park Dr · #1001" class="card has-photo" data-cat="1den" data-mls="W14144352" data-building="grand-park-3975" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3975 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/e20640ed08c3b960.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 3975 Grand Park Dr · #1001" class="card has-photo" data-cat="1den" data-mls="W14144352" data-building="grand-park-3975" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3975 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/f85d9628b0af5464.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1903,7 +1910,7 @@
 
 </div></article>
 <!-- Block Nine 1911 -->
-<article aria-label="View listing: Block Nine · #1911" class="card has-photo" data-cat="1den" data-mls="W14148552" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/734dc375bbdf174f.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Block Nine · #1911" class="card has-photo" data-cat="1den" data-mls="W14148552" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/5a9f04cabab536aa.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1918,7 +1925,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div><div class="face-head"><h3 class="building">Block Nine · #1911</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — City Centre</p><p class="prov">MLS® W14148552</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–2,520 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">Block Nine · #1911</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — City Centre</p><p class="prov">MLS® W14148552</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–2,520 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 spot</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Maher Dib, Salesperson — Cityview Realty Inc.</p><a class="call-btn" href="tel:905-363-1943">Call 905-363-1943</a></div></div><div class="details">
@@ -1963,7 +1970,7 @@
 
 </div></article>
 <!-- Block Nine 1914 -->
-<article aria-label="View listing: Block Nine · #1914" class="card has-photo" data-cat="1den" data-mls="W14146740" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/734dc375bbdf174f.webp"/><span class="chip plate-badge">Furnished</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: Block Nine · #1914" class="card has-photo" data-cat="1den" data-mls="W14146740" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/5a9f04cabab536aa.webp"/><span class="chip plate-badge">Furnished</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -1978,7 +1985,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/100689096047469627416" rel="noopener" target="_blank">Morgan Six Moving</a></div><div class="face-head"><h3 class="building">Block Nine · #1914</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — Creditview</p><p class="prov">MLS® W14146740</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">Block Nine · #1914</h3><span class="face-star">★ 4.9</span></div><p class="addr">4055 Parkside Village Dr — Creditview</p><p class="prov">MLS® W14146740</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>1 space + locker included</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Hadiuz Zaman, Salesperson — Home Land Plus Realty Ltd.</p><a class="call-btn" href="tel:416-222-6868">Call 416-222-6868</a></div></div><div class="details">
@@ -2567,7 +2574,7 @@
 
 
 <!-- Trailwood 502 (watch) -->
-<article aria-label="View listing: 25 Trailwood Dr · #502" class="card has-photo mini" data-cat="watch" data-mls="W13866842" data-building="trailwood-25" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Street View of 25 Trailwood Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/0d3144c114a40151.webp"/><div class="mini-controls plate-controls">
+<article aria-label="View listing: 25 Trailwood Dr · #502" class="card has-photo mini" data-cat="watch" data-mls="W13866842" data-building="trailwood-25" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Street View of 25 Trailwood Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/c782c9bcb79788b1.webp"/><div class="mini-controls plate-controls">
 <button aria-label="Accept Trailwood #502 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
 <button aria-label="Remove Trailwood #502 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,700<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 1,000–1,199 sq ft</span><div class="travel">
@@ -2691,7 +2698,7 @@
 
 </div></article>
 <!-- Burnhamthorpe 1907 (watch) -->
-<article aria-label="View listing: 220 Burnhamthorpe Rd W · #1907" class="card has-photo mini" data-cat="watch" data-mls="W14153608" data-building="burnhamthorpe-220" data-promote="1-Bedroom + Den Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 220 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/f8972e48d2828e4e.webp"/><div class="mini-controls plate-controls">
+<article aria-label="View listing: 220 Burnhamthorpe Rd W · #1907" class="card has-photo mini" data-cat="watch" data-mls="W14153608" data-building="burnhamthorpe-220" data-promote="1-Bedroom + Den Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 220 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/3daecf8417e86c19.webp"/><div class="mini-controls plate-controls">
 <button aria-label="Accept Burnhamthorpe #1907 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
 <button aria-label="Remove Burnhamthorpe #1907 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,600<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
@@ -2709,7 +2716,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/111828851350393605913" rel="noopener" target="_blank">S</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/111828851350393605913" rel="noopener" target="_blank">S</a></div><div class="face-head"><h3 class="building">220 Burnhamthorpe Rd W · #1907</h3><span class="face-star">★ 3.8</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14153608</p><div class="allin allin-line"><span class="allin-label">All-in</span> $2,600 <span class="chip status conf">CONFIRMED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2026</div><div class="face-head"><h3 class="building">220 Burnhamthorpe Rd W · #1907</h3><span class="face-star">★ 3.8</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14153608</p><div class="allin allin-line"><span class="allin-label">All-in</span> $2,600 <span class="chip status conf">CONFIRMED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Included</span></p>
 <p><span class="mk">Utilities</span><span>ALL included</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Ivana Novak, Salesperson — Property.Ca Inc.</p><a class="call-btn" href="tel:647-219-7205">Call 647-219-7205</a></div></div><div class="details">
@@ -2757,7 +2764,7 @@
 
 </div></article>
 <!-- Elm Dr 1507 (watch) -->
-<article aria-label="View listing: 55 Elm Dr W · #1507" class="card mini" data-cat="watch" data-mls="W14149798" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><div class="mini-controls plate-controls">
+<article aria-label="View listing: 55 Elm Dr W · #1507" class="card mini has-photo" data-cat="watch" data-mls="W14149798" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 55 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/0aacd7b6a574753b.webp"/><div class="mini-controls plate-controls">
 <button aria-label="Accept Elm #1507 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
 <button aria-label="Remove Elm #1507 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,700<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 800–899 sq ft</span><div class="travel">
@@ -2775,7 +2782,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div></div><div class="face-head"><h3 class="building">55 Elm Dr W · #1507</h3><span class="face-star">★ 5.0</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14149798</p><div class="allin allin-line"><span class="allin-label">All-in</span> $2,700 <span class="chip status conf">CONFIRMED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">55 Elm Dr W · #1507</h3><span class="face-star">★ 5.0</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14149798</p><div class="allin allin-line"><span class="allin-label">All-in</span> $2,700 <span class="chip status conf">CONFIRMED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>ALL included + cable TV</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Shivani Varma, Salesperson — Re/Max Realty Specialists Inc.</p><a class="call-btn" href="tel:647-885-9594">Call 647-885-9594</a></div></div><div class="details">
