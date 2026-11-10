@@ -108,15 +108,15 @@
   html[data-theme="light"] .chip.warn{color:#7c4a03}
   /* ---------- Category pill surfaces (Airbnb-style) ---------- */
   :root{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
-    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4)}
+    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4); --pill-sel-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 2px rgba(255,255,255,.09)}
   @media (prefers-color-scheme: light){
     :root{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
-      --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3}
+      --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3; --pill-sel-shadow:inset 0 2px 5px rgba(0,0,0,.16),inset 0 -1px 2px rgba(255,255,255,.7)}
   }
   html[data-theme="dark"]{--pill-bg:#141d38; --pill-border:rgba(255,255,255,.16); --pill-shadow:0 1px 3px rgba(0,0,0,.35);
-    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4)}
+    --pill-sel-bg:#3d4763; --pill-sel-border:rgba(255,255,255,.4); --pill-sel-shadow:inset 0 2px 6px rgba(0,0,0,.5),inset 0 -1px 2px rgba(255,255,255,.09)}
   html[data-theme="light"]{--pill-bg:#ffffff; --pill-border:#d9d9d9; --pill-shadow:0 1px 2px rgba(0,0,0,.07),0 4px 14px rgba(0,0,0,.05);
-    --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3}
+    --pill-sel-bg:#efefef; --pill-sel-border:#a3a3a3; --pill-sel-shadow:inset 0 2px 5px rgba(0,0,0,.16),inset 0 -1px 2px rgba(255,255,255,.7)}
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{margin:0;background:var(--bg);color:var(--text);
@@ -149,16 +149,6 @@
   .theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .theme-toggle:active{filter:brightness(1.15)}
 
-  /* ---------- Search pill ---------- */
-  .search-pill{margin-top:16px;display:flex;align-items:stretch;
-    background:var(--card);border:1px solid var(--line-soft);border-radius:999px;
-    box-shadow:var(--shadow);overflow:hidden}
-  .pill-seg{flex:1 1 0;display:flex;align-items:center;justify-content:center;text-align:center;
-    padding:13px 4px;min-height:48px;
-    font-family:"Outfit",system-ui,sans-serif;font-size:13.5px;font-weight:600;line-height:1.25}
-  .pill-seg + .pill-seg{border-left:1px solid var(--line-soft)}
-  @media (max-width:400px){.pill-seg{font-size:12px;padding:12px 2px}}
-
   /* ---------- Category rail (pinned under app bar) — Airbnb-style pills ---------- */
   .catrail{position:sticky;top:var(--appbar-h);z-index:55;
     display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;
@@ -172,7 +162,7 @@
     background:var(--pill-bg);border:1px solid var(--pill-border);box-shadow:var(--pill-shadow);
     cursor:pointer;color:var(--text);font-family:inherit;
     -webkit-tap-highlight-color:transparent;
-    transition:background .18s ease,border-color .18s ease}
+    transition:background .18s ease,border-color .18s ease,box-shadow .13s ease,transform .13s ease}
   .cat-tile:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .tile-glyph{display:block;line-height:0}
   .tile-glyph svg{width:20px;height:20px}
@@ -183,7 +173,8 @@
   .tile-all .tile-glyph{color:var(--muted)}
   .tile-label{font-family:"Outfit",system-ui,sans-serif;font-size:13.5px;font-weight:600;line-height:1.2;white-space:nowrap}
   .tile-count{font-size:12px;font-weight:600;color:var(--faint);line-height:1.2}
-  .cat-tile.selected{background:var(--pill-sel-bg);border-color:var(--pill-sel-border)}
+  .cat-tile.selected{background:var(--pill-sel-bg);border-color:var(--pill-sel-border);box-shadow:var(--pill-sel-shadow)}
+  .cat-tile:active{transform:scale(.97);box-shadow:var(--pill-sel-shadow)}
   .cat-tile.selected .tile-label{font-weight:700}
   .cat-tile.selected .tile-count{color:var(--muted)}
 
@@ -197,7 +188,7 @@
   section[data-section="2-Bedroom Condos"] .sec-name{color:var(--sec-blue)}
   section[data-section="1-Bedroom + Den Condos"] .sec-name{color:var(--sec-magenta)}
   section[data-section="Houses & Townhouses"] .sec-name{color:var(--sec-green)}
-  section[data-section="Watch list"] .sec-name{color:var(--sec-orange)}
+  section[data-section="Watchlist"] .sec-name{color:var(--sec-orange)}
   .row-title .count{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;color:var(--faint);font-weight:600}
   .sec-subline{display:block;font-size:13px;font-weight:500;color:var(--muted);padding:0 2px;min-height:1.2em}
   .section-sub{margin:3px 2px 0;font-size:13.5px;color:var(--muted)}
@@ -236,14 +227,17 @@
   .plate:has(.plate-badge) .rent-big{margin-top:30px}
   .card:not(.in-detail) .plate:has(.plate-controls) .rent-big{margin-top:48px}
   .plate-controls{position:absolute;top:8px;right:8px;z-index:3;display:flex;gap:6px;margin:0}
-  .mini-accept,.mini-remove{font-family:inherit;font-size:13px;font-weight:700;line-height:1;
-    min-height:44px;padding:10px 13px;border-radius:10px;cursor:pointer;
+  .mini-accept,.mini-remove{font-family:inherit;font-weight:700;line-height:1;
+    width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;
     background:var(--card);color:var(--muted);border:1px solid var(--line);
     box-shadow:0 4px 14px rgba(0,0,0,.22)}
-  .mini-remove{color:var(--faint);min-width:44px}
+  .mini-remove{color:var(--faint)}
+  .mini-accept svg,.mini-remove svg{width:30px;height:30px;display:block}
   .mini-accept:hover{color:#a9f2d2;border-color:rgba(61,220,151,.4)}
   .mini-remove:hover{color:#ffc2c9;border-color:rgba(255,107,122,.4)}
-  .mini-remove.confirming{color:#ffd9a0;border-color:rgba(255,180,84,.5);background:var(--amber-soft)}
+  .mini-remove.confirming{color:#ffd9a0;border-color:rgba(255,180,84,.5);background:var(--amber-soft);
+    width:auto;padding:0 14px;border-radius:999px;font-size:13px}
 
   /* travel inside the plate: compact bus / drive rows — detail view only;
      feed plates stay clean (rent + spec pill over the photo) */
@@ -452,6 +446,7 @@
   }
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto}
+    .cat-tile:active{transform:none}
   }
 
 </style>
@@ -465,10 +460,8 @@
 </header>
 <!-- ===== App bar (sticky) ===== -->
 <div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
-<!-- ===== Hunt summary ===== -->
-<div class="search-pill" role="note"><span class="pill-seg">Mississauga</span><span class="pill-seg">Jan–Apr 2027</span><span class="pill-seg">up to $2,500</span><span class="pill-seg">Bus ≤ 40 min</span></div>
 <!-- ===== Section navigation chips ===== -->
-<nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><rect height="7" rx="1.5" width="7" x="4" y="4"></rect><rect height="7" rx="1.5" width="7" x="13" y="4"></rect><rect height="7" rx="1.5" width="7" x="4" y="13"></rect><rect height="7" rx="1.5" width="7" x="13" y="13"></rect></svg></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M3 18v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"></path><path d="M3 18h18"></path><path d="M3 21v-3"></path><path d="M21 21v-3"></path><path d="M5 10V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2"></path><path d="M7 8h4"></path></svg></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M2 18v-5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v5"></path><path d="M2 18h15"></path><path d="M2 21v-3"></path><path d="M17 21v-3"></path><path d="M4 11V9a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v2"></path><path d="M19.5 4v5"></path><path d="M17 6.5h5"></path></svg></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M4 11l8-7 8 7"></path><path d="M6 9.5V20h12V9.5"></path><path d="M10 20v-5h4v5"></path></svg></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg></span><span class="tile-label">Watch</span><span class="tile-count"></span></button></nav>
+<nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4" fill="currentColor" fill-opacity=".12"/><ellipse cx="12" cy="12" rx="3.8" ry="8.4"/><path d="M3.9 9.3h16.2M3.9 14.7h16.2"/></svg></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M3.2 18.6V7a1.9 1.9 0 0 1 1.9-1.9h13.8A1.9 1.9 0 0 1 20.8 7v11.6"/><rect x="5.1" y="8" width="5.9" height="3.6" rx="1.5" fill="currentColor" fill-opacity=".18"/><rect x="13" y="8" width="5.9" height="3.6" rx="1.5" fill="currentColor" fill-opacity=".18"/><path d="M3.2 15.1c3.2-1.2 6.2-1.7 8.8-1.7s5.6.5 8.8 1.7v3.5H3.2z" fill="currentColor" fill-opacity=".10"/></svg></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M2.6 18.6V9.6"/><rect x="4.1" y="10.3" width="5.1" height="3.2" rx="1.4" fill="currentColor" fill-opacity=".18"/><path d="M2.6 15h10.7a1.8 1.8 0 0 1 1.8 1.8v1.8H2.6z" fill="currentColor" fill-opacity=".10"/><path d="M16 18.6v-3.2h5.6v3.2"/><path d="M18.8 15.4v-2.1"/><path d="M17.1 13.3h3.4l-1.05-2.9h-1.3z" fill="currentColor" fill-opacity=".18"/></svg></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M16.7 8.1V4.5h2.5v4.9"/><path d="M3.4 11.3L12 4.1l8.6 7.2"/><path d="M5.7 9.7v9.1a1 1 0 0 0 1 1h10.6a1 1 0 0 0 1-1V9.7" fill="currentColor" fill-opacity=".08"/><path d="M10.2 19.8v-4.4a1.8 1.8 0 0 1 3.6 0v4.4"/><path d="M12.9 17.4h.01" stroke-width="2.4"/><circle cx="7.9" cy="13.2" r="1.2" fill="currentColor" fill-opacity=".18"/></svg></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" viewBox="0 0 24 24"><path d="M2.6 12.1c2-3.9 5.3-6 9.4-6s7.4 2.1 9.4 6c-2 3.9-5.3 6-9.4 6s-7.4-2.1-9.4-6Z"/><circle cx="12" cy="12.1" r="3.4" fill="currentColor" fill-opacity=".16"/><circle cx="12" cy="12.1" r="1.3" fill="currentColor" stroke="none"/><path d="M12 3.6v1.8M5.3 5.5l1.1 1.6M18.7 5.5l-1.1 1.6"/></svg></span><span class="tile-label">Watchlist</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
 <h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">All at or under the $2,500 rent cap.</p></h2>
@@ -2169,7 +2162,7 @@
 <dl>
 <div class="row"><dt>Listed</dt><dd>Oct 18, 2026 · MLS® W14091848</dd></div>
 <div class="row"><dt>Included</dt><dd>Heat, water AND high-speed internet included in rent — the only overhead left on top is hydro, so the real cost stays close to the sticker</dd></div>
-<div class="row"><dt>Status</dt><dd>Accepted by Andrew on Nov 8, 2026 — moved from the watch list into the main list. Rent $2,550 is over the $2,500 cap and hydro is not included; accepted as-is.</dd></div>
+<div class="row"><dt>Status</dt><dd>Accepted by Andrew on Nov 8, 2026 — moved from the watchlist into the main list. Rent $2,550 is over the $2,500 cap and hydro is not included; accepted as-is.</dd></div>
 <div class="row"><dt>Laundry</dt><dd>In-suite laundry ✅ — Stacked washer/dryer visible in the listing photos (checked Nov 8, 2026)</dd></div>
 <div class="row"><dt>Building</dt><dd>Gym ✅ (fully equipped) · 24h concierge ✅ · rooftop pool · Building ~3 years old (Pemberton)</dd></div>
 <div class="row"><dt>Pets</dt><dd>Pets: No per listing — noted (pets are a bonus item, not a requirement)</dd></div>
@@ -2567,16 +2560,16 @@
 </div></article>
 </div>
 </section>
-<!-- ===== Watch list ===== -->
-<section class="cat" data-cat="watch" data-section="Watch list">
-<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Watch list</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. Accept moves it to the main list; ✕ removes it for good.</p></h2>
+<!-- ===== Watchlist ===== -->
+<section class="cat" data-cat="watch" data-section="Watchlist">
+<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Watchlist</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. ✓ moves it to the main list; ✕ removes it for good.</p></h2>
 <div class="section-body rail" id="body-watch">
 
 
 <!-- Trailwood 502 (watch) -->
 <article aria-label="View listing: 25 Trailwood Dr · #502" class="card has-photo mini" data-cat="watch" data-mls="W13866842" data-building="trailwood-25" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Street View of 25 Trailwood Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/0d3144c114a40151.webp"/><div class="mini-controls plate-controls">
-<button class="mini-accept" type="button">✓ Accept</button>
-<button aria-label="Remove Trailwood #502 permanently" class="mini-remove" type="button">✕</button>
+<button aria-label="Accept Trailwood #502 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
+<button aria-label="Remove Trailwood #502 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,700<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 1,000–1,199 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -2635,8 +2628,8 @@
 </div></article>
 <!-- Shipp 2706 (watch) -->
 <article aria-label="View listing: 4205 Shipp Dr · #2706" class="card has-photo mini" data-cat="watch" data-mls="W14155284" data-building="shipp-4205" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Chelsea Towers, 4205 Shipp Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/0fb974cf5e508978.webp"/><div class="mini-controls plate-controls">
-<button class="mini-accept" type="button">✓ Accept</button>
-<button aria-label="Remove Shipp #2706 permanently" class="mini-remove" type="button">✕</button>
+<button aria-label="Accept Shipp #2706 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
+<button aria-label="Remove Shipp #2706 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,800<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 1,000–1,199 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -2699,8 +2692,8 @@
 </div></article>
 <!-- Burnhamthorpe 1907 (watch) -->
 <article aria-label="View listing: 220 Burnhamthorpe Rd W · #1907" class="card has-photo mini" data-cat="watch" data-mls="W14153608" data-building="burnhamthorpe-220" data-promote="1-Bedroom + Den Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 220 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/f8972e48d2828e4e.webp"/><div class="mini-controls plate-controls">
-<button class="mini-accept" type="button">✓ Accept</button>
-<button aria-label="Remove Burnhamthorpe #1907 permanently" class="mini-remove" type="button">✕</button>
+<button aria-label="Accept Burnhamthorpe #1907 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
+<button aria-label="Remove Burnhamthorpe #1907 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,600<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -2765,8 +2758,8 @@
 </div></article>
 <!-- Elm Dr 1507 (watch) -->
 <article aria-label="View listing: 55 Elm Dr W · #1507" class="card mini" data-cat="watch" data-mls="W14149798" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><div class="mini-controls plate-controls">
-<button class="mini-accept" type="button">✓ Accept</button>
-<button aria-label="Remove Elm #1507 permanently" class="mini-remove" type="button">✕</button>
+<button aria-label="Accept Elm #1507 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
+<button aria-label="Remove Elm #1507 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,700<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 800–899 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -2916,7 +2909,7 @@
     '2-Bedroom Condos': 'condos',
     '1-Bedroom + Den Condos': 'condos',
     'Houses & Townhouses': 'homes',
-    'Watch list': 'watching'
+    'Watchlist': 'watching'
   };
   function recount(){
     var secs = document.querySelectorAll('.cat');
@@ -4033,6 +4026,7 @@
     }
     if(removeBtn){
       var timer = null;
+      var removeHTML = removeBtn.innerHTML;
       removeBtn.addEventListener('click', function(){
         if(removeBtn.classList.contains('confirming')){
           if(timer) clearTimeout(timer);
@@ -4046,7 +4040,7 @@
           removeBtn.textContent = 'Sure?';
           timer = setTimeout(function(){
             removeBtn.classList.remove('confirming');
-            removeBtn.textContent = '\u2715';
+            removeBtn.innerHTML = removeHTML;
           }, 3000);
         }
       });
