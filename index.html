@@ -5863,7 +5863,11 @@
   var detailRoot = null, heroEl = null, sheetEl = null;
 
   function cardByMls(mls){
-    return document.querySelector('.card[data-mls="' + mls + '"]');
+    var cards = document.querySelectorAll('.card');
+    for(var i = 0; i < cards.length; i++){
+      if(cards[i].getAttribute('data-mls') === mls) return cards[i];
+    }
+    return null;
   }
   function reducedMotion(){
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -6607,7 +6611,8 @@
       if(chipEl) dbAllin.appendChild(chipEl.cloneNode(true));
     }
     var call = card.querySelector('.listedby .call-btn');
-    if(call){ dbCall.setAttribute('href', call.getAttribute('href')); dbCall.style.display = ''; }
+    var callHref = call ? call.getAttribute('href') : null;
+    if(callHref && callHref.indexOf('tel:') === 0){ dbCall.setAttribute('href', callHref); dbCall.style.display = ''; }
     else { dbCall.style.display = 'none'; }
     /* Email button: only when the card's contact block carries a real
        published mailto address (exactly three listings do); the subject is
