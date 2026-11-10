@@ -472,6 +472,32 @@
     .cat-tile:active{transform:none}
   }
 
+
+  /* ---------- No-photo placeholder (designed plate) ----------
+     Class treatment for a card with no building photo: a soft
+     diagonal gradient in the page palette, blue toward magenta —
+     a light treatment in day mode, a deep treatment at night —
+     with a thin-line house glyph and a small caption centred on
+     the plate. Pure graphic design: no image of any place, and no
+     credit line. The detail hero carries the same design (the
+     detail builder moves the placeholder element into the hero,
+     exactly as it moves a real photo). */
+  .card.has-placeholder:not(.in-detail) .plate{background:linear-gradient(140deg,#16294f 0%,#262058 52%,#4b1a5c 100%)}
+  .card[data-cat] .detail-hero.has-placeholder{background:linear-gradient(140deg,#16294f 0%,#262058 52%,#4b1a5c 100%)}
+  @media (prefers-color-scheme: light){
+    .card.has-placeholder:not(.in-detail) .plate{background:linear-gradient(140deg,#7ea6e8 0%,#a87fd2 52%,#d67fc6 100%)}
+    .card[data-cat] .detail-hero.has-placeholder{background:linear-gradient(140deg,#7ea6e8 0%,#a87fd2 52%,#d67fc6 100%)}
+  }
+  html[data-theme="light"] .card.has-placeholder:not(.in-detail) .plate{background:linear-gradient(140deg,#7ea6e8 0%,#a87fd2 52%,#d67fc6 100%)}
+  html[data-theme="light"] .card[data-cat] .detail-hero.has-placeholder{background:linear-gradient(140deg,#7ea6e8 0%,#a87fd2 52%,#d67fc6 100%)}
+  html[data-theme="dark"] .card.has-placeholder:not(.in-detail) .plate{background:linear-gradient(140deg,#16294f 0%,#262058 52%,#4b1a5c 100%)}
+  html[data-theme="dark"] .card[data-cat] .detail-hero.has-placeholder{background:linear-gradient(140deg,#16294f 0%,#262058 52%,#4b1a5c 100%)}
+  .card.has-placeholder .rent-big,.card.has-placeholder .spec-pill,.card.has-placeholder .travel{position:relative;z-index:2}
+  .plate-placeholder{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:12px;text-align:center;pointer-events:none}
+  .plate-placeholder svg{width:74px;height:74px;display:block;color:rgba(255,255,255,.72)}
+  .plate-placeholder-cap{font-size:12.5px;font-weight:600;letter-spacing:.02em;color:rgba(255,255,255,.92);text-shadow:0 1px 10px rgba(31,10,64,.4)}
+  .detail-hero .plate-placeholder{padding:16px}
+  .detail-hero .plate-placeholder svg{width:88px;height:88px}
 </style>
 </head>
 <body>
@@ -479,7 +505,7 @@
 <!-- ===== Header ===== -->
 <header class="top">
 <h1>Apartment Hunt</h1>
-<p class="updated">Last updated November 9, 2026</p>
+<p class="updated">Last updated November 10, 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
 <div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
@@ -1214,62 +1240,6 @@
 </dl>
 </div><div class="actions">
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30455619/1206-8-nahani-way-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 111 Bristol Rd E · #109" class="card has-photo" data-cat="2bed" data-mls="W13777804" data-building="bristol-111" role="button" tabindex="0"><div class="plate"><img alt="Street View of 111 Bristol Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/cf564baa8fdefe21.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed + Den · 1 Bath · 900–999 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~38</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 33 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">46–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Aug 2023</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Aug 2023</div><div class="face-head"><h3 class="building">111 Bristol Rd E · #109</h3></div><p class="addr">Hurontario</p><p class="prov">Listed Sep 13, 2026 · MLS® W13777804</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–$2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>2 parking spaces</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Kerry Dannett Edwards, Salesperson — Century 21 Leading Edge Realty Inc.</p><a class="call-btn" href="tel:416-686-1500">Call 416-686-1500</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Sep 13, 2026 · MLS® W13777804</dd></div>
-<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
-<div class="row"><dt>Note</dt><dd>Den counted per the MLS headline (Bedrooms Plus 1, and the room list shows a den); the Den/Family Room field reads N — verify with the agent.</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~38 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 46–49 min (5 PM) · 33 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Leela Supermarket MEAT AND GROCERY Mississauga — <strong>5 min walk</strong> <span class="ba-wdist">~320 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Vibrin Drug Mart PharmaChoice — <strong>5 min walk</strong> <span class="ba-wdist">~350 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Bristol Rd At Wildwood Trail — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30272065/109-111-bristol-road-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
 </div>
@@ -4946,7 +4916,7 @@
 
 </div></article>
 <!-- Boxford 16 -->
-<article aria-label="View listing: Stacked Townhouse · #16" class="card" data-cat="houses" data-mls="W14134882" role="button" tabindex="0"><div class="plate"><div class="rent-big">$2,100<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Stacked Townhouse · #16" class="card has-placeholder" data-cat="houses" data-mls="W14134882" role="button" tabindex="0"><div class="plate"><div class="plate-placeholder" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false" aria-hidden="true"><path d="M8 31L32 11l24 20"/><path d="M15.5 25.5V51h33V25.5"/><path d="M27 51V39h10v12"/></svg><span class="plate-placeholder-cap">No photo available</span></div><div class="rent-big">$2,100<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -5167,6 +5137,62 @@
 </dl>
 </div><div class="actions">
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30473517/832-95-trailwood-drive-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
+
+</div></article>
+<article aria-label="View listing: 111 Bristol Rd E · #109" class="card has-photo" data-cat="houses" data-mls="W13777804" data-building="bristol-111" role="button" tabindex="0"><div class="plate"><img alt="Street View of 111 Bristol Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/cf564baa8fdefe21.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed + Den · 1 Bath · 900–999 sq ft</span><div class="travel">
+<div class="tblock bus">
+<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">~38</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
+</div>
+</div>
+<div class="tblock drive">
+<div class="tlabel"><span>Drive</span><span class="tnote">his · 33 km · no 407</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">46–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
+</div>
+</div>
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Aug 2023</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Aug 2023</div><div class="face-head"><h3 class="building">111 Bristol Rd E · #109</h3></div><p class="addr">Hurontario</p><p class="prov">Listed Sep 13, 2026 · MLS® W13777804</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–$2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+<p><span class="mk">Parking</span><span>2 parking spaces</span></p>
+<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
+</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Kerry Dannett Edwards, Salesperson — Century 21 Leading Edge Realty Inc.</p><a class="call-btn" href="tel:416-686-1500">Call 416-686-1500</a></div></div><div class="details">
+<dl>
+<div class="row"><dt>Listed</dt><dd>Sep 13, 2026 · MLS® W13777804</dd></div>
+<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
+<div class="row"><dt>Note</dt><dd>Den counted per the MLS headline (Bedrooms Plus 1, and the room list shows a den); the Den/Family Room field reads N — verify with the agent.</dd></div>
+<div class="row"><dt>Bus</dt><dd>Typically ~38 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
+<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 46–49 min (5 PM) · 33 km · no 407</dd></div>
+<div class="building-area">
+<div class="ba-title">Building &amp; area</div>
+<div class="ba-group">
+<span class="ba-label">Rating</span>
+<p class="ba-text">No Google rating or reviews for this building yet.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Gym</span>
+<p class="ba-text">no listing claim found, and no independent trace.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Nearby (approx)</span>
+<div class="ba-nearby">
+<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Leela Supermarket MEAT AND GROCERY Mississauga — <strong>5 min walk</strong> <span class="ba-wdist">~320 m</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Vibrin Drug Mart PharmaChoice — <strong>5 min walk</strong> <span class="ba-wdist">~350 m</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Bristol Rd At Wildwood Trail — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
+</div>
+</div>
+<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
+</div>
+<div class="contact">
+
+
+
+<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
+</div>
+</dl>
+</div><div class="actions">
+<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30272065/109-111-bristol-road-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
 </div>
@@ -6543,7 +6569,9 @@
     if(plate){
       var photo = plate.querySelector('.plate-photo');
       var credit = plate.querySelector('.photo-credit--plate');
+      var placeholder = plate.querySelector('.plate-placeholder');
       if(photo) hero.appendChild(photo);
+      if(placeholder){ hero.appendChild(placeholder); hero.classList.add('has-placeholder'); }
       if(credit) hero.appendChild(credit);
       if(!photo) hero.classList.add('no-photo');
     }else{
