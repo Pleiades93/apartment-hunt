@@ -5717,12 +5717,55 @@
      never the all-in estimate. Sorting re-appends the section's
      existing card elements in the new order — cards are never
      rebuilt and their content is never touched. State is
-     per-section and kept in memory only. The default order is the
-     order the cards were in when the page loaded; a card that
-     arrives later (a promoted Maybe) joins the end of it. */
+     per-section and kept in memory only.
+     The DEFAULT order groups cards by building: the building is
+     the card's data-building stamp (the few cards without one fall
+     back to the name the card displays). Building groups are
+     ordered by their highest unit's rent, highest first, and the
+     units inside a group run high to low; ties anywhere keep the
+     relative order the cards had when the page loaded. The
+     grouped order is applied on load, so every view opens with
+     it — the All rails, the single-category views, and the
+     Favorites filter, which shows these same cards in place. The
+     two Price modes stay a pure rent order across the whole
+     section, ungrouped. A card that arrives later (a promoted
+     Maybe) joins the end of the default order. */
   var SORT_LABELS = ['Sort: Default', 'Price ↓', 'Price ↑'];
   var sortMode = {};    /* cat -> 0 default, 1 high-to-low, 2 low-to-high */
-  var homeOrder = {};   /* cat -> [cards in default order] */
+  var homeOrder = {};   /* cat -> [cards in grouped default order] */
+  function buildingOf(card){
+    var b = card.getAttribute('data-building');
+    if(b) return 'b:' + b;
+    var label = card.getAttribute('aria-label') || '';
+    var m = label.match(/^View listing:\s*(.*?)\s*·/);
+    return 'n:' + (m ? m[1] : label);
+  }
+  function groupedOrder(cards){
+    var groups = [];
+    var byKey = {};
+    cards.forEach(function(c, i){
+      var key = buildingOf(c);
+      var r = rentOf(c);
+      r = (r === null ? 0 : r);
+      var g = byKey[key];
+      if(!g){ g = { first: i, top: r, items: [] }; byKey[key] = g; groups.push(g); }
+      if(r > g.top) g.top = r;
+      g.items.push({ c: c, i: i, r: r });
+    });
+    groups.sort(function(a, b){
+      var d = b.top - a.top;
+      return d !== 0 ? d : (a.first - b.first);
+    });
+    var out = [];
+    groups.forEach(function(g){
+      g.items.sort(function(a, b){
+        var d = b.r - a.r;
+        return d !== 0 ? d : (a.i - b.i);
+      });
+      g.items.forEach(function(x){ out.push(x.c); });
+    });
+    return out;
+  }
   function applySort(sec){
     var cat = sec.getAttribute('data-cat');
     var body = sec.querySelector('.section-body');
@@ -5749,7 +5792,7 @@
   document.querySelectorAll('.cat').forEach(function(sec){
     var cat = sec.getAttribute('data-cat');
     sortMode[cat] = 0;
-    homeOrder[cat] = sectionCards(sec);
+    homeOrder[cat] = groupedOrder(sectionCards(sec));
     var title = sec.querySelector('.row-title');
     if(!title || !title.parentNode) return;
     var btn = document.createElement('button');
@@ -5764,6 +5807,7 @@
       btn.classList.toggle('on', sortMode[cat] !== 0);
       applySort(sec);
     });
+    applySort(sec);
   });
 
   /* ---------- detail view: ONE MOVING PANEL ----------
