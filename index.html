@@ -32,7 +32,7 @@
     --dd:#d7deee; --chip-text:#c9d4ea; --chip-bg:rgba(255,255,255,.06);
     --link:#7db4ff;
     --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42;
-    --appbar-h:48px; --appbar-bg:rgba(6,9,19,.92);
+    --appbar-h:54px; --appbar-bg:rgba(6,9,19,.92);
     --shadow:0 14px 34px rgba(1,4,12,.5);
     --band-blue:rgba(106,174,255,.10); --band-magenta:rgba(240,107,216,.09);
     --band-green:rgba(61,220,151,.09); --band-orange:rgba(255,140,66,.11);
@@ -148,13 +148,15 @@
     border-bottom:1px solid var(--line-soft)}
   .appbar-count{font-family:"Outfit",system-ui,sans-serif;font-size:15px;font-weight:700;letter-spacing:-.01em;white-space:nowrap}
   .appbar-right{display:flex;align-items:center;gap:10px}
-  .theme-toggle{width:40px;height:40px;flex:0 0 auto;border-radius:50%;
-    border:1px solid var(--line-soft);background:var(--card);color:var(--text);
-    display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  /* white circle in both themes (icon art has a white ground baked in); margin-top:1px offsets the
+     app bar's 1px bottom border so the gaps above and below the circle measure equal */
+  .theme-toggle{width:44px;height:44px;flex:0 0 auto;border-radius:50%;overflow:hidden;
+    border:1px solid var(--pill-border);background:#fff;box-shadow:var(--pill-shadow);
+    margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
     -webkit-tap-highlight-color:transparent}
-  .theme-toggle svg{width:20px;height:20px;display:block}
+  .theme-toggle img{width:100%;height:100%;object-fit:cover;display:block}
   .theme-toggle:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-  .theme-toggle:active{filter:brightness(1.15)}
+  .theme-toggle:active{box-shadow:var(--pill-press-shadow)}
 
   /* ---------- Category rail (pinned under app bar) — Airbnb-style pills ---------- */
   .catrail{position:sticky;top:var(--appbar-h);z-index:55;
@@ -475,7 +477,7 @@
 <p class="updated">Last updated November 9, 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
-<div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
+<div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
 <!-- ===== Section navigation chips ===== -->
 <nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
