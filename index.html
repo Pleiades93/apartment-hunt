@@ -7,7 +7,7 @@
 <meta content="light dark" name="color-scheme"/>
 <link href="data:," rel="icon"/>
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="photos/e5e9ea3573317af5.png">
+<link rel="apple-touch-icon" sizes="180x180" href="photos/a29e43feb1d258d4.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
 <meta name="apple-mobile-web-app-title" content="Apartment Hunt">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -184,6 +184,8 @@
   .cat-tile:active{transform:translateY(1px) scale(.98);box-shadow:var(--pill-press-shadow)}
   .cat-tile.selected .tile-label{font-weight:700}
   .cat-tile.selected .tile-count{color:var(--muted)}
+  .fav-empty{margin:36px auto 8px;max-width:520px;padding:0 20px;text-align:center;color:var(--muted);font-size:15px;line-height:1.55}
+  .fav-empty[hidden]{display:none}
 
   /* ---------- Category rows ---------- */
   .section-head{margin:24px 0 4px}
@@ -195,7 +197,7 @@
   section[data-section="2-Bedroom Condos"] .sec-name{color:var(--sec-blue)}
   section[data-section="1-Bedroom + Den Condos"] .sec-name{color:var(--sec-magenta)}
   section[data-section="Houses & Townhouses"] .sec-name{color:var(--sec-green)}
-  section[data-section="Watchlist"] .sec-name{color:var(--sec-orange)}
+  section[data-section="Maybes"] .sec-name{color:var(--sec-orange)}
   .row-title .count{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;color:var(--faint);font-weight:600}
   .sec-subline{display:block;font-size:13px;font-weight:500;color:var(--muted);padding:0 2px;min-height:1.2em}
   .section-sub{margin:3px 2px 0;font-size:13.5px;color:var(--muted)}
@@ -284,16 +286,22 @@
   .detail-panel[hidden]{display:none}
   .detail-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
   .detail-scroll .card{max-width:760px;margin:0 auto;cursor:default;box-shadow:none;border:0;border-radius:0;background:transparent;padding:0}
-  .detail-close,.detail-share{position:absolute;top:calc(10px + env(safe-area-inset-top));z-index:5;
+  .detail-close,.detail-share,.detail-fav{position:absolute;top:calc(10px + env(safe-area-inset-top));z-index:5;
     width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.05);
     background:rgba(255,255,255,.94);color:#111;box-shadow:0 2px 10px rgba(0,0,0,.22);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
     line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
     transition:background .32s cubic-bezier(.32,.72,.22,1),color .32s cubic-bezier(.32,.72,.22,1),border-color .32s cubic-bezier(.32,.72,.22,1),box-shadow .32s cubic-bezier(.32,.72,.22,1)}
   .detail-close{left:12px}
-  .detail-share{right:12px}
-  .detail-close svg,.detail-share svg{width:19px;height:19px;display:block}
-  .detail-close:focus-visible,.detail-share:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .detail-share{right:60px}
+  .detail-fav{right:12px}
+  .detail-close svg,.detail-share svg,.detail-fav svg{width:19px;height:19px;display:block}
+  .detail-close:focus-visible,.detail-share:focus-visible,.detail-fav:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+  .detail-fav.faved{color:var(--magenta)}
+  .detail-fav.faved svg{fill:var(--magenta)}
+  @keyframes fav-pop{0%{transform:scale(1)}40%{transform:scale(1.22)}100%{transform:scale(1)}}
+  .detail-fav.pop svg{animation:fav-pop .16s ease-out}
+  @media (prefers-reduced-motion: reduce){.detail-fav.pop svg{animation:none}}
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);
     z-index:130;background:#222222;color:#fff;font-size:14px;font-weight:600;line-height:1.3;
     padding:10px 18px;border-radius:999px;box-shadow:0 8px 24px rgba(0,0,0,.3);white-space:nowrap}
@@ -406,8 +414,9 @@
   .detail-panel.scrolled::before{content:'';position:absolute;top:0;left:0;right:0;z-index:4;
     height:calc(58px + env(safe-area-inset-top));background:var(--bg);
     border-bottom:1px solid var(--line-soft);pointer-events:none}
-  .detail-panel.scrolled .detail-close,.detail-panel.scrolled .detail-share{background:transparent;border-color:transparent;
+  .detail-panel.scrolled .detail-close,.detail-panel.scrolled .detail-share,.detail-panel.scrolled .detail-fav{background:transparent;border-color:transparent;
     box-shadow:none;color:var(--text);-webkit-backdrop-filter:none;backdrop-filter:none}
+  .detail-panel.scrolled .detail-fav.faved{color:var(--magenta)}
   .detail-hero{position:sticky;top:0;z-index:0;overflow:hidden;
     height:min(66vw,340px);min-height:230px;background:var(--card2)}
   .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-blue),var(--card2))}
@@ -468,7 +477,7 @@
 <!-- ===== App bar (sticky) ===== -->
 <div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><svg aria-hidden="true" class="icon-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.8" viewbox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5 5l1.6 1.6M17.4 17.4L19 19M19 5l-1.6 1.6M6.6 17.4L5 19"></path></svg><svg aria-hidden="true" class="icon-moon" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="1.8" viewbox="0 0 24 24" style="display:none"><path d="M20 13.6A8.2 8.2 0 1 1 10.4 4 6.6 6.6 0 0 0 20 13.6Z"></path></svg></button></span></div>
 <!-- ===== Section navigation chips ===== -->
-<nav aria-label="Categories" class="catrail"><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Watchlist</span><span class="tile-count"></span></button></nav>
+<nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
 <h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">All at or under the $2,500 rent cap.</p></h2>
@@ -2169,7 +2178,7 @@
 <dl>
 <div class="row"><dt>Listed</dt><dd>Oct 18, 2026 · MLS® W14091848</dd></div>
 <div class="row"><dt>Included</dt><dd>Heat, water AND high-speed internet included in rent — the only overhead left on top is hydro, so the real cost stays close to the sticker</dd></div>
-<div class="row"><dt>Status</dt><dd>Accepted by Andrew on Nov 8, 2026 — moved from the watchlist into the main list. Rent $2,550 is over the $2,500 cap and hydro is not included; accepted as-is.</dd></div>
+<div class="row"><dt>Status</dt><dd>Accepted by Andrew on Nov 8, 2026 — moved from Maybes into the main list. Rent $2,550 is over the $2,500 cap and hydro is not included; accepted as-is.</dd></div>
 <div class="row"><dt>Laundry</dt><dd>In-suite laundry ✅ — Stacked washer/dryer visible in the listing photos (checked Nov 8, 2026)</dd></div>
 <div class="row"><dt>Building</dt><dd>Gym ✅ (fully equipped) · 24h concierge ✅ · rooftop pool · Building ~3 years old (Pemberton)</dd></div>
 <div class="row"><dt>Pets</dt><dd>Pets: No per listing — noted (pets are a bonus item, not a requirement)</dd></div>
@@ -2567,9 +2576,9 @@
 </div></article>
 </div>
 </section>
-<!-- ===== Watchlist ===== -->
-<section class="cat" data-cat="watch" data-section="Watchlist">
-<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Watchlist</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. ✓ moves it to the main list; ✕ removes it for good.</p></h2>
+<!-- ===== Maybes ===== -->
+<section class="cat" data-cat="watch" data-section="Maybes">
+<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Maybes</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span><p class="section-sub">Over the $2,500 rent cap — but with everything included in the rent. Parked here for Andrew's decision. ✓ moves it to the main list; ✕ removes it for good.</p></h2>
 <div class="section-body rail" id="body-watch">
 
 
@@ -2830,7 +2839,8 @@
 </div>
 </section>
 </div>
-<div aria-label="Listing details" aria-modal="true" class="detail-panel" hidden="" id="detailPanel" role="dialog"><button aria-label="Back to listings" class="detail-close" id="detailClose" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button aria-label="Share listing" class="detail-share" id="detailShare" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 15.5v-11"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5.5 12.5v6A1.5 1.5 0 0 0 7 20h10a1.5 1.5 0 0 0 1.5-1.5v-6"/></svg></button><div class="detail-scroll" id="detailScroll"></div><div class="detail-bar" id="detailBar"><div class="db-price"><div class="db-rent" id="dbRent"></div><div class="db-allin" id="dbAllin"></div></div><div class="db-actions"><a class="db-email" href="#" hidden="" id="dbEmail">Email agent</a><a class="db-call" href="#" id="dbCall">Call agent</a></div></div></div>
+<p class="fav-empty" id="favEmpty" hidden="">No favorites yet — open a listing and tap the heart to save it here.</p>
+<div aria-label="Listing details" aria-modal="true" class="detail-panel" hidden="" id="detailPanel" role="dialog"><button aria-label="Back to listings" class="detail-close" id="detailClose" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button aria-label="Share listing" class="detail-share" id="detailShare" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24"><path d="M12 15.5v-11"/><path d="M7.5 8L12 3.5 16.5 8"/><path d="M5.5 12.5v6A1.5 1.5 0 0 0 7 20h10a1.5 1.5 0 0 0 1.5-1.5v-6"/></svg></button><button aria-label="Add to favorites" aria-pressed="false" class="detail-fav" id="detailFav" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button><div class="detail-scroll" id="detailScroll"></div><div class="detail-bar" id="detailBar"><div class="db-price"><div class="db-rent" id="dbRent"></div><div class="db-allin" id="dbAllin"></div></div><div class="db-actions"><a class="db-email" href="#" hidden="" id="dbEmail">Email agent</a><a class="db-call" href="#" id="dbCall">Call agent</a></div></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden=""></div>
 
 <script>
@@ -2838,6 +2848,7 @@
   "use strict";
   var ACCEPT_KEY = 'aptHunt.acceptedMinis';
   var REMOVE_KEY = 'aptHunt.removedMinis';
+  var FAV_KEY = 'aptHunt.favorites';
 
   /* ---------- manual dark / light toggle (cold open is always light; the toggle switches for the session) ---------- */
   var THEME_KEY = 'aptHunt.theme';
@@ -2916,8 +2927,20 @@
     '2-Bedroom Condos': 'condos',
     '1-Bedroom + Den Condos': 'condos',
     'Houses & Townhouses': 'homes',
-    'Watchlist': 'watching'
+    'Maybes': 'maybes'
   };
+  /* favorites live across sections: count the feed cards whose MLS
+     number is in the stored favorites set */
+  function favCountInDom(){
+    var favs = load(FAV_KEY);
+    if(!favs.length) return 0;
+    var n = 0;
+    var cards = document.querySelectorAll('.cat .card[data-mls]');
+    for(var i = 0; i < cards.length; i++){
+      if(favs.indexOf(cards[i].getAttribute('data-mls')) !== -1) n++;
+    }
+    return n;
+  }
   function recount(){
     var secs = document.querySelectorAll('.cat');
     var total = 0;
@@ -2950,7 +2973,7 @@
     for(var t = 0; t < tiles.length; t++){
       var key = tiles[t].getAttribute('data-cat');
       var cnt = tiles[t].querySelector('.tile-count');
-      if(cnt) cnt.textContent = key === 'all' ? String(total) : String(perCat[key] || 0);
+      if(cnt) cnt.textContent = key === 'all' ? String(total) : (key === 'favorites' ? String(favCountInDom()) : String(perCat[key] || 0));
     }
     var bar = document.getElementById('appbar-count');
     if(bar) bar.textContent = total + (total === 1 ? ' listing' : ' listings');
@@ -2969,10 +2992,43 @@
     document.body.classList.toggle('filtered', cat !== 'all');
     var secs = document.querySelectorAll('.cat');
     var firstVisible = null;
-    for(var s = 0; s < secs.length; s++){
-      var show = cat === 'all' || secs[s].getAttribute('data-cat') === cat;
-      secs[s].hidden = !show;
-      if(show && !firstVisible) firstVisible = secs[s];
+    var favEmptyEl = document.getElementById('favEmpty');
+    var totalCards = 0;
+    var favShown = 0;
+    if(cat === 'favorites'){
+      /* favorites cut across every section: a card shows only when
+         its MLS number is in the stored set, and a section left
+         with no hearted cards hides entirely */
+      var favs = load(FAV_KEY);
+      for(var s = 0; s < secs.length; s++){
+        var cards = sectionCards(secs[s]);
+        totalCards += cards.length;
+        var secShown = 0;
+        for(var j = 0; j < cards.length; j++){
+          var on2 = favs.indexOf(cards[j].getAttribute('data-mls')) !== -1;
+          cards[j].style.display = on2 ? '' : 'none';
+          if(on2) secShown++;
+        }
+        secs[s].hidden = secShown === 0;
+        favShown += secShown;
+        if(secShown && !firstVisible) firstVisible = secs[s];
+      }
+      if(favEmptyEl) favEmptyEl.hidden = favShown !== 0;
+    }else{
+      if(favEmptyEl) favEmptyEl.hidden = true;
+      for(var s2 = 0; s2 < secs.length; s2++){
+        var cards2 = sectionCards(secs[s2]);
+        totalCards += cards2.length;
+        for(var j2 = 0; j2 < cards2.length; j2++) cards2[j2].style.display = '';
+        var show = cat === 'all' || secs[s2].getAttribute('data-cat') === cat;
+        secs[s2].hidden = !show;
+        if(show && !firstVisible) firstVisible = secs[s2];
+      }
+    }
+    var bar = document.getElementById('appbar-count');
+    if(bar){
+      var n = cat === 'favorites' ? favShown : totalCards;
+      bar.textContent = n + (n === 1 ? ' listing' : ' listings');
     }
     if(scroll && firstVisible){
       var head = firstVisible.querySelector('.section-head');
@@ -3141,7 +3197,7 @@
     panel.style.willChange = '';
     panel.style.background = '';
     panel.style.pointerEvents = '';
-    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare')]
+    [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare'), document.getElementById('detailFav')]
       .forEach(function(el){
         if(el) el.getAnimations().forEach(function(a){ a.cancel(); });
       });
@@ -3150,6 +3206,10 @@
     panel.hidden = true;
     panel.classList.remove('scrolled');
     document.body.classList.remove('no-scroll');
+    /* closing out of a detail while the Favorites filter is active
+       re-runs the filter, so a listing un-hearted in its detail
+       leaves the favorites feed on return */
+    if(currentCat === 'favorites') selectCategory('favorites', false);
   }
 
   /* snapshot of a feed plate's viewport rect (where a flight starts/lands) */
@@ -3574,7 +3634,7 @@
     var fadeFrom = [{ opacity: '1' }, { opacity: '0' }];
     var imgAnim = img.animate(frames.img, { duration: FLIP_MS, easing: FLIP_EASE, delay: 0, fill: 'both' });
     var extras = [imgAnim].concat(textAnims);
-    var fadeEls = [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare')];
+    var fadeEls = [detailScroll, document.getElementById('detailBar'), document.getElementById('detailClose'), document.getElementById('detailShare'), document.getElementById('detailFav')];
     fadeEls.forEach(function(el){
       if(el) extras.push(el.animate(fadeFrom, fadeOpts));
     });
@@ -3738,6 +3798,7 @@
     if(!card || detailCard) return;
     settleFlight();
     detailCard = card;
+    paintFav(false);
     /* sticky bar: rent + all-in read from the card, Call = first agent */
     var rentEl = card.querySelector('.rent-big');
     dbRent.textContent = rentEl ? rentEl.textContent.replace(/\s+/g, ' ').trim() : '';
@@ -3939,6 +4000,37 @@
         ta.remove();
         showToast('Link copied');
       }
+    });
+  }
+  /* ---------- favorites heart (Airbnb-style, beside Share) ----------
+     The filled state is always painted FROM the stored set, never
+     from the cloned card's markup: openDetail calls paintFav() when
+     a detail opens, and the toggle below writes storage first, then
+     repaints, so closing and reopening any listing shows the truth. */
+  function paintFav(pop){
+    var btn = document.getElementById('detailFav');
+    if(!btn) return;
+    var on = detailCard ? load(FAV_KEY).indexOf(detailCard.getAttribute('data-mls')) !== -1 : false;
+    btn.classList.toggle('faved', on);
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Remove from favorites' : 'Add to favorites');
+    if(pop && !reducedMotion()){
+      btn.classList.remove('pop');
+      void btn.offsetWidth;
+      btn.classList.add('pop');
+    }
+  }
+  var favBtn = document.getElementById('detailFav');
+  if(favBtn){
+    favBtn.addEventListener('click', function(){
+      if(!detailCard) return;
+      var mls = detailCard.getAttribute('data-mls');
+      var favs = load(FAV_KEY);
+      var i = favs.indexOf(mls);
+      if(i === -1) favs.push(mls); else favs.splice(i, 1);
+      save(FAV_KEY, favs);
+      paintFav(true);
+      recount();
     });
   }
   window.addEventListener('popstate', function(){
