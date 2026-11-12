@@ -5861,6 +5861,36 @@
   var dbEmail = document.getElementById('dbEmail');
   var detailCard = null;   /* the ORIGINAL feed card — read-only */
   var detailRoot = null, heroEl = null, sheetEl = null;
+  /* true only while the CURRENT detail's history entry is one the app
+     itself pushed (a card tap). A page opened directly on a listing
+     link never pushed an entry, so closing it must not call
+     history.back() — that would leave the app. Set in openDetail when
+     its pushState runs; cleared in openDetail on a non-pushing open
+     and in teardownDetail, so it never outlives the detail it names. */
+  var detailPushed = false;
+  /* everything behind the detail overlay: the feed wrap and the
+     favorites empty-state note (the panel and the toast are their own
+     body-level siblings and stay live). While a detail is open the
+     background is inert, so keyboard focus and assistive tech cannot
+     reach controls hidden under the overlay. */
+  var bgEls = [document.querySelector('.wrap'), document.getElementById('favEmpty')];
+  function setBgInert(on){
+    bgEls.forEach(function(el){
+      if(!el) return;
+      if(on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+    });
+  }
+  /* after a detail has been torn down locally (Maybes accept/remove),
+     the hash may still name the listing: step back over the entry only
+     when the app pushed it; on a direct entry just clear the hash in
+     place, so the user stays on the feed either way. */
+  function leaveDetailHash(pushed){
+    if(location.hash.indexOf('#/listing/') !== 0) return;
+    if(pushed){ history.back(); }
+    else{
+      try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){}
+    }
+  }
 
   function cardByMls(mls){
     var cards = document.querySelectorAll('.card');
@@ -5998,9 +6028,11 @@
     detailScroll.innerHTML = '';
     detailScroll.scrollTop = 0;
     detailRoot = null; heroEl = null; sheetEl = null; detailCard = null;
+    detailPushed = false;
     panel.hidden = true;
     panel.classList.remove('scrolled');
     document.body.classList.remove('no-scroll');
+    setBgInert(false);
     /* closing out of a detail while the Favorites filter is active
        re-runs the filter, so a listing un-hearted in its detail
        leaves the favorites feed on return */
@@ -6595,6 +6627,7 @@
     if(!card || detailCard) return;
     settleFlight();
     detailCard = card;
+    detailPushed = false;
     paintFav(false);
     /* sticky bar: rent + all-in read from the card, Call = first agent */
     var rentEl = card.querySelector('.rent-big');
@@ -6657,11 +6690,15 @@
        synchronous, before the flight's first frame — no visible jump. */
     detailScroll.scrollTop = 0;
     document.body.classList.add('no-scroll');
+    setBgInert(true);
     if(!reducedMotion() && src && heroEl){
       runPanelFlight(panelFlightFrames(src, heroBoxOf()), function(){});
     }
     if(push !== false){
-      try{ history.pushState({ aptListing: card.getAttribute('data-mls') }, '', '#/listing/' + card.getAttribute('data-mls')); }catch(e){}
+      try{
+        history.pushState({ aptListing: card.getAttribute('data-mls') }, '', '#/listing/' + card.getAttribute('data-mls'));
+        detailPushed = true;
+      }catch(e){}
     }
     var closeBtn = document.getElementById('detailClose');
     if(closeBtn) closeBtn.focus({ preventScroll: true });
@@ -6764,8 +6801,13 @@
   });
 
   function requestClose(){
-    if(location.hash.indexOf('#/listing/') === 0){ history.back(); }
-    else closeDetail();
+    /* the app pushed this detail's history entry: stepping back over
+       it is what closes the detail (via popstate), exactly as before.
+       A direct entry pushed nothing, so step back nowhere — close
+       locally and clear the listing hash in place instead. */
+    if(detailPushed && location.hash.indexOf('#/listing/') === 0){ history.back(); return; }
+    closeDetail();
+    if(!detailPushed) leaveDetailHash(false);
   }
   document.getElementById('detailClose').addEventListener('click', requestClose);
 
@@ -6793,16 +6835,17 @@
       if(navigator.share){
         try{ navigator.share({ title: title, url: url }).catch(function(){}); }catch(e){}
       }else if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(url).then(function(){ showToast('Link copied'); }, function(){ showToast('Link copied'); });
+        navigator.clipboard.writeText(url).then(function(){ showToast('Link copied'); }, function(){ showToast('Could not copy link'); });
       }else{
         var ta = document.createElement('textarea');
         ta.value = url;
         ta.style.position = 'fixed'; ta.style.opacity = '0';
         document.body.appendChild(ta);
         ta.select();
-        try{ document.execCommand('copy'); }catch(e){}
+        var copied = false;
+        try{ copied = document.execCommand('copy'); }catch(e){ copied = false; }
         ta.remove();
-        showToast('Link copied');
+        showToast(copied ? 'Link copied' : 'Could not copy link');
       }
     });
   }
@@ -6921,10 +6964,16 @@
     if(acceptBtn){
       acceptBtn.addEventListener('click', function(){
         var wasDetail = detailCard === m;
+        var wasPushed = detailPushed;
         addTo(ACCEPT_KEY, mls);
         promote(m);
         recount();
-        if(wasDetail){ teardownDetail(); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+        /* land the promoted card where the destination section's
+           CURRENT sort mode puts it — the same applySort its sort
+           button runs — not just appended at the end */
+        var destSec = targetSectionFor(m);
+        if(destSec) applySort(destSec);
+        if(wasDetail){ teardownDetail(); leaveDetailHash(wasPushed); }
       });
     }
     if(removeBtn){
@@ -6934,10 +6983,11 @@
         if(removeBtn.classList.contains('confirming')){
           if(timer) clearTimeout(timer);
           var wasDetail = detailCard === m;
+          var wasPushed = detailPushed;
           addTo(REMOVE_KEY, mls);
           drop(m);
           recount();
-          if(wasDetail){ teardownDetail(); if(location.hash.indexOf('#/listing/') === 0) history.back(); }
+          if(wasDetail){ teardownDetail(); leaveDetailHash(wasPushed); }
         }else{
           removeBtn.classList.add('confirming');
           removeBtn.textContent = 'Sure?';
