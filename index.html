@@ -31,13 +31,13 @@
     --bus-soft:rgba(87,165,255,.09); --drive-soft:rgba(244,95,221,.08);
     --dd:#d7deee; --chip-text:#c9d4ea; --chip-bg:rgba(255,255,255,.06);
     --link:#7db4ff;
-    --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42;
+    --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42; --sec-violet:#b18cff;
     --appbar-h:54px; --appbar-bg:rgba(6,9,19,.92);
     --shadow:0 14px 34px rgba(1,4,12,.5);
     --band-blue:rgba(106,174,255,.10); --band-magenta:rgba(240,107,216,.09);
     --band-green:rgba(61,220,151,.09); --band-orange:rgba(255,140,66,.11);
     --plate-blue:rgba(63,140,255,.20); --plate-magenta:rgba(240,79,216,.17);
-    --plate-green:rgba(61,220,151,.15); --plate-orange:rgba(255,140,66,.19);
+    --plate-green:rgba(61,220,151,.15); --plate-orange:rgba(255,140,66,.19); --plate-violet:rgba(139,92,246,.18);
     --rail-bg:rgba(6,9,19,.94);
   }
   @media (prefers-color-scheme: light){
@@ -54,13 +54,13 @@
       --bus-soft:rgba(15,98,214,.07); --drive-soft:rgba(168,14,128,.06);
       --dd:#2b3650; --chip-text:#33405c; --chip-bg:rgba(20,35,80,.05);
       --link:#0f56c4;
-      --sec-blue:#0f62d6; --sec-magenta:#9e0f7a; --sec-green:#0a6e44; --sec-orange:#b84d00;
+      --sec-blue:#0f62d6; --sec-magenta:#9e0f7a; --sec-green:#0a6e44; --sec-orange:#b84d00; --sec-violet:#6d28c9;
       --appbar-bg:rgba(237,240,246,.94);
       --shadow:0 10px 26px rgba(20,35,80,.12);
       --band-blue:rgba(15,98,214,.07); --band-magenta:rgba(158,15,122,.06);
       --band-green:rgba(10,110,68,.07); --band-orange:rgba(184,77,0,.08);
       --plate-blue:rgba(15,98,214,.13); --plate-magenta:rgba(158,15,122,.11);
-      --plate-green:rgba(10,110,68,.11); --plate-orange:rgba(184,77,0,.13);
+      --plate-green:rgba(10,110,68,.11); --plate-orange:rgba(184,77,0,.13); --plate-violet:rgba(109,40,201,.12);
       --rail-bg:rgba(237,240,246,.96);
     }
     .chip.warn{color:#7c4a03}
@@ -79,13 +79,13 @@
     --bus-soft:rgba(87,165,255,.09); --drive-soft:rgba(244,95,221,.08);
     --dd:#d7deee; --chip-text:#c9d4ea; --chip-bg:rgba(255,255,255,.06);
     --link:#7db4ff;
-    --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42;
+    --sec-blue:#6aaeff; --sec-magenta:#f06bd8; --sec-green:#3ddc97; --sec-orange:#ff8c42; --sec-violet:#b18cff;
     --appbar-bg:rgba(6,9,19,.92);
     --shadow:0 14px 34px rgba(1,4,12,.5);
     --band-blue:rgba(106,174,255,.10); --band-magenta:rgba(240,107,216,.09);
     --band-green:rgba(61,220,151,.09); --band-orange:rgba(255,140,66,.11);
     --plate-blue:rgba(63,140,255,.20); --plate-magenta:rgba(240,79,216,.17);
-    --plate-green:rgba(61,220,151,.15); --plate-orange:rgba(255,140,66,.19);
+    --plate-green:rgba(61,220,151,.15); --plate-orange:rgba(255,140,66,.19); --plate-violet:rgba(139,92,246,.18);
     --rail-bg:rgba(6,9,19,.94);
   }
   html[data-theme="light"]{color-scheme:light;
@@ -101,13 +101,13 @@
     --bus-soft:rgba(15,98,214,.07); --drive-soft:rgba(168,14,128,.06);
     --dd:#2b3650; --chip-text:#33405c; --chip-bg:rgba(20,35,80,.05);
     --link:#0f56c4;
-    --sec-blue:#0f62d6; --sec-magenta:#9e0f7a; --sec-green:#0a6e44; --sec-orange:#b84d00;
+    --sec-blue:#0f62d6; --sec-magenta:#9e0f7a; --sec-green:#0a6e44; --sec-orange:#b84d00; --sec-violet:#6d28c9;
     --appbar-bg:rgba(237,240,246,.94);
     --shadow:0 10px 26px rgba(20,35,80,.12);
     --band-blue:rgba(15,98,214,.07); --band-magenta:rgba(158,15,122,.06);
     --band-green:rgba(10,110,68,.07); --band-orange:rgba(184,77,0,.08);
     --plate-blue:rgba(15,98,214,.13); --plate-magenta:rgba(158,15,122,.11);
-    --plate-green:rgba(10,110,68,.11); --plate-orange:rgba(184,77,0,.13);
+    --plate-green:rgba(10,110,68,.11); --plate-orange:rgba(184,77,0,.13); --plate-violet:rgba(109,40,201,.12);
     --rail-bg:rgba(237,240,246,.96);
   }
   html[data-theme="light"] .chip.warn{color:#7c4a03}
@@ -178,6 +178,7 @@
   .tile-glyph img{width:24px;height:24px;object-fit:contain;display:block}
   .tile-2bed .tile-glyph{color:var(--sec-blue)}
   .tile-1den .tile-glyph{color:var(--sec-magenta)}
+  .tile-1large .tile-glyph{color:var(--sec-violet)}
   .tile-houses .tile-glyph{color:var(--sec-green)}
   .tile-watch .tile-glyph{color:var(--sec-orange)}
   .tile-all .tile-glyph{color:var(--muted)}
@@ -199,6 +200,7 @@
   .row-title .sec-name{font-size:21px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
   section[data-section="2-Bedroom Condos"] .sec-name{color:var(--sec-blue)}
   section[data-section="1-Bedroom + Den Condos"] .sec-name{color:var(--sec-magenta)}
+  section[data-section="Large 1-Bedroom"] .sec-name{color:var(--sec-violet)}
   section[data-section="Houses & Townhouses"] .sec-name{color:var(--sec-green)}
   section[data-section="Maybes"] .sec-name{color:var(--sec-orange)}
   .row-title .count{font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:13px;color:var(--faint);font-weight:600}
@@ -226,6 +228,7 @@
     display:flex;flex-direction:column;gap:7px;overflow:hidden}
   .card[data-cat="2bed"] .plate{background:linear-gradient(155deg,var(--plate-blue),var(--card2))}
   .card[data-cat="1den"] .plate{background:linear-gradient(155deg,var(--plate-magenta),var(--card2))}
+  .card[data-cat="1large"] .plate{background:linear-gradient(155deg,var(--plate-violet),var(--card2))}
   .card[data-cat="houses"] .plate{background:linear-gradient(155deg,var(--plate-green),var(--card2))}
   .card[data-cat="watch"] .plate{background:linear-gradient(155deg,var(--plate-orange),var(--card2))}
   .rent-big{font-family:"Outfit",sans-serif;font-size:29px;font-weight:800;line-height:1;color:var(--text);white-space:nowrap}
@@ -436,6 +439,7 @@
     height:min(66vw,340px);min-height:230px;background:var(--card2)}
   .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-blue),var(--card2))}
   .card[data-cat="1den"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-magenta),var(--card2))}
+  .card[data-cat="1large"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-violet),var(--card2))}
   .card[data-cat="houses"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-green),var(--card2))}
   .card[data-cat="watch"] .detail-hero.no-photo{background:linear-gradient(155deg,var(--plate-orange),var(--card2))}
   .detail-hero .plate-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -516,9 +520,9 @@
 <p class="updated">Last updated November 15, 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
-<div class="appbar"><span class="appbar-count" id="appbar-count">60 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
+<div class="appbar"><span class="appbar-count" id="appbar-count">63 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
 <!-- ===== Section navigation chips ===== -->
-<nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">60</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
+<nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">63</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1large" data-cat="1large" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/b17dc4dfb77a2f54.png"/></span><span class="tile-label">Large 1-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
 <h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(11)</span></button><span class="sec-subline" data-subline=""></span></h2>
@@ -3419,6 +3423,193 @@
 </div></article>
 </div>
 </section>
+<!-- ===== Large 1-Bedroom ===== -->
+<section class="cat" data-cat="1large" data-section="Large 1-Bedroom">
+<h2 class="section-head"><button class="row-title" data-cat="1large" type="button"><span class="sec-name">Large 1-Bedroom</span><span class="count">(3)</span></button><span class="sec-subline" data-subline=""></span></h2>
+<div class="section-body rail" id="body-1large">
+
+
+<!-- Brickstone Mews 3201 -->
+<article aria-label="View listing: Brickstone Mews · #3201" class="card has-photo" data-cat="1large" data-mls="W14089336" data-building="brickstone" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Brickstone Mews" class="plate-photo" decoding="async" loading="lazy" src="photos/7c54cc5952bf1dc8.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<div class="tblock bus">
+<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
+</div>
+</div>
+<div class="tblock drive">
+<div class="tlabel"><span>Drive</span><span class="tnote">his · 37.3 km · no 407</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
+</div>
+</div>
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/113527247090638141727" rel="noopener" target="_blank">Yee WANG (Architecte)</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/113527247090638141727" rel="noopener" target="_blank">Yee WANG (Architecte)</a></div><div class="face-head"><h3 class="building">Brickstone Mews · #3201</h3><span class="face-star">★ 2.8</span></div><p class="addr">4011 Brickstone Mews — Creditview</p><p class="prov">MLS® W14089336</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+<p><span class="mk">Parking</span><span>1 spot</span></p>
+<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
+</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sharif Khan, Salesperson — Homelife/Miracle Realty Ltd</p><a class="call-btn" href="tel:416-289-3000">Call 416-289-3000</a></div></div><div class="details">
+<dl>
+<div class="row"><dt>MLS®</dt><dd>W14089336</dd></div>
+<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
+<div class="row"><dt>Building</dt><dd>Gym + indoor pool in building · Concierge · Guest suites · Unfurnished</dd></div>
+<div class="row"><dt>Pets</dt><dd>Pets: Yes — with restrictions (per listing)</dd></div>
+<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
+<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 51–53 min (5 PM) · 37.3 km · no 407</dd></div>
+<div class="building-area">
+<div class="ba-title">Building &amp; area</div>
+<div class="ba-group">
+<span class="ba-label">Rating</span>
+<div class="ba-rating"><span class="ba-stars">★ 2.8</span><span class="ba-count">50 reviews</span></div>
+</div>
+<div class="ba-group">
+<span class="ba-label">Reviews</span>
+<p class="ba-text">Strongly negative: elevators frequently out of service, unresponsive management, AC failures and repair requests closed without being done.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Gym</span>
+<p class="ba-text">corroborated — a gym (PSV Gym) is registered at this building's own address.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Nearby (approx)</span>
+<div class="ba-nearby">
+<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Aisle 24 Market — <strong>3 min walk</strong> <span class="ba-wdist">~200 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Square One Health Group - Pharmacy — <strong>1 min walk</strong> <span class="ba-wdist">~80 m</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Confederation Pky At Burnhamthorpe Rd — <strong>2 min walk</strong> <span class="ba-wdist">~140 m</span></span></div>
+</div>
+</div>
+<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
+</div>
+<div class="contact">
+
+
+<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
+</div>
+</dl>
+</div><div class="actions">
+<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30413815/3201-4011-brickstone-mews-mississauga-creditview" rel="noopener" target="_blank">View listing ↗</a>
+
+</div></article>
+<!-- Shipp 906 -->
+<article aria-label="View listing: 4205 Shipp Dr · #906" class="card has-photo" data-cat="1large" data-mls="W14156910" data-building="shipp-4205" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4205 Shipp Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/0fb974cf5e508978.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
+<div class="tblock bus">
+<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">~29</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">~32</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
+</div>
+</div>
+<div class="tblock drive">
+<div class="tlabel"><span>Drive</span><span class="tnote">his · 34.1 km · no 407</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">26–27</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">47–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
+</div>
+</div>
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/109352814853535000521" rel="noopener" target="_blank">Emin V</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/109352814853535000521" rel="noopener" target="_blank">Emin V</a></div><div class="face-head"><h3 class="building">4205 Shipp Dr · #906</h3><span class="face-star">★ 4.3</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14156910</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+<p><span class="mk">Parking</span><span>1 spot</span></p>
+<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
+</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Elena Vankevich, Broker — BAY STREET GROUP INC.</p><a class="call-btn" href="tel:647-388-5950">Call 647-388-5950</a></div></div><div class="details">
+<dl>
+<div class="row"><dt>MLS®</dt><dd>W14156910</dd></div>
+<div class="row"><dt>Laundry</dt><dd>Washer/dryer in unit</dd></div>
+<div class="row"><dt>Building</dt><dd>Gym + indoor pool in building · Sauna · Tennis courts · Unfurnished</dd></div>
+<div class="row"><dt>Pets</dt><dd>Pets: No (per listing)</dd></div>
+<div class="row"><dt>Bus</dt><dd>Typically ~29 min to work, ~32 min home (MiWay GTFS medians, Nov 2026).</dd></div>
+<div class="row"><dt>Drive</dt><dd>to work 26–27 min (5 AM) · home 47–49 min (5 PM) · 34.1 km · no 407</dd></div>
+<div class="building-area">
+<div class="ba-title">Building &amp; area</div>
+<div class="ba-group">
+<span class="ba-label">Rating</span>
+<div class="ba-rating"><span class="ba-stars">★ 4.3</span><span class="ba-count">62 reviews</span></div>
+</div>
+<div class="ba-group">
+<span class="ba-label">Reviews</span>
+<p class="ba-text">Residents praise upkeep, security and the amenity set (pool, gym, tennis); very positive overall.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Gym</span>
+<p class="ba-text">corroborated — resident reviews describe the building's gymnasium, pool and tennis courts; the listing claims a gym too.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Nearby (approx)</span>
+<div class="ba-nearby">
+<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market — <strong>11 min walk</strong> <span class="ba-wdist">~830 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Compounding Box Solutions — <strong>6 min walk</strong> <span class="ba-wdist">~430 m</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Rathburn Rd At Shipp Dr — <strong>2 min walk</strong> <span class="ba-wdist">~160 m</span></span></div>
+</div>
+</div>
+<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
+</div>
+<div class="contact">
+
+
+<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
+</div>
+</dl>
+</div><div class="actions">
+<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30487657/906-4205-shipp-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
+
+</div></article>
+<!-- Duke of York 618 -->
+<article aria-label="View listing: 3880 Duke of York Blvd · #618" class="card has-photo" data-cat="1large" data-mls="W14117010" data-building="duke-3880" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3880 Duke of York Blvd" class="plate-photo" decoding="async" loading="lazy" src="photos/5e273455aa1983b1.webp"/><div class="rent-big">$2,200<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<div class="tblock bus">
+<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">~44</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
+</div>
+</div>
+<div class="tblock drive">
+<div class="tlabel"><span>Drive</span><span class="tnote">his · 35.4 km · no 407</span></div>
+<div class="tvals">
+<div class="tval"><span class="tnumrow"><span class="tnum">29–30</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
+<div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
+</div>
+</div>
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2026</div><div class="face-head"><h3 class="building">3880 Duke of York Blvd · #618</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14117010</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,260–2,300 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+<p><span class="mk">Parking</span><span>1 spot</span></p>
+<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
+</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Justin Jeffery, Salesperson — Royal LePage Real Estate Associates</p><a class="call-btn" href="tel:905-812-8123">Call 905-812-8123</a></div></div><div class="details">
+<dl>
+<div class="row"><dt>MLS®</dt><dd>W14117010</dd></div>
+<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
+<div class="row"><dt>Building</dt><dd>Fitness centre + sauna + indoor pool in building · Concierge · Unfurnished</dd></div>
+<div class="row"><dt>Pets</dt><dd>Pets: Yes — with restrictions (per listing)</dd></div>
+<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~44 min home (MiWay GTFS medians, Nov 2026).</dd></div>
+<div class="row"><dt>Drive</dt><dd>to work 29–30 min (5 AM) · home 51–53 min (5 PM) · 35.4 km · no 407</dd></div>
+<div class="building-area">
+<div class="ba-title">Building &amp; area</div>
+<div class="ba-group">
+<span class="ba-label">Rating</span>
+<p class="ba-text">No Google rating or reviews for this building yet.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Gym</span>
+<p class="ba-text">this unit's listing names a fitness centre in the building.</p>
+</div>
+<div class="ba-group">
+<span class="ba-label">Nearby (approx)</span>
+<div class="ba-nearby">
+<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market @ Duke of York — <strong>3 min walk</strong> <span class="ba-wdist">~220 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">CITY GATE PHARMACY — <strong>5 min walk</strong> <span class="ba-wdist">~370 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
+<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Webb Dr West Of Duke Of York Blvd — <strong>3 min walk</strong> <span class="ba-wdist">~260 m</span></span></div>
+</div>
+</div>
+<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
+</div>
+<div class="contact">
+
+
+<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
+</div>
+</dl>
+</div><div class="actions">
+<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30444171/618-3880-duke-of-york-boulevard-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
+
+</div></article>
+</div>
+</section>
 <!-- ===== Houses & Townhouses ===== -->
 <section class="cat" data-cat="houses" data-section="Houses &amp; Townhouses">
 <h2 class="section-head"><button class="row-title" data-cat="houses" type="button"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(3)</span></button><span class="sec-subline" data-subline=""></span></h2>
@@ -4128,6 +4319,7 @@
   var SEC_UNIT = {
     '2-Bedroom Condos': 'condos',
     '1-Bedroom + Den Condos': 'condos',
+    'Large 1-Bedroom': 'condos',
     'Houses & Townhouses': 'homes',
     'Maybes': 'maybes'
   };
