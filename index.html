@@ -242,6 +242,14 @@
     box-shadow:0 4px 14px rgba(0,0,0,.25);font-size:11px;font-weight:700}
   .plate:has(.plate-badge) .rent-big{margin-top:30px}
   .card:not(.in-detail) .plate:has(.plate-controls) .rent-big{margin-top:48px}
+  /* weekly liveness stamp: wide badge in the plate's badge area on
+     cards not re-confirmed this week; rent clears its wrapped lines */
+  .stamp-badge{right:10px;border-radius:12px;white-space:normal}
+  .plate:has(.stamp-badge) .rent-big{margin-top:60px}
+  .plate:has(.plate-controls) .stamp-badge{right:112px}
+  .card:not(.in-detail) .plate:has(.plate-controls):has(.stamp-badge) .rent-big{margin-top:76px}
+  .stamp-badge.below{top:44px}
+  .plate:has(.stamp-badge.below) .rent-big{margin-top:96px}
   .plate-controls{position:absolute;top:8px;right:8px;z-index:3;display:flex;gap:6px;margin:0}
   .mini-accept,.mini-remove{font-family:inherit;font-weight:700;line-height:1;
     width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;cursor:pointer;
@@ -505,15 +513,15 @@
 <!-- ===== Header ===== -->
 <header class="top">
 <h1>Apartment Hunt</h1>
-<p class="updated">Last updated November 10, 2026</p>
+<p class="updated">Last updated November 15, 2026</p>
 </header>
 <!-- ===== App bar (sticky) ===== -->
-<div class="appbar"><span class="appbar-count" id="appbar-count">39 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
+<div class="appbar"><span class="appbar-count" id="appbar-count">64 listings</span><span class="appbar-right"><button aria-label="Switch to light mode" class="theme-toggle" id="themeToggle" type="button"><img alt="" aria-hidden="true" class="icon-sun" src="photos/71f69b4c9afaf0ff.webp"/><img alt="" aria-hidden="true" class="icon-moon" src="photos/ddf0e23fc4d71ae5.webp" style="display:none"/></button></span></div>
 <!-- ===== Section navigation chips ===== -->
-<nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">39</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
+<nav aria-label="Categories" class="catrail"><button aria-pressed="false" class="cat-tile tile-favorites" data-cat="favorites" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/2c0229b39e5053f1.png"/></span><span class="tile-label">Favorites</span><span class="tile-count"></span></button><button aria-pressed="true" class="cat-tile tile-all selected" data-cat="all" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/4ae54a6ede4e68d4.png"/></span><span class="tile-label">All</span><span class="tile-count">64</span></button><button aria-pressed="false" class="cat-tile tile-2bed" data-cat="2bed" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/50a9b5106fa2d2d4.png"/></span><span class="tile-label">2-Bedroom</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-1den" data-cat="1den" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/d665e080fe73dc62.png"/></span><span class="tile-label">1+Den</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-houses" data-cat="houses" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/836b49d3014fded4.png"/></span><span class="tile-label">Houses</span><span class="tile-count"></span></button><button aria-pressed="false" class="cat-tile tile-watch" data-cat="watch" type="button"><span aria-hidden="true" class="tile-glyph"><img alt="" src="photos/232719649c1295b1.png"/></span><span class="tile-label">Maybes</span><span class="tile-count"></span></button></nav>
 <!-- ===== 2 Bedroom ===== -->
 <section class="cat" data-cat="2bed" data-section="2-Bedroom Condos">
-<h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(9)</span></button><span class="sec-subline" data-subline=""></span></h2>
+<h2 class="section-head"><button class="row-title" data-cat="2bed" type="button"><span class="sec-name">2-Bedroom Condos</span><span class="count">(11)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-2bed">
 
 
@@ -952,71 +960,6 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30475844/5802-448-burnhamthorpe-road-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<!-- EX1 2103 -->
-<article aria-label="View listing: EX1 · #2103" class="card has-photo" data-cat="2bed" data-mls="W14141696" data-building="ex1" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of EX1 Condos (Exchange District)" class="plate-photo" decoding="async" loading="lazy" src="photos/9f749e4fda4aa369.webp"/><span class="chip plate-badge">Partially furnished</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~32</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 36 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">24–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">35–80</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/102432226785999854676" rel="noopener" target="_blank">Neighbourhood Notes</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/102432226785999854676" rel="noopener" target="_blank">Neighbourhood Notes</a></div><div class="face-head"><h3 class="building">EX1 · #2103</h3><span class="face-star">★ 3.0</span></div><p class="addr">4015 The Exchange — City Centre</p><p class="prov">Listed Nov 3, 2026 · MLS® W14141696</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>None included — no rental option stated</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sean Xiang Li, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-565-9200">Call 905-565-9200</a></div><div class="lb-row"><p class="contact-agent">Lu Ting Li, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-565-9200">Call 905-565-9200</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Nov 3, 2026 · MLS® W14141696</dd></div>
-<div class="row"><dt>Parking</dt><dd>None included, and no rental option is stated anywhere public — at this building, spots are deeded to specific units and no parking-rental program is documented. Parking is information only, never a gate; only the listing brokerage could clarify.</dd></div>
-<div class="row"><dt>Notes</dt><dd>Listed partially furnished. Pets: No per listing — noted (pets are a bonus item, not a requirement).</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Ensuite (laundry closet) per Laundry field; MLS field Ensuite Laundry: N — fields conflict, verify with agent</dd></div>
-<div class="row"><dt>Building</dt><dd>Gym: no listing claim found, and no independent trace.</dd></div>
-<div class="row"><dt>Bus</dt><dd>109 → 42 — typically ~30 min to work, ~32 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 24–40 min (5 AM) · home 35 min–1 h 20 (5 PM) · 36 km · no 407</dd></div>
-<div class="row"><dt>Source</dt><dd><a href="https://www.zolo.ca/mississauga-real-estate/4015-the-exchange/2103" rel="noopener" target="_blank">zolo.ca — 4015 The Exchange / 2103</a></dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">15 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Complaints centre on noise, cleanliness, security, small units and slow follow-up; one review mentions daily alarm pulls and elevators being down.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market @ Duke of York — <strong>6 min walk</strong> <span class="ba-wdist">~430 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">CITY GATE PHARMACY — <strong>7 min walk</strong> <span class="ba-wdist">~490 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Kariya Dr — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30471300/2103-4015-the-exchange-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 <article aria-label="View listing: EX1 · #705" class="card has-photo" data-cat="2bed" data-mls="W14133914" data-building="ex1" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of EX1 Condos (Exchange District)" class="plate-photo" decoding="async" loading="lazy" src="photos/9f749e4fda4aa369.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -1246,73 +1189,10 @@
 </section>
 <!-- ===== 1 Bed + Den ===== -->
 <section class="cat" data-cat="1den" data-section="1-Bedroom + Den Condos">
-<h2 class="section-head"><button class="row-title" data-cat="1den" type="button"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(20)</span></button><span class="sec-subline" data-subline=""></span></h2>
+<h2 class="section-head"><button class="row-title" data-cat="1den" type="button"><span class="sec-name">1-Bedroom + Den Condos</span><span class="count">(40)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-1den">
 
 
-<!-- M City 3 908 -->
-<article aria-label="View listing: M City 3 (M3) · #908" class="card has-photo" data-cat="1den" data-mls="W14130680" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><span class="chip plate-badge">Furnished</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">26–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 (M3) · #908</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">Listed Oct 29, 2026 · MLS® W14130680</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–2,620 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 spot, locker owned</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Gourav Setia, Salesperson — RE/MAX Realty Services Inc.</p><a class="call-btn" href="tel:647-615-4555">Call 647-615-4555</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Oct 29, 2026 · MLS® W14130680</dd></div>
-<div class="row"><dt>Laundry</dt><dd>In-suite laundry ✅</dd></div>
-<div class="row"><dt>Building</dt><dd>Gym ✅ + indoor pool</dd></div>
-<div class="row"><dt>Pets</dt><dd>Pets: yes / with restrictions — bonus ✓</dd></div>
-<div class="row"><dt>Note</dt><dd>Furnished — confirmed (noted only). Only counts if the furnishings are removable.</dd></div>
-<div class="row"><dt>Bus</dt><dd>109 → 42, off at Derry Rd/Millcreek — typically ~30 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 26–40 min (5 AM) · home 40 min–1 h 25 (5 PM) · 37 km · no 407</dd></div>
-<div class="row"><dt>Source</dt><dd><a href="https://www.zolo.ca/mississauga-real-estate/448-burnhamthorpe-road-west/908" rel="noopener" target="_blank">zolo.ca — 448 Burnhamthorpe Rd W / 908</a></dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">42 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">One theme drowns out the rest: repeated false fire alarms, day and night, plus AC complaints; some residents praise the spacious new units.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — a resident review describes the equipped gym with separate cardio, weights and functional areas.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Freshness2door — <strong>3 min walk</strong> <span class="ba-wdist">~190 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">M City Pharmacy — <strong>2 min walk</strong> <span class="ba-wdist">~110 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Parkside Village Dr — <strong>6 min walk</strong> <span class="ba-wdist">~410 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30459690/908-448-burnhamthorpe-road-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 <!-- Absolute 407 -->
 <article aria-label="View listing: Absolute World · #407" class="card has-photo" data-cat="1den" data-mls="W14137990" data-building="absolute" role="button" tabindex="0"><div class="plate"><img alt="Street View of Absolute World" class="plate-photo" decoding="async" loading="lazy" src="photos/6e9819d31fe4abdc.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
@@ -1427,237 +1307,6 @@
 </dl>
 </div><div class="actions">
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30491891/714-4011-brickstone-mews-mississauga-creditview" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- M City 3 6704 -->
-<article aria-label="View listing: M City 3 · #6704" class="card has-photo" data-cat="1den" data-mls="W14160494" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">26–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #6704</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14160494</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–2,470 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 spot</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Jannie Lam, Salesperson — Re/Max Crossroads Realty Inc.</p><a class="call-btn" href="tel:416-720-1831">Call 416-720-1831</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14160494</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Not stated in listing — verify with agent</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 26–40 min (5 AM) · home 40 min–1 h 25 (5 PM) · 37 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">42 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">One theme drowns out the rest: repeated false fire alarms, day and night, plus AC complaints; some residents praise the spacious new units.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — a resident review describes the equipped gym with separate cardio, weights and functional areas.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Freshness2door — <strong>3 min walk</strong> <span class="ba-wdist">~190 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">M City Pharmacy — <strong>2 min walk</strong> <span class="ba-wdist">~110 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Parkside Village Dr — <strong>6 min walk</strong> <span class="ba-wdist">~410 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30491746/6704-448-burnhamthorpe-road-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- M City 3 7109 -->
-<article aria-label="View listing: M City 3 · #7109" class="card has-photo" data-cat="1den" data-mls="W14152042" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">26–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/114188583843226619862" rel="noopener" target="_blank">Debanjan Das Deb</a></div><div class="face-head"><h3 class="building">M City 3 · #7109</h3><span class="face-star">★ 3.0</span></div><p class="addr">448 Burnhamthorpe Rd W — City Centre</p><p class="prov">MLS® W14152042</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Rizwan Razzaq, Salesperson — Re/Max Real Estate Centre Inc.</p><a class="call-btn" href="tel:416-543-6555">Call 416-543-6555</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14152042</dd></div>
-<div class="row"><dt>Locker</dt><dd>Included</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Laundry room in unit per listing room list</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 26–40 min (5 AM) · home 40 min–1 h 25 (5 PM) · 37 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">42 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">One theme drowns out the rest: repeated false fire alarms, day and night, plus AC complaints; some residents praise the spacious new units.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — a resident review describes the equipped gym with separate cardio, weights and functional areas.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Freshness2door — <strong>3 min walk</strong> <span class="ba-wdist">~190 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">M City Pharmacy — <strong>2 min walk</strong> <span class="ba-wdist">~110 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Parkside Village Dr — <strong>6 min walk</strong> <span class="ba-wdist">~410 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30482604/7109-448-burnhamthorpe-road-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- M City 2 3412 -->
-<article aria-label="View listing: M City 2 · #3412" class="card has-photo" data-cat="1den" data-mls="W14159850" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~44</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">24–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">40–85</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #3412</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">MLS® W14159850</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Aaron Cyrus, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-953-0550">Call 905-953-0550</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14159850</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~44 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 24–40 min (5 AM) · home 40 min–1 h 25 (5 PM) · 37 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.1</span><span class="ba-count">125 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Recurring complaints: frequent fire alarms, elevator waits, cleanliness and management (one recent review says communication is improving); the outdoor pool/patio is praised.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — reviews describe the building gym (one notes it closes at 10 PM, not 24 h).</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Freshness2door — <strong>1 min walk</strong> <span class="ba-wdist">~10 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">M City Pharmacy — <strong>4 min walk</strong> <span class="ba-wdist">~270 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Webb Dr At Confederation Pky — <strong>1 min walk</strong> <span class="ba-wdist">~40 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30491106/3412-3883-quartz-road-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- Elm Dr 611 -->
-<article aria-label="View listing: 33 Elm Dr W · #611" class="card has-photo" data-cat="1den" data-mls="W14160410" data-building="elm-33" role="button" tabindex="0"><div class="plate"><img alt="Street View of 33 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/40386922f553cec2.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~35</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~32</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35.2 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">29–30</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">50–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">33 Elm Dr W · #611</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14160410</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–2,420 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sukhi Singh, Broker — Royal Lepage Premium One Realty</p><a class="call-btn" href="tel:416-410-9111">Call 416-410-9111</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14160410</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~35 min to work, ~32 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 29–30 min (5 AM) · home 50–53 min (5 PM) · 35.2 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a gym (and an Exercise Centre in its MLS amenity list); no independent trace found.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Samosa factory — <strong>8 min walk</strong> <span class="ba-wdist">~580 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Matthews Gate Medical Centre &amp; Pharmacy — <strong>4 min walk</strong> <span class="ba-wdist">~270 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Elm Dr — <strong>3 min walk</strong> <span class="ba-wdist">~220 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30491644/611-33-elm-drive-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
 <!-- Elm Dr 413 -->
@@ -1836,7 +1485,7 @@
 
 </div></article>
 <!-- Confederation 704 -->
-<article aria-label="View listing: 4070 Confederation Pkwy · #704" class="card has-photo" data-cat="1den" data-mls="W14152238" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4070 Confederation Pkwy" class="plate-photo" decoding="async" loading="lazy" src="photos/3dcc8c7439a9b764.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 4070 Confederation Pkwy · #704" class="card has-photo" data-cat="1den" data-mls="W14152238" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4070 Confederation Pkwy" class="plate-photo" decoding="async" loading="lazy" src="photos/3dcc8c7439a9b764.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2190,187 +1839,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30476824/1914-4055-parkside-village-drive-mississauga-creditview" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<!-- Enfield 1716 -->
-<article aria-label="View listing: 156 Enfield Pl · #1716" class="card has-photo" data-cat="1den" data-mls="W14146416" data-building="enfield-156" role="button" tabindex="0"><div class="plate"><img alt="Street View of 156 Enfield Pl" class="plate-photo" decoding="async" loading="lazy" src="photos/3f3d272a736970dc.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 800–899 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~31</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 34.9 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">49–52</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">156 Enfield Pl · #1716</h3><span class="face-star">★ 5.0</span></div><p class="addr">City Centre</p><p class="prov">MLS® W14146416</p><div class="allin allin-line"><span class="allin-label">All-in</span> $2,400 <span class="chip status conf">CONFIRMED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 underground spot included + locker (owned)</span></p>
-<p><span class="mk">Utilities</span><span>included (listing describes a "Utilities Inclusive Unit")</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Francisco Moutinho De Almeida, Salesperson — Re/Max Professionals Inc.</p><a class="call-btn" href="tel:647-867-9317">Call 647-867-9317</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14146416</dd></div>
-<div class="row"><dt>Size</dt><dd>1+den / 1 bath, 800–899 sq ft — largest of the new 1+den set</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Ensuite laundry</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~31 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 49–52 min (5 PM) · 34.9 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 5.0</span><span class="ba-count">4 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Only 4 Google reviews, all 5 stars; the one written review praises the large unit and indoor parking.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims an exercise room (with pool, rec room and guest suite); no independent trace found.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Samosa factory — <strong>5 min walk</strong> <span class="ba-wdist">~360 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Cura Guardian Pharmacy — <strong>4 min walk</strong> <span class="ba-wdist">~310 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Matthews Gate — <strong>3 min walk</strong> <span class="ba-wdist">~260 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30476482/1716-156-enfield-place-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- Harvard 413 -->
-<article aria-label="View listing: 5005 Harvard Rd E · #413" class="card has-photo" data-cat="1den" data-mls="W14156004" data-building="harvard-5005" role="button" tabindex="0"><div class="plate"><img alt="Street View of 5005 Harvard Rd" class="plate-photo" decoding="async" loading="lazy" src="photos/f2754f76f070c215.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 700–799 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~11</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~15</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 43.9 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">33–34</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">53–55</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">5005 Harvard Rd E · #413</h3></div><p class="addr">Churchill Meadows</p><p class="prov">MLS® W14156004</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–2,520 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 space (underground, garage)</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Matthew Hobbs, Salesperson — 6H Realty Inc.</p><a class="call-btn" href="tel:416-886-6353">Call 416-886-6353</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14156004</dd></div>
-<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
-<div class="row"><dt>Note</dt><dd>Churchill Meadows — fastest bus ride of the whole page</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~11 min to work, ~15 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 33–34 min (5 AM) · home 53–55 min (5 PM) · 43.9 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims an exercise centre; no independent trace found.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Nations Fresh Foods • Mississauga Store — <strong>8 min walk</strong> <span class="ba-wdist">~600 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Eglinton Churchill Pharmacy | PrinceRx — <strong>11 min walk</strong> <span class="ba-wdist">~810 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Winston Churchill Blvd At Eglinton Ave — <strong>5 min walk</strong> <span class="ba-wdist">~350 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30486796/413-5005-harvard-road-e-mississauga-churchill-meadows" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<!-- Erin Square 2008 (accepted Nov 8, 2026 — main card) -->
-<article aria-label="View listing: Erin Square · #2008" class="card has-photo" data-cat="1den" data-mls="W14091848" data-building="erin-square" role="button" tabindex="0"><div class="plate"><img alt="Street View of Erin Square" class="plate-photo" decoding="async" loading="lazy" src="photos/265881f49de8dc26.webp"/><div class="rent-big">$2,550<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~14</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~15</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 42 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–40</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">40–80</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2024</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2024</div><div class="face-head"><h3 class="building">Erin Square · #2008</h3><span class="face-star">★ 3.0</span></div><p class="addr">4675 Metcalfe Ave — Erin Mills</p><p class="prov">Listed Oct 18, 2026 · MLS® W14091848</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,610–2,650 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Parking + locker included</span></p>
-<p><span class="mk">Utilities</span><span>Heat, water + internet included; hydro extra</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent"><a href="https://alicechiu.royallepage.ca/" rel="noopener" target="_blank">Alice Chiu</a>, Salesperson — Royal LePage Signature Realty</p><a class="call-btn" href="tel:647-975-6493">Call 647-975-6493</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Oct 18, 2026 · MLS® W14091848</dd></div>
-<div class="row"><dt>Included</dt><dd>Heat, water AND high-speed internet included in rent — the only overhead left on top is hydro, so the real cost stays close to the sticker</dd></div>
-<div class="row"><dt>Status</dt><dd>Accepted by Andrew on Nov 8, 2026 — moved from Maybes into the main list. Rent $2,550 is over the $2,500 cap and hydro is not included; accepted as-is.</dd></div>
-<div class="row"><dt>Laundry</dt><dd>In-suite laundry ✅ — Stacked washer/dryer visible in the listing photos (checked Nov 8, 2026)</dd></div>
-<div class="row"><dt>Building</dt><dd>Gym ✅ (fully equipped) · 24h concierge ✅ · rooftop pool · Building ~3 years old (Pemberton)</dd></div>
-<div class="row"><dt>Pets</dt><dd>Pets: No per listing — noted (pets are a bonus item, not a requirement)</dd></div>
-<div class="row"><dt>Bus</dt><dd>109 from Winston Churchill/Erin Centre → 42, or the 48 straight down Glen Erin — typically ~14 min to work, ~15 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–40 min (5 AM) · home 40 min–1 h 20 (5 PM) · 42 km · no 407</dd></div>
-<div class="row"><dt>Source</dt><dd><a href="https://www.zolo.ca/mississauga-real-estate/4675-metcalfe-avenue/2008" rel="noopener" target="_blank">zolo.ca — 4675 Metcalfe Ave / 2008</a></dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">24 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Recent reviews complain about slow/often-broken elevators, cleanliness and AC outages during a heatwave; the mall-side location is praised.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — a resident review lists the gym among the building's amenities; the listing claims a fully equipped gym.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Walmart Supercentre — <strong>8 min walk</strong> <span class="ba-wdist">~520 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">ARC PHARMACY - Compounding Pharmacy - PharmaChoice — <strong>7 min walk</strong> <span class="ba-wdist">~530 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Eglinton Ave At Metcalfe Ave — <strong>2 min walk</strong> <span class="ba-wdist">~150 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30416508/2008-4675-metcalfe-avenue-mississauga-central-erin-mills" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 3985 Grand Park Dr · #207" class="card has-photo" data-cat="1den" data-mls="W14114382" data-building="grand-park-3985" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3985 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/2dcbe9eb35980a9e.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 3985 Grand Park Dr · #207" class="card has-photo" data-cat="1den" data-mls="W14114382" data-building="grand-park-3985" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3985 Grand Park Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/2dcbe9eb35980a9e.webp"/><div class="rent-big">$2,275<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2385,7 +1854,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">52–55</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2026</div><div class="face-head"><h3 class="building">3985 Grand Park Dr · #207</h3></div><p class="addr">City Centre</p><p class="prov">Listed Oct 24, 2026 · MLS® W14114382</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–$2,450 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Street View © Google · Jun 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Jun 2026</div><div class="face-head"><h3 class="building">3985 Grand Park Dr · #207</h3></div><p class="addr">City Centre</p><p class="prov">Listed Oct 24, 2026 · MLS® W14114382</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,335–$2,375 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Alexander Chang, Salesperson — Union Capital Realty</p><a class="call-btn" href="tel:289-317-1288">Call 289-317-1288</a></div></div><div class="details">
@@ -2424,7 +1893,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30441291/207-3985-grand-park-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: M City 3 · #1703" class="card has-photo" data-cat="1den" data-mls="W14133730" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #1703" class="card has-photo" data-cat="1den" data-mls="W14133730" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2594,7 +2063,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30239925/607-3900-confederation-parkway-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: Canopy Towers · #2412" class="card has-photo" data-cat="1den" data-mls="W14145242" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/173859a661012315.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: Canopy Towers · #2412" class="card has-photo" data-cat="1den" data-mls="W14145242" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/173859a661012315.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2815,7 +2284,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30402250/508-3985-grand-park-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 36 Elm Dr W · #2303" class="card has-photo" data-cat="1den" data-mls="W14132340" data-building="elm-west-36" role="button" tabindex="0"><div class="plate"><img alt="Street View of 36 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/7714287bf1f68f19.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 36 Elm Dr W · #2303" class="card has-photo" data-cat="1den" data-mls="W14132340" data-building="elm-west-36" role="button" tabindex="0"><div class="plate"><img alt="Street View of 36 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/7714287bf1f68f19.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2869,61 +2338,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30461449/2303-36-elm-drive-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 3939 Duke of York Blvd · #2010" class="card has-photo" data-cat="1den" data-mls="W13839194" data-building="duke-3939" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3939 Duke of York Blvd" class="plate-photo" decoding="async" loading="lazy" src="photos/0ebe0cfb1260532e.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~38</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~47</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">51–53</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">3939 Duke of York Blvd · #2010</h3></div><p class="addr">City Centre</p><p class="prov">Listed Sep 29, 2026 · MLS® W13839194</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–$2,600 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Stephanie D'Souza, Salesperson — RE/MAX Realty Specialists Inc.</p><a class="call-btn" href="tel:905-272-3434">Call 905-272-3434</a></div><div class="lb-row"><p class="contact-agent">Arif Murji, Broker — RE/MAX Realty Specialists Inc.</p><a class="call-btn" href="tel:905-361-3333">Call 905-361-3333</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Sep 29, 2026 · MLS® W13839194</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~38 min to work, ~47 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 51–53 min (5 PM) · 35 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a gym; no independent trace found in the Google data.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market @ Duke of York — <strong>1 min walk</strong> <span class="ba-wdist">~70 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">CITY GATE PHARMACY — <strong>4 min walk</strong> <span class="ba-wdist">~300 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Duke Of York Blvd — <strong>2 min walk</strong> <span class="ba-wdist">~160 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30339769/2010-3939-duke-of-york-boulevard-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: Keystone by Kaneff · #1306" class="card has-photo" data-cat="1den" data-mls="W14125232" data-building="burnhamthorpe-east-204" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Keystone by Kaneff, 204 Burnhamthorpe Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/c12f6110991bf93e.webp"/><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Keystone by Kaneff · #1306" class="card has-photo" data-cat="1den" data-mls="W14125232" data-building="burnhamthorpe-east-204" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Keystone by Kaneff, 204 Burnhamthorpe Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/c12f6110991bf93e.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -2981,61 +2396,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30453467/1306-204-burnhamthorpe-road-e-mississauga-mississauga-valleys" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 25 Kingsbridge Garden Cir · #2422" class="card has-photo" data-cat="1den" data-mls="W13742256" data-building="kingsbridge-25" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 25 Kingsbridge Garden Cir" class="plate-photo" decoding="async" loading="lazy" src="photos/7c24315857ec4417.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 700–799 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~37</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~41</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">45–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/103364977349139675839" rel="noopener" target="_blank">Bilal Kamran</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/103364977349139675839" rel="noopener" target="_blank">Bilal Kamran</a></div><div class="face-head"><h3 class="building">25 Kingsbridge Garden Cir · #2422</h3></div><p class="addr">Hurontario</p><p class="prov">Listed Sep 3, 2026 · MLS® W13742256</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–$2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sumit Narula, Salesperson — RE/MAX Real Estate Centre Inc.</p><a class="call-btn" href="tel:647-895-2684">Call 647-895-2684</a></div><div class="lb-row"><p class="contact-agent">Dave Narula, Broker — RE/MAX Real Estate Centre Inc.</p><a class="call-btn" href="tel:416-845-3283">Call 416-845-3283</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Sep 3, 2026 · MLS® W13742256</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~37 min to work, ~41 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 45–49 min (5 PM) · 35 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Rabba Fine Foods — <strong>5 min walk</strong> <span class="ba-wdist">~350 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Sandalwood Drugs Compounding Pharmacy — <strong>5 min walk</strong> <span class="ba-wdist">~330 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Kingsbridge Garden Cir — <strong>5 min walk</strong> <span class="ba-wdist">~390 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30231844/2422-25-kingsbridge-garden-circle-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 75 Eglinton Ave W · #901" class="card has-photo" data-cat="1den" data-mls="W14025534" data-building="eglinton-75" role="button" tabindex="0"><div class="plate"><img alt="Street View of 75 Eglinton Ave W" class="plate-photo" decoding="async" loading="lazy" src="photos/7f94e163be8b756c.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 75 Eglinton Ave W · #901" class="card has-photo" data-cat="1den" data-mls="W14025534" data-building="eglinton-75" role="button" tabindex="0"><div class="plate"><img alt="Street View of 75 Eglinton Ave W" class="plate-photo" decoding="async" loading="lazy" src="photos/7f94e163be8b756c.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -3089,7 +2450,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30395151/901-75-eglinton-avenue-w-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: Keystone by Kaneff · #1108" class="card has-photo" data-cat="1den" data-mls="W14132594" data-building="burnhamthorpe-east-204" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Keystone by Kaneff, 204 Burnhamthorpe Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/c12f6110991bf93e.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Keystone by Kaneff · #1108" class="card has-photo" data-cat="1den" data-mls="W14132594" data-building="burnhamthorpe-east-204" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Keystone by Kaneff, 204 Burnhamthorpe Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/c12f6110991bf93e.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -3201,60 +2562,6 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30476334/1518-8-nahani-way-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 35 Watergarden Dr · #1911" class="card has-photo" data-cat="1den" data-mls="W14151330" data-building="watergarden-35" role="button" tabindex="0"><div class="plate"><img alt="Street View of 35 Watergarden Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/52f3971789ccc0ac.webp"/><div class="rent-big">$2,450<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~38.5</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~41</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">49–51</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">35 Watergarden Dr · #1911</h3></div><p class="addr">Churchill Meadows</p><p class="prov">Listed Nov 5, 2026 · MLS® W14151330</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,510–$2,550 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Linh Tran, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:647-208-4906">Call 647-208-4906</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Nov 5, 2026 · MLS® W14151330</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~38.5 min to work, ~41 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 49–51 min (5 PM) · 35 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a gym; no independent trace found in the Google data.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Rabba Fine Foods — <strong>16 min walk</strong> <span class="ba-wdist">~1.2 km</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Sandalwood Drugs Compounding Pharmacy — <strong>16 min walk</strong> <span class="ba-wdist">~1.2 km</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Nahani Way — <strong>5 min walk</strong> <span class="ba-wdist">~300 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30481891/1911-35-watergarden-drive-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 <article aria-label="View listing: 5033 Four Springs Ave · #711" class="card has-photo" data-cat="1den" data-mls="W14155708" data-building="four-springs-5033" role="button" tabindex="0"><div class="plate"><img alt="Street View of 5033 Four Springs Ave" class="plate-photo" decoding="async" loading="lazy" src="photos/96cb3ca65f87b8f1.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -3363,121 +2670,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30494080/603-50-kingsbridge-garden-circle-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: EX1 · #1709" class="card has-photo" data-cat="1den" data-mls="W14088954" data-building="ex1" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of EX1 Condos (Exchange District)" class="plate-photo" decoding="async" loading="lazy" src="photos/9f749e4fda4aa369.webp"/><div class="rent-big">$2,200<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~32</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 36 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">29–31</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">49–52</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/102432226785999854676" rel="noopener" target="_blank">Neighbourhood Notes</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/102432226785999854676" rel="noopener" target="_blank">Neighbourhood Notes</a></div><div class="face-head"><h3 class="building">EX1 · #1709</h3><span class="face-star">★ 3.0</span></div><p class="addr">4015 The Exchange — City Centre</p><p class="prov">Listed Oct 16, 2026 · MLS® W14088954</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,260–$2,300 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Parking + locker included</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Alex Kharouba, Salesperson — IRISE</p><a class="call-btn" href="tel:416-203-2715">Call 416-203-2715</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Oct 16, 2026 · MLS® W14088954</dd></div>
-<div class="row"><dt>Parking</dt><dd>Parking and locker included (verified against the listing); the structured Parking Total field reads 0.</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~32 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 29–31 min (5 AM) · home 49–52 min (5 PM) · 36 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">15 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Complaints centre on noise, cleanliness, security, small units and slow follow-up; one review mentions daily alarm pulls and elevators being down.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market @ Duke of York — <strong>6 min walk</strong> <span class="ba-wdist">~430 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">CITY GATE PHARMACY — <strong>7 min walk</strong> <span class="ba-wdist">~490 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Kariya Dr — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30413531/1709-4015-the-exchange-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 310 Burnhamthorpe Rd W · #2308" class="card has-photo" data-cat="1den" data-mls="W14030794" data-building="burnhamthorpe-310" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 310 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/7469c63034f47a03.webp"/><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~32</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~45</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35.6 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">30–31</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">50–52</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/102657510989805460664" rel="noopener" target="_blank">Ozoz Sokoh</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/102657510989805460664" rel="noopener" target="_blank">Ozoz Sokoh</a></div><div class="face-head"><h3 class="building">310 Burnhamthorpe Rd W · #2308</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14030794</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,310–$2,350 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 parking + 1 locker</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Hong Yang, Broker — KW Living Realty</p><a class="call-btn" href="tel:905-896-0002">Call 905-896-0002</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14030794</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Ensuite laundry</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~32 min to work, ~45 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 30–31 min (5 AM) · home 50–52 min (5 PM) · 35.6 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market @ Duke of York — <strong>6 min walk</strong> <span class="ba-wdist">~440 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">CITY GATE PHARMACY — <strong>7 min walk</strong> <span class="ba-wdist">~500 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd at Living Arts Dr — <strong>2 min walk</strong> <span class="ba-wdist">~120 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30399235/2308-310-burnhamthorpe-road-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: M City 3 · #7509" class="card has-photo" data-cat="1den" data-mls="W13884866" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
+<article aria-label="View listing: M City 3 · #7509" class="card has-photo" data-cat="1den" data-mls="W13884866" data-building="m-city-3" role="button" tabindex="0"><div class="plate"><img alt="Street View of M City 3" class="plate-photo" decoding="async" loading="lazy" src="photos/7751e7eb16bdad68.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -3596,122 +2789,6 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30492718/3513-3883-quartz-road-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: M City 2 · #3713" class="card has-photo" data-cat="1den" data-mls="W13863818" data-building="m-city-2" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of M City 2" class="plate-photo" decoding="async" loading="lazy" src="photos/d949ca9a3f57b36f.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~30</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~44</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">29–30</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">52–54</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/116967676369017263608" rel="noopener" target="_blank">Noor Syed</a></div><div class="face-head"><h3 class="building">M City 2 · #3713</h3><span class="face-star">★ 3.1</span></div><p class="addr">3883 Quartz Rd — City Centre</p><p class="prov">MLS® W13863818</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,410–$2,450 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Tyler Chan, Salesperson — Century 21 Kennect Realty</p><a class="call-btn" href="tel:905-604-6595">Call 905-604-6595</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W13863818</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~30 min to work, ~44 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 29–30 min (5 AM) · home 52–54 min (5 PM) · 37 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.1</span><span class="ba-count">125 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Recurring complaints: frequent fire alarms, elevator waits, cleanliness and management (one recent review says communication is improving); the outdoor pool/patio is praised.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">corroborated — reviews describe the building gym (one notes it closes at 10 PM, not 24 h).</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Freshness2door — <strong>1 min walk</strong> <span class="ba-wdist">~10 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">M City Pharmacy — <strong>4 min walk</strong> <span class="ba-wdist">~270 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Webb Dr At Confederation Pky — <strong>1 min walk</strong> <span class="ba-wdist">~40 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30366727/3713-3883-quartz-road-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: Canopy Towers · #536" class="card has-photo" data-cat="1den" data-mls="W14139084" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/173859a661012315.webp"/><div class="rent-big">$2,250<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~37</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 33 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">45–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">Canopy Towers · #536</h3><span class="face-star">★ 3.0</span></div><p class="addr">5105 Hurontario St — Hurontario</p><p class="prov">Listed Nov 2, 2026 · MLS® W14139084</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,310–$2,350 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Included</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sam Allan McDadi, Salesperson — Sam McDadi Real Estate Inc.</p><a class="call-btn" href="tel:905-502-1500">Call 905-502-1500</a></div><div class="lb-row"><p class="contact-agent">Adam Paiement, Salesperson — Sam McDadi Real Estate Inc.</p><a class="call-btn" href="tel:905-502-1500">Call 905-502-1500</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Nov 2, 2026 · MLS® W14139084</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~37 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 45–49 min (5 PM) · 33 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 3.0</span><span class="ba-count">2 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Only 2 Google reviews; the written one reports garbage-area flies entering units and cleanliness reports going unresolved.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Oceans Fresh Food Market - Mississauga Store — <strong>14 min walk</strong> <span class="ba-wdist">~1.0 km</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Shoppers Drug Mart — <strong>4 min walk</strong> <span class="ba-wdist">~320 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Nahani Way — <strong>2 min walk</strong> <span class="ba-wdist">~100 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30468305/536-5105-hurontario-street-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 <article aria-label="View listing: Canopy Towers · #2301" class="card has-photo" data-cat="1den" data-mls="W14091850" data-building="canopy" role="button" tabindex="0"><div class="plate"><img alt="Street View of Canopy Towers" class="plate-photo" decoding="async" loading="lazy" src="photos/173859a661012315.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -3768,116 +2845,6 @@
 </dl>
 </div><div class="actions">
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30416509/2301-5105-hurontario-street-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 395 Square One Dr · #801" class="card has-photo" data-cat="1den" data-mls="W13868814" data-building="square-one-395" role="button" tabindex="0"><div class="plate"><img alt="Street View of 395 Square One Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/6e4c78e56d97faec.webp"/><div class="rent-big">$2,295<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~31.5</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~36</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37.1 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">48–57</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">395 Square One Dr · #801</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W13868814</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,355–$2,395 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Parking + locker included</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Karim Suleiman, Broker of Record — Century 21 Innovative Specialist Team Inc.</p><a class="call-btn" href="tel:647-302-4786">Call 647-302-4786</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W13868814</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~31.5 min to work, ~36 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 48–57 min (5 PM) · 37.1 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a fitness centre; no independent trace found in the Google data.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Rabba Fine Foods — <strong>2 min walk</strong> <span class="ba-wdist">~190 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Remedy'sRx - City Centre Apothecary — <strong>2 min walk</strong> <span class="ba-wdist">~120 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Confederation Pky At Rathburn Rd — <strong>1 min walk</strong> <span class="ba-wdist">~20 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30372021/801-395-square-one-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 395 Square One Dr · #2302" class="card has-photo" data-cat="1den" data-mls="W14114044" data-building="square-one-395" role="button" tabindex="0"><div class="plate"><img alt="Street View of 395 Square One Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/6e4c78e56d97faec.webp"/><span class="chip warn plate-badge">Caution · verify in person</span><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~31.5</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~36</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 37.1 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">48–57</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">395 Square One Dr · #2302</h3></div><p class="addr">City Centre</p><p class="prov">MLS® W14114044</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–$2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 parking + 1 locker</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Sophia Xiao, Salesperson — Bay Street Integrity Realty Inc.</p><a class="call-btn" href="tel:905-909-9900">Call 905-909-9900</a></div><div class="lb-row"><p class="contact-agent">Stephanie Lu, Broker — Bay Street Integrity Realty Inc.</p><a class="call-btn" href="tel:905-909-9900">Call 905-909-9900</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14114044</dd></div>
-<div class="row"><dt>Laundry</dt><dd>Ensuite laundry</dd></div>
-<div class="row"><dt>Caution</dt><dd>A non-MLS source (condonow) showed this unit as “Leased Conditionally” — that flag does not appear in the MLS record. Verify the unit is still available with the agent before relying on it.</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~31.5 min to work, ~36 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 48–57 min (5 PM) · 37.1 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a fitness centre; no independent trace found in the Google data.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Rabba Fine Foods — <strong>2 min walk</strong> <span class="ba-wdist">~190 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Remedy'sRx - City Centre Apothecary — <strong>2 min walk</strong> <span class="ba-wdist">~120 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Confederation Pky At Rathburn Rd — <strong>1 min walk</strong> <span class="ba-wdist">~20 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30440999/2302-395-square-one-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
 <article aria-label="View listing: Block Nine · #1019" class="card has-photo" data-cat="1den" data-mls="W14163778" data-building="block-nine" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of Block Nine" class="plate-photo" decoding="async" loading="lazy" src="photos/5a9f04cabab536aa.webp"/><span class="chip plate-badge">Partially furnished</span><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 500–599 sq ft</span><div class="travel">
@@ -4162,60 +3129,6 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30430007/3113-3900-confederation-parkway-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 339 Rathburn Rd W · #2011" class="card has-photo" data-cat="1den" data-mls="W14090916" data-building="rathburn-339" role="button" tabindex="0"><div class="plate"><img alt="Street View of 339 Rathburn Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/8e98f13880200e55.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~31.5</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~39</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 36.9 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">49–52</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Apr 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Apr 2026</div><div class="face-head"><h3 class="building">339 Rathburn Rd W · #2011</h3></div><p class="addr">Creditview</p><p class="prov">MLS® W14090916</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–$2,500 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Faris Al-Hoyidy, Salesperson — Royal Lepage Pinnacle Real Estate</p><a class="call-btn" href="tel:647-296-6630">Call 647-296-6630</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>MLS®</dt><dd>W14090916</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~31.5 min to work, ~39 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 49–52 min (5 PM) · 36.9 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Food Basics — <strong>4 min walk</strong> <span class="ba-wdist">~290 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Remedy'sRx - City Centre Apothecary — <strong>4 min walk</strong> <span class="ba-wdist">~240 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Rathburn Rd At Confederation Pky — <strong>1 min walk</strong> <span class="ba-wdist">~90 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30415540/2011-339-rathburn-road-w-mississauga-creditview" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 <article aria-label="View listing: 3525 Kariya Dr · #1712" class="card has-photo" data-cat="1den" data-mls="W13861580" data-building="kariya-3525" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3525 Kariya Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/2228fc9c889e8300.webp"/><span class="chip warn plate-badge">Caution · verify in person</span><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
@@ -4270,65 +3183,6 @@
 </dl>
 </div><div class="actions">
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30364319/1712-3525-kariya-drive-mississauga-fairview" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: Absolute World · #1705" class="card has-photo" data-cat="1den" data-mls="W14132998" data-building="absolute-90" role="button" tabindex="0"><div class="plate"><img alt="Street View of Absolute World" class="plate-photo" decoding="async" loading="lazy" src="photos/960c2fe1920be85e.webp"/><div class="rent-big">$2,450<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 700–799 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~32.5</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~36</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 34.6 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">26–28</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">49–51</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Aug 2023</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Aug 2023</div><div class="face-head"><h3 class="building">Absolute World · #1705</h3><span class="face-star">★ 4.4</span></div><p class="addr">90 Absolute Ave — City Centre</p><p class="prov">Listed Oct 30, 2026 · MLS® W14132998</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,510–$2,550 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>1 parking + 1 locker</span></p>
-<p><span class="mk">Utilities</span><span>Hydro included (per description)</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Elena Racu, Salesperson — Royal Lepage Realty Centre</p><a class="call-btn" href="tel:416-271-1452">Call 416-271-1452</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Oct 30, 2026 · MLS® W14132998</dd></div>
-<div class="row"><dt>Included</dt><dd>Description states: “Hydro Included! … ALL INCLUSIVE!” and “1 Parking Spot, 1 Locker”. Heat and water are not individually stated, so the all-in stays ESTIMATED.</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~32.5 min to work, ~36 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 26–28 min (5 AM) · home 49–51 min (5 PM) · 34.6 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<div class="ba-rating"><span class="ba-stars">★ 4.4</span><span class="ba-count">8 reviews</span></div>
-</div>
-<div class="ba-group">
-<span class="ba-label">Reviews</span>
-<p class="ba-text">Few written reviews: one complains the garbage chutes fake recycling, another that units are small for the rent; most of the 8 ratings are star-only.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Town &amp; Country Market — <strong>5 min walk</strong> <span class="ba-wdist">~360 m</span> <span class="ba-open24">Open 24 hours</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Matthews Gate Medical Centre &amp; Pharmacy — <strong>8 min walk</strong> <span class="ba-wdist">~540 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Burnhamthorpe Rd At Absolute Ave — <strong>2 min walk</strong> <span class="ba-wdist">~120 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30462262/1705-90-absolute-avenue-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
 <article aria-label="View listing: Absolute World · #1605" class="card has-photo" data-cat="1den" data-mls="W13832238" data-building="absolute-90" role="button" tabindex="0"><div class="plate"><img alt="Street View of Absolute World" class="plate-photo" decoding="async" loading="lazy" src="photos/960c2fe1920be85e.webp"/><div class="rent-big">$2,450<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
@@ -4391,61 +3245,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30332324/1605-90-absolute-avenue-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 1 Elm Dr W · #1601" class="card has-photo" data-cat="1den" data-mls="W14096410" data-building="elm-west-1" role="button" tabindex="0"><div class="plate"><img alt="Street View of 1 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/3608de1b7f459510.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~38</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~40</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 35 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">27–28</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">48–52</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · May 2026</div></div><div class="photo-credit photo-credit--detail">Street View © Google · May 2026</div><div class="face-head"><h3 class="building">1 Elm Dr W · #1601</h3></div><p class="addr">City Centre</p><p class="prov">Listed Oct 20, 2026 · MLS® W14096410</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,560–$2,600 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Tommy Hua, Broker — RE/MAX Advance Realty</p><a class="call-btn" href="tel:416-889-9860">Call 416-889-9860</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Oct 20, 2026 · MLS® W14096410</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~38 min to work, ~40 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 27–28 min (5 AM) · home 48–52 min (5 PM) · 35 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">the listing claims a gym; no independent trace found in the Google data.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Samosa factory — <strong>8 min walk</strong> <span class="ba-wdist">~580 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Matthews Gate Medical Centre &amp; Pharmacy — <strong>4 min walk</strong> <span class="ba-wdist">~260 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Hurontario St At Elm Dr — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30421548/1601-1-elm-drive-w-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
-<article aria-label="View listing: 4090 Living Arts Dr · #2806" class="card has-photo" data-cat="1den" data-mls="W14112122" data-building="living-arts-4090" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4090 Living Arts Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/499ee7c59e1a587b.webp"/><div class="rent-big">$2,450<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 4090 Living Arts Dr · #2806" class="card has-photo" data-cat="1den" data-mls="W14112122" data-building="living-arts-4090" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 4090 Living Arts Dr" class="plate-photo" decoding="async" loading="lazy" src="photos/499ee7c59e1a587b.webp"/><div class="rent-big">$2,400<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -4460,7 +3260,7 @@
 <div class="tval"><span class="tnumrow"><span class="tnum">51–54</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
 </div>
 </div>
-</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/104992566864297254565" rel="noopener" target="_blank">Villagemayor</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/104992566864297254565" rel="noopener" target="_blank">Villagemayor</a></div><div class="face-head"><h3 class="building">4090 Living Arts Dr · #2806</h3></div><p class="addr">City Centre</p><p class="prov">Listed Oct 23, 2026 · MLS® W14112122</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,510–$2,550 <span class="chip status est">ESTIMATED</span></div><div class="meta">
+</div><div class="photo-credit photo-credit--plate">Photo: <a href="https://maps.google.com/maps/contrib/104992566864297254565" rel="noopener" target="_blank">Villagemayor</a></div></div><div class="photo-credit photo-credit--detail">Photo: <a href="https://maps.google.com/maps/contrib/104992566864297254565" rel="noopener" target="_blank">Villagemayor</a></div><div class="face-head"><h3 class="building">4090 Living Arts Dr · #2806</h3></div><p class="addr">City Centre</p><p class="prov">Listed Oct 23, 2026 · MLS® W14112122</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,460–$2,500 <span class="chip status est">ESTIMATED</span></div><div class="meta">
 <p><span class="mk">Parking</span><span>Not stated — confirm with agent</span></p>
 <p><span class="mk">Utilities</span><span>Heat included</span></p>
 </div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Jasjit S Narula, Salesperson — Right At Home Realty</p><a class="call-btn" href="tel:905-565-9200">Call 905-565-9200</a></div></div><div class="details">
@@ -4500,7 +3300,7 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30438528/2806-4090-living-arts-drive-mississauga-city-centre" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 1 Elm Dr W · #706" class="card has-photo" data-cat="1den" data-mls="W14165256" data-building="elm-west-1" role="button" tabindex="0"><div class="plate"><img alt="Street View of 1 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/3608de1b7f459510.webp"/><span class="chip warn plate-badge">Caution · verify in person</span><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: 1 Elm Dr W · #706" class="card has-photo" data-cat="1den" data-mls="W14165256" data-building="elm-west-1" role="button" tabindex="0"><div class="plate"><img alt="Street View of 1 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/3608de1b7f459510.webp"/><span class="chip warn plate-badge">Caution · verify in person</span><span class="chip plate-badge stamp-badge below">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -4677,7 +3477,7 @@
 </section>
 <!-- ===== Houses & Townhouses ===== -->
 <section class="cat" data-cat="houses" data-section="Houses &amp; Townhouses">
-<h2 class="section-head"><button class="row-title" data-cat="houses" type="button"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(6)</span></button><span class="sec-subline" data-subline=""></span></h2>
+<h2 class="section-head"><button class="row-title" data-cat="houses" type="button"><span class="sec-name">Houses &amp; Townhouses</span><span class="count">(8)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-houses">
 
 
@@ -4742,7 +3542,7 @@
 
 </div></article>
 <!-- Eglinton 62 -->
-<article aria-label="View listing: Stacked Condo Townhouse · #62" class="card has-photo" data-cat="houses" data-mls="W14131948" data-building="eglinton-3056" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3056 Eglinton Ave W" class="plate-photo" decoding="async" loading="lazy" src="photos/552f88f45140abf0.webp"/><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
+<article aria-label="View listing: Stacked Condo Townhouse · #62" class="card has-photo" data-cat="houses" data-mls="W14131948" data-building="eglinton-3056" role="button" tabindex="0"><div class="plate"><img alt="Street View of 3056 Eglinton Ave W" class="plate-photo" decoding="async" loading="lazy" src="photos/552f88f45140abf0.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,350<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed · 1 Bath · 600–699 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -4972,7 +3772,7 @@
 
 </div></article>
 <!-- Guildwood 54 -->
-<article aria-label="View listing: Townhouse · #54" class="card has-photo" data-cat="houses" data-mls="W13858464" data-building="guildwood-4620" role="button" tabindex="0"><div class="plate"><img alt="Street View of 4620 Guildwood Way" class="plate-photo" decoding="async" loading="lazy" src="photos/6d2610e768dd2cbc.webp"/><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
+<article aria-label="View listing: Townhouse · #54" class="card has-photo" data-cat="houses" data-mls="W13858464" data-building="guildwood-4620" role="button" tabindex="0"><div class="plate"><img alt="Street View of 4620 Guildwood Way" class="plate-photo" decoding="async" loading="lazy" src="photos/6d2610e768dd2cbc.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="rent-big">$2,500<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 1 Bath · 700–799 sq ft</span><div class="travel">
 <div class="tblock bus">
 <div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
 <div class="tvals">
@@ -5139,67 +3939,11 @@
 <a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30473517/832-95-trailwood-drive-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
 
 </div></article>
-<article aria-label="View listing: 111 Bristol Rd E · #109" class="card has-photo" data-cat="houses" data-mls="W13777804" data-building="bristol-111" role="button" tabindex="0"><div class="plate"><img alt="Street View of 111 Bristol Rd E" class="plate-photo" decoding="async" loading="lazy" src="photos/cf564baa8fdefe21.webp"/><div class="rent-big">$2,300<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed + Den · 1 Bath · 900–999 sq ft</span><div class="travel">
-<div class="tblock bus">
-<div class="tlabel"><span>Bus</span><span class="tnote">hers</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">~38</span><span class="tunit">min</span></span><span class="tdir">to work</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">~42</span><span class="tunit">min</span></span><span class="tdir">home</span></div>
-</div>
-</div>
-<div class="tblock drive">
-<div class="tlabel"><span>Drive</span><span class="tnote">his · 33 km · no 407</span></div>
-<div class="tvals">
-<div class="tval"><span class="tnumrow"><span class="tnum">28–29</span><span class="tunit">min</span></span><span class="tdir">to work · 5 AM</span></div>
-<div class="tval"><span class="tnumrow"><span class="tnum">46–49</span><span class="tunit">min</span></span><span class="tdir">home · 5 PM</span></div>
-</div>
-</div>
-</div><div class="photo-credit photo-credit--plate">Street View © Google · Aug 2023</div></div><div class="photo-credit photo-credit--detail">Street View © Google · Aug 2023</div><div class="face-head"><h3 class="building">111 Bristol Rd E · #109</h3></div><p class="addr">Hurontario</p><p class="prov">Listed Sep 13, 2026 · MLS® W13777804</p><div class="allin allin-line"><span class="allin-label">All-in</span> ~$2,360–$2,400 <span class="chip status est">ESTIMATED</span></div><div class="meta">
-<p><span class="mk">Parking</span><span>2 parking spaces</span></p>
-<p><span class="mk">Utilities</span><span>Not stated in listing</span></p>
-</div><div class="listedby"><div class="lb-title">Listed by</div><div class="lb-row"><p class="contact-agent">Kerry Dannett Edwards, Salesperson — Century 21 Leading Edge Realty Inc.</p><a class="call-btn" href="tel:416-686-1500">Call 416-686-1500</a></div></div><div class="details">
-<dl>
-<div class="row"><dt>Listed</dt><dd>Sep 13, 2026 · MLS® W13777804</dd></div>
-<div class="row"><dt>Laundry</dt><dd>In-suite laundry</dd></div>
-<div class="row"><dt>Note</dt><dd>Den counted per the MLS headline (Bedrooms Plus 1, and the room list shows a den); the Den/Family Room field reads N — verify with the agent.</dd></div>
-<div class="row"><dt>Bus</dt><dd>Typically ~38 min to work, ~42 min home (MiWay GTFS medians, Nov 2026).</dd></div>
-<div class="row"><dt>Drive</dt><dd>to work 28–29 min (5 AM) · home 46–49 min (5 PM) · 33 km · no 407</dd></div>
-<div class="building-area">
-<div class="ba-title">Building &amp; area</div>
-<div class="ba-group">
-<span class="ba-label">Rating</span>
-<p class="ba-text">No Google rating or reviews for this building yet.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Gym</span>
-<p class="ba-text">no listing claim found, and no independent trace.</p>
-</div>
-<div class="ba-group">
-<span class="ba-label">Nearby (approx)</span>
-<div class="ba-nearby">
-<div class="ba-nrow"><span class="ba-nlabel">Grocery</span><span class="ba-nval">Leela Supermarket MEAT AND GROCERY Mississauga — <strong>5 min walk</strong> <span class="ba-wdist">~320 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Pharmacy</span><span class="ba-nval">Vibrin Drug Mart PharmaChoice — <strong>5 min walk</strong> <span class="ba-wdist">~350 m</span></span></div>
-<div class="ba-nrow"><span class="ba-nlabel">Bus stop</span><span class="ba-nval">Bristol Rd At Wildwood Trail — <strong>3 min walk</strong> <span class="ba-wdist">~210 m</span></span></div>
-</div>
-</div>
-<div class="ba-attr">Building data: Google Places · Walk times: Google Routes · Review themes summarize the reviews Google returns (max 5)</div>
-</div>
-<div class="contact">
-
-
-
-<p class="contact-email">Email: via the Realtor.ca contact form on the listing page</p>
-</div>
-</dl>
-</div><div class="actions">
-<a class="btn btn-primary" href="https://www.realtor.ca/real-estate/30272065/109-111-bristol-road-mississauga-hurontario" rel="noopener" target="_blank">View listing ↗</a>
-
-</div></article>
 </div>
 </section>
 <!-- ===== Maybes ===== -->
 <section class="cat" data-cat="watch" data-section="Maybes">
-<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Maybes</span><span class="count">(4)</span></button><span class="sec-subline" data-subline=""></span></h2>
+<h2 class="section-head"><button class="row-title" data-cat="watch" type="button"><span class="sec-name">Maybes</span><span class="count">(5)</span></button><span class="sec-subline" data-subline=""></span></h2>
 <div class="section-body rail" id="body-watch">
 
 
@@ -5330,7 +4074,7 @@
 
 </div></article>
 <!-- Burnhamthorpe 1907 (watch) -->
-<article aria-label="View listing: 220 Burnhamthorpe Rd W · #1907" class="card has-photo mini" data-cat="watch" data-mls="W14153608" data-building="burnhamthorpe-220" data-promote="1-Bedroom + Den Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 220 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/3daecf8417e86c19.webp"/><div class="mini-controls plate-controls">
+<article aria-label="View listing: 220 Burnhamthorpe Rd W · #1907" class="card has-photo mini" data-cat="watch" data-mls="W14153608" data-building="burnhamthorpe-220" data-promote="1-Bedroom + Den Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 220 Burnhamthorpe Rd W" class="plate-photo" decoding="async" loading="lazy" src="photos/3daecf8417e86c19.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="mini-controls plate-controls">
 <button aria-label="Accept Burnhamthorpe #1907 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
 <button aria-label="Remove Burnhamthorpe #1907 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,600<span class="per">/mo</span></div><span class="chip type spec-pill">1 Bed + Den · 2 Bath · 700–799 sq ft</span><div class="travel">
@@ -5396,7 +4140,7 @@
 
 </div></article>
 <!-- Elm Dr 1507 (watch) -->
-<article aria-label="View listing: 55 Elm Dr W · #1507" class="card mini has-photo" data-cat="watch" data-mls="W14149798" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 55 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/0aacd7b6a574753b.webp"/><div class="mini-controls plate-controls">
+<article aria-label="View listing: 55 Elm Dr W · #1507" class="card mini has-photo" data-cat="watch" data-mls="W14149798" data-promote="2-Bedroom Condos" role="button" tabindex="0"><div class="plate"><img alt="Exterior photo of 55 Elm Dr W" class="plate-photo" decoding="async" loading="lazy" src="photos/0aacd7b6a574753b.webp"/><span class="chip plate-badge stamp-badge">Not re-confirmed November 15, 2026 — last verified November 10, 2026</span><div class="mini-controls plate-controls">
 <button aria-label="Accept Elm #1507 into the main list" class="mini-accept" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4 12.6l5.4 5.4L20 6.8"/></svg></button>
 <button aria-label="Remove Elm #1507 permanently" class="mini-remove" type="button"><svg aria-hidden="true" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="3.1" viewBox="0 0 24 24"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg></button>
 </div><div class="rent-big">$2,700<span class="per">/mo</span></div><span class="chip type spec-pill">2 Bed · 2 Bath · 800–899 sq ft</span><div class="travel">
@@ -6932,16 +5676,6 @@
     var body = sec.querySelector('.section-body');
     if(body) body.appendChild(card);
   }
-
-  /* Erin Square #2008 (W14091848) is a permanent MAIN card now (accepted
-     Nov 8, 2026). Scrub any stored on-device mini state for it. */
-  ['W14091848'].forEach(function(mls){
-    [ACCEPT_KEY, REMOVE_KEY].forEach(function(key){
-      var list = load(key);
-      var kept = list.filter(function(m){ return m !== mls; });
-      if(kept.length !== list.length) save(key, kept);
-    });
-  });
 
   var minis = Array.prototype.slice.call(document.querySelectorAll('.card.mini[data-mls]'));
 
